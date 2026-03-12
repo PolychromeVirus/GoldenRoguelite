@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"SummLog",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SummLog",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,5 @@
+count,deck,deckamt,herb,nut,vial,potion,mist,antidote,psy,bramble,crystal,oil,weasel,smoke,sleep,life,10,20,30,star,stone,summon,catch,halt,force,cloak,douse,total,element
+1,Chapter 1,22,20,5,0,0,1,10,5,4,6,4,4,3,3,1,0,0,0,4,3,0,1,1,1,1,1,100,mercury
+1,Chapter 2,25,10,5,3,2,1,10,6,6,4,4,4,2,2,1,1,1,0,4,2,2,1,1,1,1,1,100,venus
+1,Chapter 3,32,0,10,5,1,1,10,5,4,4,4,6,1,1,1,1,1,1,3,2,2,1,1,1,1,1,100,jupiter
+1,Chapter 4,,,,,,,,,,,,,,,,,,,,,,,,,,,0,mars

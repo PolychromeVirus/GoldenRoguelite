@@ -1,0 +1,25 @@
+psynergy,psynergy,disarm,reward,trap
+Catch,Catch,Cast Catch,Look at the next floor card,
+Cloak,Cloak,Cast Cloak,Take no damage from non-boss enemies for the first round of the next combat,
+Douse,Douse,Cast Douse,Enemies begin the next combat with -1 DEF,
+Force,Force,Cast Force,Cure all status conditions from all adepts,
+Halt,Halt,Cast Halt,"Roll a d4, on a 1, trade a djinni any player owns for one of a different element",
+Move,Move,Cast Move,All players take two blind draws,
+Reveal,Reveal,Cast Reveal,All players get one choice draw,
+Whirlwind,Whirlwind,Cast Whirlwind,Gain 10g,
+Stolen Supplies,Catch,Cast Catch,Players do not gain HP or PP at the end of combat,TRUE
+Sentry Statues,Cloak,Cast Cloak,Jupiter enemies start combat with +3 ATK,TRUE
+Evil Desert Wind,Douse,Cast Douse,Venus enemies start combat with +3 ATK,TRUE
+Speedy Enemies,Halt,Cast Halt,The first enemy turn is before player turns,TRUE
+Statue Trap,Move,Cast Move,2 additional enemies appear in combats on this floor,TRUE
+Falling Rocks,,(Cannot be disarmed),All adepts lose 2 HP before combats on this floor,TRUE
+Poison Spike,Restore,Cast Restore,1 adept is poisoned at the start of combats on this floor,TRUE
+Venus Overload,,Jupiter Adept spends 8PP,All adepts take damage equal to the total Venus affinity of all players before the next combat,TRUE
+Mars Overload,,Mercury adept spends 8PP,All adepts take damage equal to the total Mars affinity of all players before the next combat,TRUE
+Jupiter Overload,,Venus adept spends 8PP,All adepts take damage equal to the total Jupiter affinity of all players before the next combat,TRUE
+Mercury Overload,,Mars adept spends 8PP,All adepts take damage equal to the total Mercury affinity of all players before the next combat,TRUE
+Magic Powder,Miracle,Cast Miracle,All adepts begin combats on this floor stunned,TRUE
+Sleeping Gas,Force,Cast Force,All adepts begin combats on this floor sleeping,TRUE
+Psy Seal,Halt,Cast Halt,Psynergy cannot be cast for the first turn of combats on this floor,TRUE
+Armory,Break,Cast Break,All enemies begin combat with 2 ATK up and 2 DEF up tokens,TRUE
+Frost,Frost,Cast Frost,"Roll a d4, on a 1, a djinni joins the party",

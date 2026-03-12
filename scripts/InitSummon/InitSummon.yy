@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InitSummon",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InitSummon",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

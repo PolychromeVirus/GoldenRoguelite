@@ -1,0 +1,1 @@
+if global.inCombat{instance_destroy()}

@@ -1,0 +1,1 @@
+if global.textdisplay == text{global.textdisplay = ""}

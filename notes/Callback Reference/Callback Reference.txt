@@ -1,0 +1,133 @@
+Bottom row y = 124
+
+button 1 = 36
+button 2 = 64
+button 3 = 92
+button 4 = 120
+button 5 = 148
+
+right side 1 = 200
+right side 2 = 228
+
+NAMING CONVENTION - 
+
+FunctionName() (UpperCamelCase)
+assAssetName (first lowercase prefix is asset type, obj, spr, fnt, other similar)
+_variable (local variables, used inconsistently, update when able to cleanly)
+variable (instance variable, simple, lowercase)
+(global variables are also full lowercase with no prefix, but they are differentiated by requiring global. before it)
+MACRO (all upper)
+
+see below for specific variable names in structs (keep consistent)
+
+
+Player keys:
+onAttack: extra attack : condition: "two6"
+onRoll: called when rolled
+
+Attack Flow:
+Click Attack Button > WeaponAttack(unleash?,applydamage?) this step is where aggressionstruct is originally set and gets its initial values, 
+it is passed throughout the rest of this logic > Select Targets (if param2 of WeaponAttack() is true) selecttargets decides which targeter to use, or resolves attacks that target everyone, it uses the state of struct at this point to create objMonsterTarget or objCharTarget
+
+PASSIVES - 
+
+damage_cap_1 - all damage capped at 1
+damage_half - final damage halved
+_mud - TODO: reduce enemy rolls
+_vine - TODO: attempt rolls auto fail
+_DjinnEcho - TODO: Djinni effects from range update 1 > 3
+_Resonate - TODO: Increase damage or range of spells (except single target ones) (choice stored in data)
+_melee - TODO: Increase all melee pools by amt
+_element - TODO: Increase all player's pool of their own element by amt
+skip_enemies - skips enemy phase
+skip_bosses - skip boss turns (number is how many)
+
+var passive = {
+		effect: effect,
+		countdown: countdown,
+		sprite: sprite,
+		source: source,
+		data: data
+	}
+	
+use AddPassive(), it has tooltips (also able to push to the queue directly, all the function does is push to the queue and send a debug message)
+
+UNLEASH INFO - 
+
+result = {
+		active: false,
+		name: "",
+		dam_bonus: 0,
+		element: "",
+		num: 1,
+		statuses: {},
+		heal_hp_ratio: 0,
+		heal_pp_ratio: 0,
+		heal_hp_flat: 0,
+		heal_pp_flat: 0,
+		splash_ratio: 0,
+		splash_element: "",
+		double_atk: false,
+		convert_element: "",
+		instant_kill: false
+	}
+
+WeaponAttack(unleash = true, attack = true) - returns dam
+
+onRoll: subtractpip, addpip
+onAttack: struct containing attack info (targets again after attacking)
+
+ASSIGN STRUCT - 
+
+{ dieset(string), num(int), element(string), target(string) }
+
+TARGETING SCHEMA-
+
+target: "enemy", "ally", "none"\
+num: number (range)\
+dam: damage as a raw number\
+repeater: number of times to apply the damage (one target)\
+dmgtype: element of the damage, lowercase\
+unleash: holds the unleash struct, seen above\
+onConfirm: instantiates with a copy of unleash, used for other abilities\
+splash: holds splash sprite\
+pierce: boolean\
+slash: boolean\
+targetlist: listm optional unless this is post targeting\
+caster: player source of the damage\
+statuses: struct of status flags (see below)\
+selected: slotID of the center target\
+source: menu that sent it, "djinni" "summon" "weapon" "item" "psynergy"\
+
+
+healing: number of points for target to recover
+healingratio: % of maxhp to heal
+revive: boolean for if this targets dead players exclusively
+removepoison: boolean
+removebad: boolean
+removebuffs: boolean
+defup: num
+atkup: num
+rootTokens: num
+regen: num (number of turns)
+regheal: num (healing applied on regen rounds)
+aegiscurse: boolean
+cloak: boolean
+
+
+statuses = {
+inflict_delude,
+inflict_sleep,
+inflict_stun,
+inflict_poison,
+inflict_venom,
+inflict_psyseal,
+inflict_haunt,
+inflict_clearstats,
+inflict_atkdown,
+inflict_defdown,
+}
+
+// TODOs:
+
+- Change DestroyAllBut. menus that would be destroyed by this should push their id to a global array, destroy all but will iterate through it. this array then will only contain instances that actually exist, instead of iterating through a growing array of object indexes

@@ -1,0 +1,1 @@
+if clickable{sprite_index = no}else{sprite_index = nogrey}

@@ -1,0 +1,18 @@
+name,alias,element,venus,mars,jupiter,mercury,range,targetType,base,text
+Zagan,Zagan,Venus,1,1,0,0,1,enemy,,Target // Weapon Attack\nTarget and Target's Neighbors get -3 DEF
+Megaera,Megaera,Mars,,1,1,,1,enemy,,Target // Weapon Attack\nTarget // Weapon Attack\nParty // +3 ATK
+Flora,Flora,Jupiter,1,,2,,12,enemy,,All Opposing // Jupiter Damage:\nParty's Jupiter Power + Inflict Sleep
+Moloch,Moloch,Mercury,,,1,2,0,enemy,,"Party // When Summoned:\nSelect a number\nPassive // Until end of combat:\nThat number is ""do nothing"" on enemy move lists"
+Ulysses,Ulysses,Mars,,2,,2,0,enemy,,Passive // 2 Enemy Turns or 3 Boss Turns:\nEnemies turns are skipped.
+Haures,Haures,Venus,2,1,,,12,enemy,,All Opposing // Inflict Poison\nPassive // Until end of combat:\nPoison does 2 damage instead of 1
+Eclipse,Eclipse856,Jupiter,,,3,1,12,enemy,,"All Opposing // Jupiter Damage:\nX Jupiter Damage\n(X = 1/2 of target Max HP, or 10% of Boss Max HP)\nAll Opposing // Inflict Delusion"
+Coatlicue,Coatlicue,Mercury,,,1,2,12,enemy,,Party // Recover all HP\nCountdown // 5 Rounds:\nAuto // Countdown:\nParty // Recover 5 HP
+Daedalus,Daedalus,Mars,1,3,,,7,enemy,,"Target // Mars Damage: All \nAll Opposing // Mars Damage:\nEnemies take X Mars Damage. (X = 1/2 of the\ndamage the enemy next to them took, starting \nwith the target, rounded up)"
+Azul,Azul,Mercury,,2,,2,12,enemy,,All Opposing // Mercury Damage:\nElemental + Inflict Stun
+Catastrophe,Catastrophe851,Jupiter,,3,3,,12,enemy,,All Opposing // Weapon Attack
+Charon,Charon,Venus,,,,,1,enemy,,Target X // Target is Downed\n(X = # of Djinn pairs spent as the cost)
+Iris,Iris859,Mars,,4,,4,12,enemy,,Party // Recover all HP\nPassive // 1 Round:\nParty // All damage reduced to 1\nAuto // Start of next turn:\nPassive // 1 Round:\nParty // All incoming damage is halved
+Boreas,Boreas,Mercury,,,,4,0,enemy,,Self // Cast a Mercury spell you know at its maximum level.\nYou may set your dice rolls manually.\nThis spell costs 0 PP
+Thor,Thor,Jupiter,,,4,,0,enemy,,Self // Cast a Jupiter spell you know at its maximum level.\nYou may set your dice rolls manually.\nThis spell costs 0 PP
+Meteor,Meteor866,Mars,,4,,,0,enemy,,Self // Cast a Mars spell you know at its maximum level.\nYou may set your dice rolls manually.\nThis spell costs 0 PP
+Judgment,Judgment,Venus,4,,,,0,enemy,,Self // Cast a Venus spell you know at its maximum level.\nYou may set your dice rolls manually.\nThis spell costs 0 PP

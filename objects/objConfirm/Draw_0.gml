@@ -1,0 +1,1 @@
+draw_sprite(image,0,x,y)

@@ -1,0 +1,12 @@
+chapter,name,alias,effect1,effect2,wpn,arm,itm,art,psy,sum,quote
+1,Vale,vale,level,djinni,,,10,,,,"With Psynergy, the more you practice, the more you learn."
+1,Vault,vault,djinni,choice,20,20,10,,,,"Welcome to Vault, the town at the heart of Angara."
+1,Kolima,kolima,djinni,,20,20,5,,,,"If I could speak, I'd tell them this is Kolima, village of lumberjacks!\n- Small Tree"
+1,Imil,imil,djinni,,20,20,10,,50,,There's been an epidemic going around Imil. You should leave right away if you don't want to catch it.
+2,Xian,xian,djinni,,20,20,10,25,30,,This is Xian. Travelers are welcome here! Relax. Stay long.
+2,Tolbi,tolbi,djinni,choice,20,20,10,25,,50,"Hmm? Do you want to test your luck at Tolbi Spring? ... Really? Well then, I'll give you the chance to go first."
+2,Lalivero,lalivero,djinni,,10,10,10,25,,,"You are leaving after all, aren't you... You are welcome in Lalivero anytime."
+3,Air's Rock,airsrock,summon,,,20,,25,30,50,"The longer I sit here gazing at Air's Rock, the more I grow to love it. All it takes is one glance, and you're convinced it holds some mystery deep within."
+3,Gaia Rock,gaiarock,level,,,20,20,25,30,50,Legend has it that Mt. Mikage is enshrouded by a mysterious power. I wonder if that's the source of the serpent's eternal life.
+3,Aqua Rock,aquarock,djinni,,20,,10,25,30,50,He always wanted to climb to the peak of the mountain on Aqua Island. But he spent all his time studying that Aqua Stone instead. I always wondered why.
+3,Magma Rock,magmarock,djinni,level,20,20,20,25,30,50,On the far side of the river lies a huge mountain we call Magma Rock. It is a sacred place that the gods created long ago.

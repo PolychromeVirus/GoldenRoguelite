@@ -1,0 +1,1 @@
+LearnPsy(global.psynergylist[indicator].base,global.turn)

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CalcPreview",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CalcPreview",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

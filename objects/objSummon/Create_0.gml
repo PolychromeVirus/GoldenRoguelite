@@ -1,0 +1,1 @@
+if array_length(global.knownSummons) == 0{instance_deactivate_object(id)}

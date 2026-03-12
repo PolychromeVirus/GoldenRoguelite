@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"UnleashDjinn",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"UnleashDjinn",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

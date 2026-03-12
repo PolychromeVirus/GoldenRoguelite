@@ -1,0 +1,32 @@
+Name,alias,Slot,Cursed,text
+Psychic Circlet,Psychic_Circlet,Headwear,,Auto // Start of Turn:\nRestore +1 PP\n\n12% chance to break after combat.
+Catch Beads,Catch_Beads,Psynergy,,Self // Learn Catch\n\nPassive // Permanent:\nYou are able to cast Catch
+Cloak Ball,Cloak_Ball,Psynergy,,Self // Learn Cloak\n\nPassive // Permanent:\nYou are able to cast Cloak
+Douse Drop,Douse_Drop,Psynergy,,Self // Learn Douse\n\nPassive // Permanent:\nYou are able to cast Douse
+Halt Gem,Halt_Gem,Psynergy,,Self // Learn Halt\n\nPassive // Permanent:\nYou are able to cast Halt
+Adept Ring,Adept_Ring,Ring,,Auto // Weapon Attack:\nTarget Adept // Recover 2 PP\n\n12% chance to break after combat.
+Healing Ring,Healing_Ring,Ring,,Auto // Weapon Attack:\nTarget Adept // Recover 3 HP\n\n25% chance to break after combat.
+Unicorn Ring,Unicorn_Ring,Ring,,Auto // Start of Turn:\nTarget Adept // Cure Poison\n\n12% chance to break after combat.
+War Ring,War_Ring,Ring,,Passive // Permanent: +1 Melee Power\n\n12% chance to break after combat.
+Bronze Shield,Bronze_Shield,Shield,,Passive // Permanent:\n+1 DEF
+Dragon Shield,Dragon_Shield,Shield,,Passive // Permanent:\n+2 Mars/Mercury Resistance
+Earth Shield,Earth_Shield,Shield,,Passive // Permanent:\n+2 Venus/Jupiter Resistance
+Lucky Cap,Lucky_Cap,Headwear,,Self // Reroll 1 die\n(Can be used once per turn)\n\n12% chance to break after combat.
+Lure Cap,Lure_Cap,Headwear,,Passive // Enemy attacks have a higher chance of hitting you
+Orb of Force,Orb_of_Force,Psynergy,,Self // Learn Force\n\nPassive // Permanent:\nYou are able to cast Force
+Cleric's ring,Clerics_Ring,Ring,,Passive // Permanent:\nCurses cannot cause you to skip your turn\n\nCursed items still cannot be unequipped outside of town
+Fairy Ring,Fairy_Ring,Ring,,Passive // Permanent:\nAll dice in pool have -1  (min 1)
+Guardian Ring,Guardian_Ring,Ring,,Passive // Permanent:\nAll dice in pool have +1  (max 6)
+Herbed Shirt,Herbed_Shirt,Body,,Auto // Poison/Venom Damage:\nSelf // Cure Poison or Venom
+Dragon Robe,Dragon_Robe,Body,,Passive // Permanent:\nPsynergy costs 1 less PP to cast (min 1)
+Silk Robe,Silk_Robe,Body,,Passive // Permanent:\nAttempt rolls enemies make against you\nmust roll 6 to succeed
+Fear Helm,Fear_Helm,Headwear,TRUE,Passive // Permanent:\n+3 DEF\n\nCursed
+Thunder Crown,Thunder_Crown,Headwear,TRUE,Auto // Start of Turn:\nRestore +2 PP\n\nCursed
+Soul Ring,Soul_Ring,Ring,,Auto // Downed:\nSelf // Healing:\nRecover all HP\nDiscard this card
+Stardust Ring,Stardust_Ring,Ring,,Auto // Weapon Attack + Dual 6s:\nTarget // Seal Psynergy\n\n12% chance to break after combat.
+Spirit Ring,Spirit_Ring,Ring,,Auto // Weapon Attack + Dual 6s:\nParty // Recover 6 HP\n\n12% chance to break after combat.
+Iron Shield,Iron_Shield,Shield,,"Passive // Permanent:\nSelf // +2 DEF\n\nIf you have any DEF up tokens, effect changes to:\n\nPassive // Permanent:\nSelf // +1 DEF"
+Mirrored Shield,Mirrored_Shield,Shield,,Auto // Attack Targets You:\nTarget Attacker // X Normal Damage\n\nX = Current DEF
+Adept's Clothes,Adepts_Clothes,Body,,Passive // Permanent:\n+5 Max PP
+Water Jacket,Water_Jacket,Body,,Passive // Permanent:\n+2 Mars/Mercury Resistance
+Storm Gear,Storm_Gear,Body,,Passive // Permanent:\n+2 Venus/Jupiter Resistance

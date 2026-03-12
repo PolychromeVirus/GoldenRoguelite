@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GetReal",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetReal",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnterTown",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnterTown",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

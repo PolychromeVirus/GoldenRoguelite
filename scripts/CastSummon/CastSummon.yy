@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CastSummon",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CastSummon",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InitTroops",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InitTroops",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

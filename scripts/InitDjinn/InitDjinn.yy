@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InitDjinn",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InitDjinn",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

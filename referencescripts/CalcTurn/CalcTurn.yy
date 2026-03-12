@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CalcTurn",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CalcTurn",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,10 @@
+dungeon,floor,type,troops_a,troops_b,solo,unique,name
+Mercury Lighthouse,1,combat,Ooze;Harpy;Siren;Ooze,,TRUE,FALSE,Hermes Fountain
+Mercury Lighthouse,9,combat,Saturos,,TRUE,TRUE,Aerie
+Venus Lighthouse,1,combat,Boulder Beast;Boulder Beast;Recluse;Recluse,,TRUE,TRUE,Venus Entry 1
+Venus Lighthouse,2,combat,Fenrir;Recluse;Skull Warrior;Skull Warrior;Thunder Lizard;Wild Gryphon,,TRUE,TRUE,Venus Entry 2
+Venus Lighthouse,3,combat,Tempest Lizard,,TRUE,TRUE,Venus Entry 3
+Venus Lighthouse,9,combat,Fusion Dragon,,TRUE,TRUE,Aerie
+Jupiter Lighthouse,5,combat,Devil Scorpion;Devil Scorpion;Macetail;Macetail;Ghost Army;Ghost Army,Foul Mummy;Foul Mummy;Blue Dragon;Blue Dragon;Foul Mummy;Foul Mummy,FALSE,FALSE,Jupiter Tower 1
+Jupiter Lighthouse,6,combat,Sentinel,Anger Ball;Guardian Ball;Star Magician;Refresh Ball;Thunder Ball,TRUE,TRUE,Jupiter Tower 2
+Jupiter Lighthouse,9,combat,Agatio;Karst,Karst;Agatio,TRUE,TRUE,Aerie

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ProcessChoiceDrawQueue",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ProcessChoiceDrawQueue",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

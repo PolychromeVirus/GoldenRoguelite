@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InitTurn",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InitTurn",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

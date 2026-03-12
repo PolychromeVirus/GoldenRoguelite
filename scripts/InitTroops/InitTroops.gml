@@ -1,0 +1,4 @@
+
+function InitTroops(){
+	global.troops = []
+}

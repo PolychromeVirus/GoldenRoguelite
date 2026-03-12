@@ -1,0 +1,4 @@
+DeleteButtons()
+ClearOptions()
+
+alarm_set(0,480)

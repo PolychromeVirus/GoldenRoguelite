@@ -1,0 +1,115 @@
+Element,Name,alias,Cost,Range,TargetType,Stage,maxstage,Base,mode,Damage,unused,isCharacterSkill,text
+Venus,Aegis,Aegis,4,1,Self,1,2,Aegis,,,,,"Target Adept // +X DEF, -X ATK\n(X = Venus Charge)\nPassive // 1 Round:\nTarget's Psynergy affected by ATK"
+Venus,Bulwark,Bulwark,8,1,Self,2,2,Aegis,,,,,"Target Adept // +X DEF, -X ATK\n(X = Venus Charge)\nIf Venus Charge is maxed:\nATK is not reduced"
+Jupiter,Astral Blast,Astral_Blast,2,1,Other,1,2,Astral Blast,,,,,Target // Normal Damage:\nWeapon Attack Damage + Jupiter Charge
+Jupiter,Thunder Mine,Thunder_Mine,10,1,Other,2,2,Astral Blast,,,,,Target // Jupiter Damage:\nJupiter Values
+Mars,Aura,Aura,5,4,Self,1,3,Aura,both,,,,Party // Healing:\nLowest Mars Value
+Mars,Healing Aura,Healing_Aura,10,4,Self,2,3,Aura,both,,,,Party // Healing:\nLowest Mars Value + Highest Mars Value
+Mars,Cool Aura,Cool_Aura,20,4,Self,3,3,Aura,both,,,,Party // Healing:\n(Lowest Mars Value x 2) + (Highest Mars Value x 2)
+Jupiter,Backstab,Backstab,3,1,Other,1,1,Backstab,,,,,Target // Weapon Attack\nTarget // 2 Jupiter Damage\nRoll a d10 -\n10: a non-boss Target is downed.
+Mars,Beam,Beam,7,3,Other,1,3,Beam,,,,,Target 3 // Mars Damage:\nUncharged Mars + (2 x Mars Charge)
+Mars,Cycle Beam,Cycle_Beam,12,5,Other,2,3,Beam,,,,,Target 5 // Mars Damage:\n3 x Mars Charge
+Mars,Searing Beam,Searing_Beam,20,12,Other,3,3,Beam,,,,,All Opposing // Mars Damage:\n3 x Mars Charge
+Mars,Blast,Blast,3,3,Other,1,3,Blast,,,,,Target X // Mars Damage:\nAll Charge\n(X = Unique Elements in Pool)
+Mars,Mad Blast,Mad_Blast,9,3,Other,2,3,Blast,,,,,Target X // Mars Damage:\nAll Charge + (2 x X)\n(X = Unique Elements in Pool)
+Mars,Fiery Blast,Fiery_Blast,16,3,Other,3,3,Blast,,,,,Target 3 // Mars Damage:\nHighest Elemental Value (One of each Element)
+Jupiter,Bolt,Bolt,3,1,Other,1,3,Bolt,,5,,,Target // 5 Jupiter Damage + Stun
+Jupiter,Flash Bolt,Flash_Bolt,6,3,Other,2,3,Bolt,,5,,,Target 3 // 5 Jupiter Damage + Stun
+Jupiter,Blue Bolt,Blue_Bolt,10,5,Other,3,3,Bolt,,10,,,Target 5 // 10 Jupiter Damage + Stun
+Mercury,Break,Break,3,1,Other,1,1,Break,,,,,Target 3 // Reset ATK and DEF
+Mars,Burn Off,Dragon_Fire,2,1,Self,1,2,Burn Off,,,,,Target Adept // Reset ATK and DEF
+Mars,Burn Away,Epicenter,6,4,Self,2,2,Burn Off,,,,,Party // Reset ATK and DEF
+None,Catch,Catch,5,0,None,1,1,Catch,prompt,,,,"Auto // End of Combat, before Drawing:\nDraw an additional Item card."
+None,Cloak,Cloak,10,1,Self,1,1,Cloak,,,,,Target Adept // Passive:\nPassive // 1 Round:\nImmune to Damage and Attack Effects
+Mercury,Cool,Cool,5,12,Other,1,3,Cool,,,,,All Opposing // 2 Mercury Damage
+Mercury,Supercool,Supercool,8,12,Other,2,3,Cool,,,,,All Opposing // Mercury Damage:\nMercury Charge
+Mercury,Megacool,Megacool,15,12,Other,3,3,Cool,,,,,All Opposing // Mercury Damage:\nAll Charge
+Venus,Cure,Cure,3,1,Self,1,3,Cure,both,,,,Target Adept + Self // Healing:\nHighest Venus Value
+Venus,Cure Well,Cure_Well,10,1,Self,2,3,Cure,both,,,,Target Adept + Self // Healing:\n2 Highest Venus Values
+Venus,Potent Cure,Potent_Cure,15,1,Self,3,3,Cure,both,,,,Target Adept + Self // Healing:\n2 Highest Venus Values x 2
+Jupiter,Delude,Delude,4,3,Other,1,1,Delude,,,,,Target 3 // Inflict Delusion
+Mercury,Diamond Dust,Diamond_Dust,5,1,Other,1,2,Diamond Dust,,,,,Target // Mercury Damage:\nWeapon Attack Damage\nTarget's Neighbors // Mercury Damage:\nWeapon Attack Damage / 2 (Round Down)
+Mercury,Diamond Berg,Diamond_Berg,10,1,Other,2,2,Diamond Dust,,,,,Target // Mercury Damage:\nWeapon Attack Damage x 2
+Jupiter,Djinn Echo,Djinn_Echo,3,4,Self,1,2,Djinn Echo,,,,,"Countdown // 2 Rounds:\nDjinn effects that Target 1, Target 3 instead."
+Jupiter,Call Djinn,Call_Djinn,6,4,Self,2,2,Djinn Echo,,,,,"Countdown // 3 Rounds:\nDjinn effects that Target 1, Target 3 instead.\n\nTarget Adept // Unleash Djinn"
+Mercury,Douse,Douse,3,3,Other,1,3,Douse,,3,,,Target 3 // 3 Mercury Damage
+Mercury,Drench,Drench,6,3,Other,2,3,Douse,,8,,,Target 3 // 8 Mercury Damage
+Mercury,Deluge,Deluge,12,5,Other,3,3,Douse,,12,,,Target 5 // 12 Mercury Damage
+Jupiter,Dull,Dull,4,3,Other,1,1,Dull,,,,,Target 3 // -3 ATK
+Mars,Flare,Flare,3,3,Other,1,3,Flare,,5,,,Target 3 // 5 Mars Damage
+Mars,Flare Wall,Flare_Wall,7,3,Other,2,3,Flare,,10,,,Target 3 // 10 Mars Damage
+Mars,Flare Storm,Flare_Storm,10,3,Other,3,3,Flare,,15,,,Target 3 // 15 Mars Damage
+None,Force,Force,3,3,Other,1,1,Force,,,,,Target // Normal Damage:\nX Elemental Values (X = Times cost is paid)\n\nAuto // Force Puzzle:\nSolve Puzzle for 3 PP
+Mercury,Frost,Frost,4,3,Other,1,3,Frost,,,,,Target 3 // Mercury Damage:\nMelee Charge
+Mercury,Tundra,Tundra,8,3,Other,2,3,Frost,,,,,Target 3 // Mercury Damage:\nMelee Charge + (2 x Mercury Charge)
+Mercury,Glacier,Glacier,15,5,Other,3,3,Frost,,,,,Target 5 // Mercury Damage:\nMelee Charge + (2 x Mercury Charge)
+Mercury,Froth,Froth,3,3,Other,1,3,Froth,,,,,Target 3 // Mercury Damage:\nMercury Charge\n(-2 DEF if 2+ Venus Charge)
+Mercury,Froth Sphere,Froth_Sphere,5,5,Other,2,3,Froth,,,,,Target 5 // Mercury Damage:\nMercury Charge\n(-2 DEF if 2+ Venus Charge)
+Mercury,Froth Spiral,Froth_Spiral,10,5,Other,3,3,Froth,,,,,Target 5 // Mercury Damage:\n2 x Mercury Charge\n-X DEF (X = Venus Charge)
+Mars,Fume,Fume,3,1,Other,1,3,Fume,,7,,,Target // 7 Mars Damage
+Mars,Serpent Fume,Serpent_Fume,10,1,Other,2,3,Fume,,,,,Target // Mars Damage:\nMars Values
+Mars,Dragon Fume,Dragon_Fume,20,1,Other,3,3,Fume,,,,,Target // Mars Damage:\nMars Values x 2
+Venus,Gaia,Gaia,4,3,Other,1,3,Gaia,,,,,Target 3 // Venus Damage:\nVenus Power
+Venus,Mother Gaia,Mother_Gaia,10,3,Other,2,3,Gaia,,,,,Target 3 // Venus Damage:\nVenus Power x 2\n(Targets 6 if Pool has Jupiter Charge)
+Venus,Grand Gaia,Grand_Gaia,15,3,Other,3,3,Gaia,,,,,Target 3 // Venus Damage:\nVenus Power x (2 ^ Jupiter Charge)
+Jupiter,Halt,Halt,3,0,None,1,1,Halt,prompt,,,,Auto // Start of Boss Fight:\nBoss skips their first Boss Turn
+Mercury,Ice,Ice,2,1,Other,1,3,Ice,,,,,Target // Mercury Damage:\nAll Charge
+Mercury,Ice Horn,Ice_Horn,6,3,Other,2,3,Ice,,,,,Target 3 // Mercury Damage:\nMercury Charge x 2
+Mercury,Ice Missile,Ice_Missile,12,3,Other,3,3,Ice,,,,,Target 3 // Mercury Damage:\nAll Charge x 2
+Jupiter,Impact,Impact,2,1,Self,1,2,Impact,,,,,Target Adept // +3 ATK
+Jupiter,High Impact,High_Impact,6,4,Self,2,2,Impact,,,,,Party // +3 ATK
+None,Miracle,Miracle,5,3,Other,1,1,Miracle,,,,,Target 3 // Mars Damage:\nMars Charge\n\nSelf // +X DEF\n(X = Venus Charge)\n\nTarget Adept // Healing:\nMercury Charge\n\nTarget Y // Inflict Any Status\n(Y = Jupiter Charge)
+None,Move,Move,3,0,None,1,1,Move,overworld,,,,Auto // Puzzle Drawn:\nShuffle Puzzle Deck\nRedraw Puzzle\n\nCondition:\nUsable once per floor.
+Mars,Planet Diver,Planet_Diver,8,1,Other,1,2,Planet Diver,,,,,Target // Mars or Venus Damage:\n2 Elemental Values\n(x 2 if one Mars and one Venus selected)
+Mars,Planetary,Planetary,18,1,Other,2,2,Planet Diver,,,,,Self // Set HP to 1\nPassive // 1 Round:\nReceive 1/2 Healing\nAuto // Start of Next Turn:\nTarget // Mars or Venus Damage:\nAll Values\n(x 2 if Venus Power and Mars Power equal)
+Jupiter,Plasma,Plasma,7,3,Other,1,3,Plasma,,,,,Target up to 3 // Jupiter Damage:\nAssigned Jupiter Values
+Jupiter,Shine Plasma,Shine_Plasma,10,5,Other,2,3,Plasma,,,,,Target up to 5 // Jupiter Damage:\nAssigned Jupiter Values\n(2 Dice may be assigned twice)
+Jupiter,Spark Plasma,Spark_Plasma,20,7,Other,3,3,Plasma,,,,,Target 7 // Jupiter Damage:\nSplit Jupiter Values
+Mercury,Ply,Ply,2,1,Self,1,3,Ply,both,,,,Target Adept // Healing:\nHighest Mercury Value\nPassive // 3 Rounds: Auto // Start of target turn:\nTarget Adept // Recover 3 HP
+Mercury,Ply Well,Ply_Well,5,1,Self,2,3,Ply,both,,,,Target Adept // Healing:\nMercury Power\nPassive // 3 Rounds: Auto // Start of target turn:\nTarget Adept // Recover X HP (X = Mercury Power)
+Mercury,Pure Ply,Pure_Ply,10,1,Self,3,3,Ply,both,,,,Target Adept // Recover all HP\nPassive // 3 Rounds: Auto // Start of target turn:\nTarget Adept // Recover X HP (X = Mercury Power)
+Mercury,Prism,Prism,5,3,Other,1,3,Prism,,,,,Target 3 // Mercury Damage:\nHighest Mercury Value\nX Targets skip their turn (X = Jupiter Charge)
+Mercury,Hail Prism,Hail_Prism,7,5,Other,2,3,Prism,,,,,Target 5 // Mercury Damage:\nHighest Mercury Value\nX Targets skip their turn (X = Jupiter Charge)
+Mercury,Freeze Prism,Freeze_Prism,12,5,Other,3,3,Prism,,,,,Target 5 // 1 Mercury Damage\nRepeat X times (X = 2 x Highest Mercury Values)
+None,Psy Drain,Psy_Drain,0,1,Other,1,1,Psy Drain,,,,,Self // +X PP\n(X = All Charge)
+Venus,Quake,Quake,3,3,Other,1,3,Quake,,3,,,Target 3 // 3 Venus Damage
+Venus,Earthquake,Earthquake,7,5,Other,2,3,Quake,,,,,Target 5 // Venus Damage:\nVenus Power + 3
+Venus,Quake Sphere,Quake_Sphere,15,12,Other,3,3,Quake,,,,,Target 7 // Venus Damage:\nVenus Power x 2
+Venus,Ragnarok,Ragnarok,10,1,Other,1,2,Ragnarok,,,,,Target // Venus Damage:\nVenus Values
+Venus,Odyssey,Odyssey,20,1,Other,2,2,Ragnarok,,,,,Target // Venus Damage:\nVenus Values\nTarget // Venus Damage:\nVenus Values\n\n(Both targets must be the same)
+Jupiter,Ray,Ray,3,3,Other,1,3,Ray,,3,,,Target 3 // 3 Jupiter Damage
+Jupiter,Storm Ray,Storm_Ray,6,3,Other,2,3,Ray,,8,,,Target 3 // 8 Jupiter Damage
+Jupiter,Destruct Ray,Destruct_Ray,10,3,Other,3,3,Ray,,12,,,Target 3 // 12 Jupiter Damage
+Venus,Resonate,Resonate,3,4,Self,1,2,Resonate,,,,,"Passive // 1 Round:\nAll multi-target spells gain +X damage or\n+X Targets\n(X = Venus Charge / 2 when cast,\nround down)"
+Venus,Cascade,Cascade,7,4,Self,2,2,Resonate,,,,,Passive // 1 Round:\nAll multi-Target spells gain +X damage or\n+X Targets\n(X = Venus Charge when cast)
+Mercury,Restore,Restore,2,1,Self,1,2,Restore,both,,,,Target Adept // Cure Status
+Mercury,Panacea,Cure_Poison,7,4,Self,2,2,Restore,both,,,,Party // Cure Status
+Jupiter,Reveal,Reveal,5,0,None,1,1,Reveal,prompt,,,,Auto // Card Draft:\n\n10% chance to activate: Draft an additional time
+Venus,Revive,Revive,4,1,Self,1,1,Revive,,,,,Auto // End of Round:\nTarget Downed Adept // Healing:\nVenus Power x 2
+Venus,Root,Growth,3,1,Self,1,2,Root,,,,,"Target Adept // Healing:\nApply 3 Root Tokens\nAuto // Start of Round:\nRooted Adepts +2 HP, +1 DEF, -1 Root Token"
+Venus,Deep Root,Mad_Growth,6,1,Self,2,2,Root,,,,,"Target Adept // Healing:\nApply 6 Root Tokens\nAuto // Start of Round:\nRooted Adepts +2 HP, +1 DEF, -1 Root Token"
+Jupiter,Slash,Slash,2,1,Other,1,3,Slash,,,,,Target // Normal Damage:\nWeapon Attack Damage (Ignore DEF)
+Jupiter,Wind Slash,Wind_Slash,5,3,Other,2,3,Slash,,,,,Target 3 // Jupiter Damage:\nWeapon Attack Damage (Ignore DEF)\n(+Target DEF if 2 Mercury Charge)
+Jupiter,Sonic Slash,Sonic_Slash,8,3,Other,3,3,Slash,,,,,Target 3 // Jupiter Damage:\nWind Slash x 2
+Jupiter,Sleep,Sleep,4,3,Other,1,1,Sleep,,,,,Target 3 // Inflict Sleep
+Venus,Spire,Spire,2,1,Other,1,3,Spire,,,,,Target // Venus Damage:\nAll Charge
+Venus,Clay Spire,Clay_Spire,6,3,Other,2,3,Spire,,,,,Target 3 // Venus Damage:\nVenus Charge x 2
+Venus,Stone Spire,Stone_Spire,12,3,Other,3,3,Spire,,,,,Target 3 // Venus Damage:\nAll Charge x 2
+Venus,Thorn,Thorn,5,12,Other,1,3,Thorn,,,,,All Opposing // 2 Venus Damage
+Venus,Briar,Briar,6,12,Other,2,3,Thorn,,,,,All Opposing // Venus Damage:\nVenus Charge
+Venus,Nettle,Nettle,15,12,Other,3,3,Thorn,,,,,All Opposing // Venus Damage:\nAll Charge
+Mars,Volcano,Volcano,5,1,Other,1,3,Volcano,,,,,Target // Mars Damage:\nMars Power + 4
+Mars,Eruption,Eruption,8,3,Other,2,3,Volcano,,,,,Target 3 // Mars Damage:\nMars Power + 6
+Mars,Pyroclasm,Pyroclasm,14,5,Other,3,3,Volcano,,,,,Target 5 // Mars Damage:\nMars Power + 10
+Jupiter,Ward,Ward,2,1,Self,1,2,Ward,,,,,Target Adept // +3 DEF
+Jupiter,Resist,Resist,6,4,Self,2,2,Ward,,,,,Party // +3 DEF
+Jupiter,Whirlwind,Whirlwind,5,3,Other,1,3,Whirlwind,,,,,Target 3 // Jupiter Damage:\n2 x Jupiter Charge
+Jupiter,Tornado,Tornado,8,5,Other,2,3,Whirlwind,,,,,Target 5 // Jupiter Damage:\n2 x Jupiter Charge
+Jupiter,Tempest,Tempest,12,5,Other,3,3,Whirlwind,,,,,Target 5 // Jupiter Damage:\nNon-Jupiter Charge + (2 x Jupiter Charge)
+Mercury,Wish,Wish,4,4,Self,1,3,Wish,both,,,,Party // Healing:\nHighest Mercury Value
+Mercury,Wish Well,Wish_Well,6,4,Self,2,3,Wish,both,,,,Party // Healing:\nHighest Mercury Value + Mercury Power
+Mercury,Pure Wish,Pure_Wish,10,4,Self,3,3,Wish,both,,,,Party // Healing:\n(All Charge x 2) + Mercury Power
+None,Retreat,Retreat,5,0,None,1,1,Retreat,overworld,,,Isaac,"Auto // Puzzle revealed:\nTurn floor card face down on\ntop of the deck. You are no\nlonger on a floor.\n\nWhen revealed, a floor must be started from the beginning, even if it was started previously."
+Venus,Scoop,Scoop,5,0,None,1,1,Scoop,overworld,,,Felix,Self // Draw 1 Treasure
+Mercury,Insight,Bind,5,0,None,1,1,Insight,overworld,,,Amiti,"Auto // Not in battle:\nLook at the next floor card\nin the pile, and then put it\nback."
+Mars,Call Zombie,Call_Zombie,2,0,None,1,1,Call Zombie,,,,Akafubu,Target Downed Enemy // Summon target\n\nOR\n\nTarget ? // ? Damage:\nInflict the effect of 1 move\nfrom a summoned enemy X\ntimes. Moves that target AllOpposing Target 5 instead.\n(X = LVL)

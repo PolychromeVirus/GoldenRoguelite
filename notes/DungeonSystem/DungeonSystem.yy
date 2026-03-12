@@ -1,0 +1,11 @@
+{
+  "$GMNotes":"v1",
+  "%Name":"DungeonSystem",
+  "name":"DungeonSystem",
+  "parent":{
+    "name":"GoldenRoguelite",
+    "path":"GoldenRoguelite.yyp",
+  },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
+}

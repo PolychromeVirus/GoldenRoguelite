@@ -1,0 +1,1 @@
+//hovertext = global.players[global.turn].name

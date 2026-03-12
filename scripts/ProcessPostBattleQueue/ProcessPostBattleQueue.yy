@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ProcessPostBattleQueue",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ProcessPostBattleQueue",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

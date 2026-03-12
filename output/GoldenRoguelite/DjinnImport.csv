@@ -1,0 +1,73 @@
+element,name,text,chapter,ready,recover
+Venus,Bane,Target // Venus Damage + Poison:\n   All Charge,1,1,1
+Venus,Mud,Countdown // 3 Rounds:\n   Subtract 1 from all Enemy move selection\n   and attempt rolls,1,1,1
+Venus,Sap,"Target // Weapon Attack\n\nSelf // Recover X HP\n   (X = 1/2 of damage done, rounded up)",1,1,1
+Venus,Flint,"Target // Weapon + Venus Damage:\n   Weapon Attack (Do not Unleash)\n   +X Venus Damage\n   (X = 1/2 of damage done, rounded up)",1,1,1
+Venus,Vine,Countdown // 3 Rounds:\n   All attempt rolls fail,1,1,1
+Venus,Mold,Target // Enemy Damage:\n   Target's Neighbors // Select an attack:\n      Both neighbors attack target with\n      selection,1,1,1
+Venus,Flower,Party // Healing:\n   Assign Venus Values,1,1,1
+Venus,Granite,Countdown // 1 Round:\n   Party // All incoming damage is halved\n   (rounded up),2,0,1
+Venus,Ground,Auto // Start of Enemy Turn:\n   Skip Enemy Turn\n\nCondition:\n   Starts combat face down,2,1,1
+Venus,Iron,Party // +3 DEF,2,1,1
+Venus,Salt,Party // Healing:\n   Remove all tokens\n   Cancel all passives,2,1,1
+Venus,Quartz,Target Downed Adept // Healing:\n   Roll d6 - \n   1-4: Recover 1/2 Max HP\n   5-6: Recover all HP,2,1,1
+Venus,Echo,"Target // Weapon Attack\n   If unleash is triggered, trigger it again\n\nPassive // This turn:\n   All damage is Venus",2,1,1
+Venus,Steel,"Target // Weapon Attack\n\nSelf // Healing:\n   If attack triggers an unleash, unleash\n   damage is converted into healing",2,1,1
+Venus,Meld,Target // Weapon Attack:\n   Attack with another Adept's weapon,3,1,1
+Venus,Petra,Countdown // 3 Rounds:\n   All enemies reroll if they select move X\n   (Select X when this activates),3,1,1
+Venus,Geode,Target // Weapon Attack:\n   +X Venus Damage\n   (X = Weapon Attack Damage),3,1,1
+Venus,Crystal,Party // Healing:\n   Elemental Charge + DEF,3,1,1
+Mercury,Dew,Target Downed Adept // Recover all HP\n\nCondition:\n   This Djinni does not recover on its own,1,1,1
+Mercury,Hail,Target // Mercury Damage:\n   All Charge + Inflict -2 DEF,1,1,1
+Mercury,Spritz,Party // Healing:\n   Elemental Charge,1,1,1
+Mercury,Tonic,Target Adept // Healing:\n   You may remove any tokens on target,1,1,1
+Mercury,Steam,Countdown // 3 Rounds:\n   Passive // Countdown:\n      Party // +X Temporary Elemental Power\n      (X = Countdown),1,1,1
+Mercury,Mist,Target // Mercury Damage + Inflict Sleep:\n   All Charge,1,1,1
+Mercury,Spring,Target Adept // Healing:\n   All Charge,1,1,1
+Mercury,Fizz,Target Adept // Recover X HP\n   (X = 1/2 of target max HP),2,1,1
+Mercury,Fog,Target // Inflict Delusion,2,1,1
+Mercury,Sleet,Target // Mercury Damage:\n   All Charge + Inflict -2 ATK,2,1,1
+Mercury,Sour,"Target // Weapon + Mercury Damage:\n   Weapon Attack (Do not Unleash)\n   +X Mercury Damage\n   (x = half of damage done, rounded up)",2,1,1
+Mercury,Chill,Target // Mercury Damage:\n   All Charge\nTarget // Reset ATK and DEF,2,1,1
+Mercury,Gel,"Target // Weapon Attack\n   If unleash is triggered, trigger it again\n\nPassive // This turn:\n   All damage is Mercury",2,1,1
+Mercury,Serac,Target // Weapon Attack\n   Roll d6:\n   6: Non-boss target is downed,2,1,1
+Mercury,Shade,Countdown // 1 Round:\n   All incoming damage is halved (rounded up),3,1,1
+Mercury,Rime,Target // Seal Psynergy,3,1,1
+Mercury,Eddy,Party // Unleash 1 face-down Djinni\n\nCondition:\n   This Djinni does not recover on its own,3,1,1
+Mercury,Balm,Party // Healing:\n   Downed Adepts are healed for 1/2 Max HP\n\nCondition:\n   This Djinni does not recover on its own,3,1,1
+Mars,Ember,Party // Recover X PP\n   (X = Mars Charge),1,1,1
+Mars,Fever,Target // Mars Damage + Inflict Delusion:\n   All Charge,1,1,1
+Mars,Forge,Party // +2 ATK,1,1,1
+Mars,Cannon,"Target // Weapon + Mars Damage:\n   Weapon Attack (Do not Unleash)\n   +X Mars Damage\n   (X is half of damage done, rounded up)",1,1,1
+Mars,Kindle,Countdown // 1 Round:\n   Party // +2 Melee Power,1,1,1
+Mars,Torch,Target // Mars Damage:\n   Weapon Attack Damage (Ignore DEF),1,1,1
+Mars,Scorch,Target // Weapon Attack Damage + Stun,1,1,1
+Mars,Flash,Countdown // 1 Round:\n   Party // All damage reduced to 1\n\nCondition:\n   This Djinni does not recover on its own,2,1,0
+Mars,Char,Target // Mars Damage + Stun:\n   All Charge,2,1,1
+Mars,Shine,Target // Mars Damage:\n   All Charge\n\nTarget's Neighbors // Inflict Delusion,2,1,1
+Mars,Spark,Target Downed Adept // Recover X HP\n   (X = Half of Max HP),2,1,1
+Mars,Corona,Party // +2 DEF,2,1,1
+Mars,Core,Target // Weapon Attack\n\nAuto // X Damage Done:\n   Reset target ATK and DEF\n   (X = 1/2 of maximum possible damage),2,1,1
+Mars,Reflux,"Passive // 1 Round:\n   When attacked, attacker takes X damage\n   (X = ATK)",2,1,1
+Mars,Fugue,All Opposing // Mars Damage:\n   Split All Charge\n\nAuto // Target takes damage:\n   Seal Psynergy,3,1,1
+Mars,Coal,"Party // Gain Partial Reroll Token\n\nPartial Reroll Token:\n   (Reroll any part of dice pool, maximum 1\n   token, disappears after 1 round)",3,1,1
+Mars,Tinder,Auto // End of Round:\n   Target Downed Adept // Healing:\n      Mars Power,3,1,1
+Mars,Fury,Target // Mars Damage + Inflict Haunt:\n   All Charge,3,1,1
+Jupiter,Gust,Target // Weapon Attack\n\nTarget // Roll d6\n   5-6: Weapon Attack\n   (You may reselect your target),1,1,1
+Jupiter,Kite,Auto // End of Target Turn:\n   Target Adept // Take another turn after this\n   one\n\n(Djinn and PP do not recover on the second turn),1,1,1
+Jupiter,Squall,Target // Jupiter Damage + Stun:\n      All Charge,1,1,1
+Jupiter,Zephyr,"Party // Gain Reroll Token\n\nReroll Token:\n   Reroll entire dice pool, maximum 1 token",1,1,1
+Jupiter,Luff,Target // Seal Psynergy,1,1,1
+Jupiter,Ether,Target Adept // Recover X PP\n   (X = All Charge),1,1,1
+Jupiter,Wheeze,Target // Jupiter Damage + Poison:\n      All Charge,1,1,1
+Jupiter,Haze,Countdown // 1 Round:\n   Target Adept // Immune to Damage and\n   Attack Effects\n\nCondition:\n   This Djinni does not recover on its own,2,1,1
+Jupiter,Breeze,Party // +2 DEF,2,1,1
+Jupiter,Smog,Target // Jupiter Damage + Inflict Delusion:\n   All Charge,2,1,1
+Jupiter,Breath,Target Adept // Healing:\n   All Charge,2,1,1
+Jupiter,Blitz,Target // Jupiter Damage + Stun:\n   All Charge,2,1,1
+Jupiter,Aroma,Party // Recover X PP\n   (X = Elemental Charge),2,1,1
+Jupiter,Whorl,Target // Weapon Attack\n   Roll d6 -\n   6: Non-boss target is downed,2,1,1
+Jupiter,Waft,Target 3 // Inflict Sleep,3,1,1
+Jupiter,Gasp,All Opposing // Attempt to Haunt,3,1,0
+Jupiter,Lull,"Auto // Immediate:\n   This turn ends, the round begins again\n   from the first player",3,1,1
+Jupiter,Gale,"Target // Remove:\n   Roll a d6 -\n   1,3,5: Nothing happens\n   2,4,6: Non-Boss target is downed\n   (no reward)",3,1,1

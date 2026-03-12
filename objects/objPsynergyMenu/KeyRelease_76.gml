@@ -1,0 +1,1 @@
+PsyLookup(global.players[global.turn].spells[selected])

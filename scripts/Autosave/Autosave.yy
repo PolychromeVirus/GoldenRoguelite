@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Autosave",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Autosave",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

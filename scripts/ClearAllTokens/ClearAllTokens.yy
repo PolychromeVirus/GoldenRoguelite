@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ClearAllTokens",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ClearAllTokens",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
