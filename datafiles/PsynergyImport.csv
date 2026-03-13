@@ -112,4 +112,3 @@ Mercury,Pure Wish,Pure_Wish,10,4,Self,3,3,Wish,both,,,,Party // Healing:\n(All C
 None,Retreat,Retreat,5,0,None,1,1,Retreat,overworld,,,Isaac,"Auto // Puzzle revealed:\nTurn floor card face down on\ntop of the deck. You are no\nlonger on a floor.\n\nWhen revealed, a floor must be started from the beginning, even if it was started previously."
 Venus,Scoop,Scoop,5,0,None,1,1,Scoop,overworld,,,Felix,Self // Draw 1 Treasure
 Mercury,Insight,Bind,5,0,None,1,1,Insight,overworld,,,Amiti,"Auto // Not in battle:\nLook at the next floor card\nin the pile, and then put it\nback."
-Mars,Call Zombie,Call_Zombie,2,0,None,1,1,Call Zombie,,,,Akafubu,Target Downed Enemy // Summon target\n\nOR\n\nTarget ? // ? Damage:\nInflict the effect of 1 move\nfrom a summoned enemy X\ntimes. Moves that target AllOpposing Target 5 instead.\n(X = LVL)

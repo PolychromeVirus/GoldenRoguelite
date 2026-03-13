@@ -672,8 +672,6 @@ function CastSpell(spellID, playerID) {
 			}
 			exit
 			break
-		case "Call Zombie": // character skill (Akafubu)
-			break
 		default:
 			show_debug_message("CastSpell: '" + spell.name + "' has no implementation yet")
 			instance_destroy(objPsynergyMenu)

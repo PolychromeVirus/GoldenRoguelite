@@ -12,6 +12,7 @@ if (mon_index >= array_length(mon_list)) {
 		if global.players[i].poison { global.players[i].hp -= _poison_amt; _tick_dam += _poison_amt }
 		if global.players[i].venom { global.players[i].hp -= 3; _tick_dam += 3 }
 		if _tick_dam > 0 {
+			global.players[i].flash_timer = 12
 			instance_create_depth(0,0,-200,objDamageNumber,
 				{ amount: _tick_dam, world_x: 5 + i * 400 + 100, world_y: 70, col: c_purple, gui_mode: true })
 		}

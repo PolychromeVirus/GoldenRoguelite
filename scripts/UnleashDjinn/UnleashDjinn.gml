@@ -109,8 +109,7 @@ function UnleashDjinn(djinnID, playerID) {
 			break
 		case "Sap":   // Venus: weapon + half damage done
 			_struct.dam = WeaponAttack(true, false).dam
-			_struct.onConfirm.active = true
-			_struct.onConfirm.heal_hp_ratio = 0.5
+			_struct.unleash.heal_hp_ratio = 0.5
 			break
 
 		case "Cannon":  // Mars: weapon + half damage done
@@ -305,9 +304,7 @@ function UnleashDjinn(djinnID, playerID) {
 
 			break
 
-		// ── Stubbed (complex/unique — future implementation) ────────────
-		case "Mud": // TODO: _mud passive does nothing right now
-			//reduce enemy choice index by 1
+		case "Mud": // reduces enemy move roll index by 1
 			AddPassive("_mud",3,Venus875,"Mud",{},playerID)
 			InjectLog("Enemies moves restricted!")
 			
@@ -317,8 +314,7 @@ function UnleashDjinn(djinnID, playerID) {
 			exit
 			break
 			
-		case "Vine": // TODO: _vine passive does nothing right now
-			//make all attempt roles fail
+		case "Vine": // skips all enemy attempt targeting
 			AddPassive("_vine",3,Venus875,"Vine",{},playerID)
 			InjectLog("Enemies got all tangled up!")
 			instance_destroy(objDjinniMenu)

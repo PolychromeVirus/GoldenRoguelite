@@ -11,7 +11,7 @@ if instance_position(mouse_x, mouse_y, objConfirm) and clickable {
 
 	// Instant kill
 	mon.monsterHealth = 0
-	mon.flash_timer = 8
+	mon.flash_timer = 12; mon.flash_color = c_white
 	global.gold += 1
 	instance_create_depth(0, 0, -200, objDamageNumber,
 	{

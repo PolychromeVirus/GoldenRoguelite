@@ -1,12 +1,12 @@
 
 //damage_cap_1 - all damage capped at 1
 //damage_half - final damage halved
-//_mud - TODO: reduce enemy rolls
-//_vine - TODO: attempt rolls auto fail
-//_DjinnEcho - TODO: Djinni effects from range update 1 > 3
-//_Resonate - TODO: Increase damage or range of spells (except single target ones) (choice stored in data)
-//_melee - TODO: Increase all melee pools by amt
-//_element - TODO: Increase all player's pool of their own element by amt
+//_mud - reduces enemy move roll index (ExecuteMonsterTurn)
+//_vine - skips attempt targeting (RunEnemyPhase)
+//_DjinnEcho - djinni effects from range 1 > 3 (UnleashDjinn)
+//_Resonate - increase damage or range of multi-target spells (CastSpell + objResonatePicker)
+//_melee - increase all melee pools by amt (CreateDicePool, used by Kindle)
+//_element - increase player's own element pool by amt (CreateDicePool, used by Steam)
 
 
 function AddPassive(effect, countdown, sprite, source, data, casterID = global.turn) {

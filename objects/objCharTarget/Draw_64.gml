@@ -1,3 +1,4 @@
+if variable_instance_exists(self, "confirmed") and confirmed { exit }
 var drawx = 50
 var drawy = 300
 var drawymaster = drawy

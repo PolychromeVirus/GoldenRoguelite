@@ -5,7 +5,7 @@ if global.inCombat{
 				
 			}else{
 				
-				NextTurn()
+				instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
 				instance_destroy()
 				
 			}

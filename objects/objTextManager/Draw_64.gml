@@ -77,6 +77,26 @@ if global.charselect == false{
 			if _p.hp > 0 {draw_sprite_stretched_ext(_p.portrait, 0, _colX + _portraitOffset, texty + _portraitOffset, _portraitSize, _portraitSize,c_white,1)}
 			else{draw_sprite_stretched_ext(_p.portrait, 0, _colX + _portraitOffset, texty + _portraitOffset, _portraitSize, _portraitSize,c_white,.5)}
 
+			// Heal flash (green overlay)
+			if _p.heal_flash > 0 {
+				draw_set_alpha(_p.heal_flash / 12)
+				draw_set_colour(c_lime)
+				draw_rectangle(_colX + _portraitOffset, texty + _portraitOffset,
+				               _colX + _portraitOffset + _portraitSize,
+				               texty + _portraitOffset + _portraitSize, false)
+				draw_set_alpha(1.0)
+				_p.heal_flash--
+			}
+
+			// Damage flash (red additive)
+			if _p.flash_timer > 0 {
+				gpu_set_blendmode(bm_add)
+				draw_sprite_stretched_ext(_p.portrait, 0, _colX + _portraitOffset, texty + _portraitOffset,
+				                          _portraitSize, _portraitSize, c_red, _p.flash_timer / 12)
+				gpu_set_blendmode(bm_normal)
+				_p.flash_timer--
+			}
+
 			// Layout bottom-up from portrait bottom, shifted up by _portraitOffset
 			healthtext = string(_p.hp) + "/" + string(_p.hpmax) + " HP"
 			pptext = string(_p.pp) + "/" + string(_p.ppmax) + " PP"

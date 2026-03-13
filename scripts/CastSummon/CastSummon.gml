@@ -263,7 +263,7 @@ function CastSummon(summonID, playerID){
 					_eclipse_dam = max(1, ceil(_mon.maxhp * 0.5))
 				}
 				_mon.monsterHealth -= _eclipse_dam
-				_mon.flash_timer = 8
+				_mon.flash_timer = 12; _mon.flash_color = ElementColor("jupiter")
 				if (_mon.monsterHealth <= 0) {
 					_mon.monsterHealth = 0
 					global.gold += 1

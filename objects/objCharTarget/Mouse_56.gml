@@ -32,25 +32,39 @@ if instance_position(mouse_x,mouse_y,objConfirm){
 		_ratio_amount = sel.hpmax * healingratio
 		if (sel.halfheal and _ratio_amount > 0) { _ratio_amount = floor(_ratio_amount / 2) }
 	}
+	var _gui_x = 237 + selected * 400
+	var _gui_y = 165
 	if !delayed{
 		if revive and sel.hp <= 0{
 			sel.hp = min(_heal_amount, sel.hpmax)
+			sel.heal_flash = 12
+			instance_create_depth(0,0,-200,objDamageNumber, { amount: sel.hp, world_x: _gui_x, world_y: _gui_y, col: global.c_important, gui_mode: true })
 			choice = true
 		}
 
-		if _heal_amount > 0 and sel.hp != sel.hpmax{	
+		if _heal_amount > 0 and sel.hp != sel.hpmax{
 			var oldhp = variable_clone(sel.hp)
 			sel.hp = min(sel.hpmax, sel.hp + _heal_amount)
 			InjectLog(sel.name + " is healed " + string(_heal_amount) + " (" + string(oldhp) + " to " + string(sel.hp) + ")")
+			sel.heal_flash = 12
+			instance_create_depth(0,0,-200,objDamageNumber, { amount: sel.hp - oldhp, world_x: _gui_x, world_y: _gui_y, col: global.c_important, gui_mode: true })
 			choice = true
 		}
-		
+
 		if _ratio_amount != 0{
+			var _old_ratio_hp = variable_clone(sel.hp)
 			sel.hp = min(sel.hpmax, sel.hp + _ratio_amount)
+			if _ratio_amount > 0 {
+				sel.heal_flash = 12
+				instance_create_depth(0,0,-200,objDamageNumber, { amount: sel.hp - _old_ratio_hp, world_x: _gui_x, world_y: _gui_y, col: global.c_important, gui_mode: true })
+			}
 		}
-	
+
 		if ppheal > 0 and sel.pp != sel.ppmax{
+			var _oldpp = variable_clone(sel.pp)
 			sel.pp = min(sel.ppmax, sel.pp + ppheal)
+			sel.heal_flash = 12
+			instance_create_depth(0,0,-200,objDamageNumber, { amount: sel.pp - _oldpp, world_x: _gui_x, world_y: _gui_y, col: global.c_important, gui_mode: true })
 			choice = true
 		}
 
@@ -143,8 +157,12 @@ if instance_position(mouse_x,mouse_y,objConfirm){
 		if itemid != -1{
 			array_push(global.discard,itemid)
 			array_delete(global.players[global.turn].inventory,itemid,1)
-			
+
 		}
+		// Hide char menu immediately so portrait bar shows heal flash during delay
+		confirmed = true
+		ClearOptions()
+		DeleteButtons()
 		alarm_set(0,30)
 		exit
 	}

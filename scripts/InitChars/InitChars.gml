@@ -92,6 +92,8 @@ function InitChars(){
 			onAttack: [],
 			onRoll: {},
 			planetary: {active: false, dam: 0, element: "venus"},
+			heal_flash: 0,
+			flash_timer: 0,
 			
 		}
 		if tempchar.portrait == -1{tempchar.portrait = Aaron_Jerra}

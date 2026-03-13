@@ -40,7 +40,6 @@ function RunEnemyPhase(bosses_only, on_complete=undefined) {
 		with (objMonster) {
 			if monsterHealth <= 0 { continue }
 			if bosses_only and !boss { continue }
-			if !bosses_only and boss { continue }
 			array_push(_mon_list, id)
 		}
 	}

@@ -58,13 +58,37 @@ Staff attacks use charged melee dice only; all others use all charged dice.
 ### Castability Check
 `isCastable` checks PP cost + player has >=1 die of the spell's element (no charged dice requirement). it also checks if a spell is provided by an item (always castable)
 
+### Targeting Schema (packet struct)
+Fields set before `SelectTargets`: `target` ("enemy"/"ally"/"none"), `num` (range), `dam`, `repeater`, `dmgtype` (element), `unleash` (struct), `onConfirm`, `splash`, `pierce`, `slash`, `caster`, `statuses`, `source` ("djinni"/"summon"/"weapon"/"item"/"psynergy")
+Healing fields: `healing`, `healingratio`, `revive`, `removepoison`, `removebad`, `removebuffs`, `defup`, `atkup`, `rootTokens`, `regen`, `regheal`, `aegiscurse`, `cloak`
+Status inflicts: `inflict_delude`, `inflict_sleep`, `inflict_stun`, `inflict_poison`, `inflict_venom`, `inflict_psyseal`, `inflict_haunt`, `inflict_clearstats`, `inflict_atkdown`, `inflict_defdown`
+
+### Passive System
+- `AddPassive()` pushes to player's passive queue. Struct: `{effect, countdown, sprite, source, data}`
+- Key effects: `damage_cap_1`, `damage_half`, `skip_enemies`, `skip_bosses`, `_DjinnEcho`, `_Resonate`, `_mud`, `_vine`, `_melee`, `_element`
+
+### Dungeon & Floor System
+- `global.dungeonlist[]` loaded from `DungeonImport.csv`, per-dungeon troop CSVs
+- `global.floorChallenges[]` — `{type, troop, completed, unique, override_name, puzzle_index}`
+- Flow: `StartDungeon()` → `GenerateFloor()` → combat/puzzle challenges → `NextFloor()` → `CompleteDungeon()`
+- `DifficultyUp()` increments `global.curseStacks` (hp/res/atk), applied at monster spawn
+
+### Town System
+- `EnterTown(index)` → auto-heal, repair broken armor, queue find rewards → `ProcessTownFinds()` → `objTownShop`
+- `objTownShop` shows aggregated discard pile inventory + psynergy/summon specials
+
+### Reroll System
+- `player.rerolls[]` array of `{mode, uses, source, expires}`
+- `objReroll` button in combat → `objRerollPicker` for partial/single selection → `RerollDice(player, selections)`
+
 ## Code Organization
 
-- `scripts/` — 35 script modules (GML functions). Key: `GetChargedDice.gml` (QueryDice + macros), `CastSpell.gml`, `SelectTargets.gml`, `NextTurn.gml`, `RollDice.gml`, `CreateDicePool.gml`
-- `objects/` — 33 objects. Key combat objects: `objAttack`, `objMonsterTarget`, `objCharTarget`, `objDiceDisplay`, `objMonster`, `objCombat`
+- `scripts/` — ~85 script modules (GML functions). Key: `GetChargedDice.gml` (QueryDice + macros), `CastSpell.gml`, `SelectTargets.gml`, `NextTurn.gml`, `RollDice.gml`, `CreateDicePool.gml`, `UnleashDjinn.gml`, `WeaponAttack.gml`, `ProcessPostBattleQueue.gml`
+- `objects/` — ~80 objects. Key combat: `objAttack`, `objMonsterTarget`, `objCharTarget`, `objDiceDisplay`, `objMonster`, `objCombat`. Key UI: `objTownShop`, `objPuzzlePrompt`, `objBossRewardPicker`, `objRerollPicker`, `objForcePicker`, `objEchoPicker`, `objResonatePicker`
 - `objects/obj*/Mouse_7.gml` or `Mouse_56.gml` — confirm/click handlers (GMS2 mouse event naming)
-- `datafiles/` — 8 CSV data files defining all game content
+- `datafiles/` — ~20 CSV data files (content + per-dungeon troop/recipe files)
 - `rooms/` — CharacterSelect, MainGame, MainGameTester
+- `notes/` — struct field references, naming conventions, passive/character TODO tracking
 
 ## Conventions
 
@@ -72,3 +96,10 @@ Staff attacks use charged melee dice only; all others use all charged dice.
 - The `damage` field in spells is a string — use `real()` to convert
 - Element colors (GML BGR format): melee=`0x303030`, venus=`0x44BB44`, mars=`0x2244FF`, jupiter=`0xCC44AA`, mercury=`0xCC8800`
 - `objMonsterTarget` and `objCharTarget` follow the same pattern: `selected` index, Draw GUI highlight, Confirm applies effect + calls `NextTurn()`
+- Naming: `FunctionName()` (UpperCamelCase), `assAssetName` (prefixed), `_variable` (local), `MACRO` (all caps)
+- `objButton3`–`objButton8` are children of `objButton2` — use `object_index == objButton2` guard in `instance_position` checks
+- Struct assignment is by reference — use `variable_clone()` to avoid mutating templates
+- `asset_get_index()` is case-sensitive — CSV aliases must match sprite names exactly
+- Depth: menu objects at 0, tooltip text drawn at -1
+- `DeleteButtons()` called at top of each menu Create to clear previous buttons
+- `DestroyAllBut()` clears non-essential instances when transitioning menus

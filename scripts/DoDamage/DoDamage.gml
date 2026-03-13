@@ -65,19 +65,19 @@ function DoDamage(struct){
         if tempdam >= 9999 and !mon.boss{
             // Instant kill (Charon)
             mon.monsterHealth = 0
-            mon.flash_timer = 8
+            mon.flash_timer = 12; mon.flash_color = _dam_col
             global.gold += 1
             _show_dam = 9999
         } else if tempdam >= 9999 and mon.boss {
             var final_dam = 0
-            mon.flash_timer = 8
+            mon.flash_timer = 12; mon.flash_color = _dam_col
             _show_dam = final_dam
 			InjectLog("The boss resisted death!")
 
         }else if tempdam > 0 {
             var final_dam = max(1, tempdam - _resist + modif)
             mon.monsterHealth -= final_dam
-            mon.flash_timer = 8
+            mon.flash_timer = 12; mon.flash_color = _dam_col
             _show_dam = final_dam
 
             if mon.monsterHealth <= 0 {
@@ -85,12 +85,16 @@ function DoDamage(struct){
                 global.gold += 1
             }
         }
-        if _show_dam > 0 {
+		var _icon_x = mon.x
+		var _icon_y = mon.y - mon.sprite_height
+		if mon.monsterHealth <= 0 {
+			instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Death })
+        } else if _show_dam > 0 {
             instance_create_depth(0,0,-200,objDamageNumber,
             {
                 amount: _show_dam,
-                world_x: mon.x,
-                world_y: mon.y - mon.sprite_height,
+                world_x: _icon_x,
+                world_y: _icon_y,
                 col: _dam_col
             })
         }
@@ -99,31 +103,31 @@ function DoDamage(struct){
 		var attempt = true
 		var attempted = false
 		var stats = variable_clone(struct.statuses)
-		
+
 		if variable_struct_exists(stats, "inflict_mark") { mon.mark = stats.inflict_mark}
 		if mon.boss{attempt = irandom(1) == 1}
 		if mon.monsterHealth > 0 and attempt{
-			if variable_struct_exists(stats, "inflict_poison") { mon.poison = stats.inflict_poison; attempted = true}
-			if variable_struct_exists(stats, "inflict_venom") { mon.venom = stats.inflict_venom; attempted = true}
-			if variable_struct_exists(stats, "inflict_stun") { mon.stun = stats.inflict_stun; attempted = true}
-			if variable_struct_exists(stats, "inflict_sleep") { mon.sleep = stats.inflict_sleep; attempted = true}
-			if variable_struct_exists(stats, "inflict_delude") { mon.delude = stats.inflict_delude; attempted = true}
-			if variable_struct_exists(stats, "inflict_psyseal") { mon.psyseal = stats.inflict_psyseal; attempted = true}
+			if variable_struct_exists(stats, "inflict_poison") { mon.poison = stats.inflict_poison; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Poison }) }
+			if variable_struct_exists(stats, "inflict_venom") { mon.venom = stats.inflict_venom; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Poison_Flow }) }
+			if variable_struct_exists(stats, "inflict_stun") { mon.stun = stats.inflict_stun; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Bolt }) }
+			if variable_struct_exists(stats, "inflict_sleep") { mon.sleep = stats.inflict_sleep; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Sleep }) }
+			if variable_struct_exists(stats, "inflict_delude") { mon.delude = stats.inflict_delude; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Delude }) }
+			if variable_struct_exists(stats, "inflict_psyseal") { mon.psyseal = stats.inflict_psyseal; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Psy_Seal }) }
 			if variable_struct_exists(stats, "inflict_lose_turn") and stats.inflict_lose_turn > 0 { mon.lose_turn = true; stats.inflict_lose_turn--; attempted = true}
-			
-			
+
+
 		}else if attempted and !attempt{InjectLog(mon.name + " resisted status!")}
-	    if variable_struct_exists(stats, "inflict_defdown") { mon.defmod -= stats.inflict_defdown; mon.defmod_fresh = bool(stats.inflict_defdown)}
-		if variable_struct_exists(stats, "inflict_atkdown") { mon.atkmod -= stats.inflict_atkdown; mon.atkmod_fresh = bool(stats.inflict_atkdown)}
+	    if variable_struct_exists(stats, "inflict_defdown") { mon.defmod -= stats.inflict_defdown; mon.defmod_fresh = bool(stats.inflict_defdown); if stats.inflict_defdown > 0 { instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: defense_down }) } }
+		if variable_struct_exists(stats, "inflict_atkdown") { mon.atkmod -= stats.inflict_atkdown; mon.atkmod_fresh = bool(stats.inflict_atkdown); if stats.inflict_atkdown > 0 { instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: attack_down }) } }
 		if variable_struct_exists(stats, "inflict_clearstats") {
 			mon.atkmod = 0
 			mon.defmod = 0
-	
+
 		}
 		var _hauntatt = irandom(1)
 		if variable_struct_exists(stats, "inflict_haunt") and _hauntatt { mon.haunt = stats.inflict_haunt; attempted = true}
 		else if variable_struct_exists(stats, "inflict_haunt") and !_hauntatt{ InjectLog(mon.name + " resisted a spirit!") }
-		
+
 		if variable_struct_exists(stats, "locked") and stats.locked == true { mon.locked = struct.statuses.locked}
 	}
 	
@@ -134,7 +138,7 @@ function DoDamage(struct){
 			var _mon = targets[_uk]
 			if _mon.monsterHealth > 0 and !_mon.boss {
 				_mon.monsterHealth = 0
-				_mon.flash_timer = 8
+				_mon.flash_timer = 12; _mon.flash_color = _dam_col
 				global.gold += 1
 				instance_create_depth(0,0,-200,objDamageNumber,
 				{ amount: 9999, world_x: _mon.x, world_y: _mon.y - _mon.sprite_height, col: c_white })
@@ -148,7 +152,7 @@ function DoDamage(struct){
 	var _caster = struct.caster
 	if variable_struct_exists(_unleash, "heal_hp_ratio") and _unleash.heal_hp_ratio > 0 {
 		var _heal = ceil(tempdam * _unleash.heal_hp_ratio)
-		_caster.hp = min(_caster.hp + _heal, _caster.maxhp)
+		_caster.hp = min(_caster.hp + _heal, _caster.hpmax)
 		InjectLog(_caster.name + " recovers " + string(_heal) + " HP!")
 	}
 	if variable_struct_exists(_unleash, "heal_pp_ratio") and _unleash.heal_pp_ratio > 0 {
@@ -178,7 +182,7 @@ function DoDamage(struct){
 			var _sn = troop[selected - 1]
 			var _sd = SplashWithResist(struct, _unleash, tempdam, _sn)
 			_sn.monsterHealth -= _sd
-			_sn.flash_timer = 8
+			_sn.flash_timer = 12; _sn.flash_color = _splash_col
 			InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
 			if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
 			instance_create_depth(0,0,-200,objDamageNumber,
@@ -189,7 +193,7 @@ function DoDamage(struct){
 			var _sn = troop[selected + 1]
 			var _sd = SplashWithResist(struct, _unleash, tempdam, _sn)
 			_sn.monsterHealth -= _sd
-			_sn.flash_timer = 8
+			_sn.flash_timer = 12; _sn.flash_color = _splash_col
 			InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
 			if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
 			instance_create_depth(0,0,-200,objDamageNumber,
@@ -261,7 +265,7 @@ function DoDamage(struct){
 					var _target = troop[selected]
 					if _target.monsterHealth > 0 {
 						_target.monsterHealth -= _ndam
-						_target.flash_timer = 8
+						_target.flash_timer = 12; _target.flash_color = c_red
 						if _target.monsterHealth <= 0 { _target.monsterHealth = 0; global.gold += 1 }
 						InjectLog(_neighbor.name + " strikes " + _target.name + " for " + string(_ndam) + "!")
 						instance_create_depth(0, 0, -200, objDamageNumber,
@@ -280,7 +284,7 @@ function DoDamage(struct){
 			var _sn = troop[selected - 1]
 			var _sd = SplashWithResist(struct, _onConfirm, tempdam, _sn)
 			_sn.monsterHealth -= _sd
-			_sn.flash_timer = 8
+			_sn.flash_timer = 12; _sn.flash_color = _oc_splash_col
 			InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
 			if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
 			instance_create_depth(0,0,-200,objDamageNumber,
@@ -290,7 +294,7 @@ function DoDamage(struct){
 			var _sn = troop[selected + 1]
 			var _sd = SplashWithResist(struct, _onConfirm, tempdam, _sn)
 			_sn.monsterHealth -= _sd
-			_sn.flash_timer = 8
+			_sn.flash_timer = 12; _sn.flash_color = _oc_splash_col
 			InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
 			if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
 			instance_create_depth(0,0,-200,objDamageNumber,
@@ -306,7 +310,7 @@ function DoDamage(struct){
 		for (var _c = selected - 1; _c >= 0; _c--) {
 			if (troop[_c].monsterHealth <= 0) { continue }
 			troop[_c].monsterHealth -= _cascade_dam
-			troop[_c].flash_timer = 8
+			troop[_c].flash_timer = 12; troop[_c].flash_color = _dam_col
 			InjectLog(troop[_c].name + " takes " + string(_cascade_dam) + " cascade damage!")
 			if (troop[_c].monsterHealth <= 0) {
 				troop[_c].monsterHealth = 0
@@ -319,7 +323,7 @@ function DoDamage(struct){
 		for (var _c = selected + 1; _c < array_length(troop); _c++) {
 			if (troop[_c].monsterHealth <= 0) { continue }
 			troop[_c].monsterHealth -= _cascade_dam
-			troop[_c].flash_timer = 8
+			troop[_c].flash_timer = 12; troop[_c].flash_color = _dam_col
 			InjectLog(troop[_c].name + " takes " + string(_cascade_dam) + " cascade damage!")
 			if (troop[_c].monsterHealth <= 0) {
 				troop[_c].monsterHealth = 0

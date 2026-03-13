@@ -1,7 +1,7 @@
 // Central pause state manager — derive global.pause from what menus exist
 if instance_exists(objStatDisplay)
 	or isCombatMenu()
-	or instance_exists(objCharTarget)
+	or (instance_exists(objCharTarget) and (!variable_instance_exists(objCharTarget, "confirmed") or !objCharTarget.confirmed))
 	or instance_exists(objCharMenu)
 	or instance_exists(objDjinnDraft)
 	or instance_exists(objSummonDraft)
