@@ -67,7 +67,7 @@ function _AdvanceTurn(){
 		}
 		if global.players[i].hp <= 0 {
 			global.players[i].hp = 0
-			ClearAllTokens(global.players[i])
+			ClearAllTokens(global.players[i], true)
 		}
 		if array_contains(global.players[i].armor, FindItemID("Herbed Shirt")) and global.players[i].poison{ global.players[i].poison = false;global.players[i].venom = false; InjectLog(global.players[i].name + " nibbled on their shirt!")}
 		if array_contains(global.players[i].armor, FindItemID("Herbed Shirt")) and global.players[i].venom{ global.players[i].poison = false;global.players[i].venom = false; InjectLog(global.players[i].name + " nibbled on their shirt!")}
@@ -82,7 +82,13 @@ function _AdvanceTurn(){
 	CheckVictory()
 	// --- Advance turn ---
 	global.playersActed++
-
+	
+	for (var _i = 0; _i < 4; _i++) {
+			global.turn = (global.turn + 1) mod 4
+			if global.players[global.turn].hp > 0 { break }
+			global.playersActed++
+		}
+	
 	if global.playersActed >= array_length(global.players) {
 		// --- End of round: enemy phase, then back to first player ---
 		global.playersActed = 0
@@ -104,11 +110,7 @@ function _AdvanceTurn(){
 	} else {
 		// --- Mid-round: boss phase, then next player ---
 		// Advance to next alive player
-		for (var _i = 0; _i < 4; _i++) {
-			global.turn = (global.turn + 1) mod 4
-			if global.players[global.turn].hp > 0 { break }
-			global.playersActed++
-		}
+		
 
 		global.turnPhase = "boss"
 		ClearOptions()

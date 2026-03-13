@@ -20,23 +20,8 @@ if instance_position(mouse_x,mouse_y,objConfirm){
 		array_push(sel.inventory, itemid)
 		InjectLog(global.itemcardlist[itemid].name + " transferred to " + sel.name)
 		show_debug_message("itemid: " + string(itemid) + " slot: " + string(slot))
-		if global.inCombat{
-			if array_length(global.attackQueue) > 0 {
-				ProcessAttackQueue()
-				instance_destroy()
-				exit
-			}else{
-				global.pause = false
-				NextTurn()
-				instance_destroy()
-				exit
-			}
-
-		}else{
-			DeleteButtons()
-			alarm_set(2,60)
-			exit
-		}
+		alarm_set(0,30)
+		exit
 	}	
 	
 	var choice = false
@@ -154,25 +139,13 @@ if instance_position(mouse_x,mouse_y,objConfirm){
 	
 
 	
-	if choice = true{show_debug_message("Canary")
+	if choice = true{
 		if itemid != -1{
 			array_push(global.discard,itemid)
 			array_delete(global.players[global.turn].inventory,itemid,1)
 			
 		}
-		if global.inCombat{
-			if array_length(global.attackQueue) > 0 {
-				ProcessAttackQueue()
-				instance_destroy()
-			}else{
-				global.pause = false
-				NextTurn()
-				instance_destroy()
-			}
-		}else{
-			DeleteButtons()
-			alarm_set(2,60)
-			
-		}
+		alarm_set(0,30)
+		exit
 	}
 }

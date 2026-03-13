@@ -87,7 +87,7 @@ if mode == 0 {
 		var SelectedItem = _inv[selected]
 
 		if instance_position(mouse_x,mouse_y,objConfirm){
-			if global.itemcardlist[SelectedItem].type == "Healing" or global.itemcardlist[SelectedItem].type == "Battle"{
+			if global.itemcardlist[SelectedItem].type == "Healing" or global.itemcardlist[SelectedItem].type == "Battle" or global.itemcardlist[SelectedItem].name == "Lucky Medal"{
 				ClearOptions()
 				DeleteButtons()
 				OnUse(SelectedItem,selected,_player)

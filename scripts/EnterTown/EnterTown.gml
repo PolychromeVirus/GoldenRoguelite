@@ -13,7 +13,8 @@ function EnterTown(town_index) {
 		var _p = global.players[i]
 		_p.hp = _p.hpmax
 		_p.pp = _p.ppmax
-
+		_p.poison = false
+		_p.venom = false
 		// Auto-repair broken armor
 		for (var j = 0; j < array_length(_p.broken_armor); j++) {
 			if (_p.broken_armor[j]) {
@@ -43,7 +44,7 @@ function EnterTown(town_index) {
 		}
 		ProcessTownFinds()
 	} else {
-		// Already visited — go straight to shop TODO: towns can't be revisited
+		// Already visited ï¿½ go straight to shop TODO: towns can't be revisited
 		DeleteButtons()
 		CreateOptions()
 	}

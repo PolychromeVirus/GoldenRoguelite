@@ -26,6 +26,11 @@ function NextFloor() {
 			InjectLog("Floor Reward! Djinni!")
 			DjinnDraft()
 		}
+		if (_reward == "summon") {
+			_has_reward = true
+			InjectLog("Floor Reward! Summon Tablet!")
+			SummonDraft()
+		}
 	}
 
 	// Clear floor effects from previous floor

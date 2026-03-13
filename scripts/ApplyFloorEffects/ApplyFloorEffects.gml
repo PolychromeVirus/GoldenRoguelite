@@ -67,13 +67,15 @@ function ApplyFloorEffects() {
 			else if (string_pos("Mars", _name) > 0) _elem = "mars"
 			else if (string_pos("Jupiter", _name) > 0) _elem = "jupiter"
 			else if (string_pos("Mercury", _name) > 0) _elem = "mercury"
+			var _affinity = 0
 			for (var _p = 0; _p < 4; _p++) {
-				if (global.players[_p].hp <= 0) continue
-				var _affinity = QueryDice(global.players[_p], _elem, "affinity")
-				if (_affinity > 0) {
-					global.players[_p].hp = max(1, global.players[_p].hp - _affinity)
-				}
+				_affinity += QueryDice(global.players[_p], _elem, "affinity")
 			}
+			for (var _p = 0; _p < 4; _p++) {	
+				if (global.players[_p].hp <= 0) continue
+				global.players[_p].hp = max(1, global.players[_p].hp - _affinity)
+			}
+			
 			InjectLog(_elem + " overload deals affinity damage!")
 		}
 		else if (_name == "Magic Powder") {
@@ -90,7 +92,7 @@ function ApplyFloorEffects() {
 		}
 		else if (_name == "Psy Seal") {
 			for (var _p = 0; _p < 4; _p++) {
-				if (global.players[_p].hp > 0) global.players[_p].psySeal = 1
+				if (global.players[_p].hp > 0) global.players[_p].psyseal = 1
 			}
 			InjectLog("Psynergy sealed for the first turn!")
 		}

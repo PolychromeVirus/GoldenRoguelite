@@ -269,7 +269,7 @@ function ExecuteMonsterTurn(mon_id) {
 								CreateDicePool()
 							} else {
 								_p.hp = 0
-								ClearAllTokens(_p)
+								ClearAllTokens(_p,true)
 							}
 						}
 					}
