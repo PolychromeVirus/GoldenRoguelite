@@ -75,7 +75,7 @@ function QueryDice(player, subset, mode) {
 	var highest = 0
 	var second  = 0
 	var lowest  = 7   // sentinel — above max pip value
-
+	
 	switch mode {
 
 		case "affinity":
@@ -110,7 +110,7 @@ function QueryDice(player, subset, mode) {
 				if !include[p] { continue }
 				var vpool = dpool[p]
 				for (var i = 0; i < array_length(vpool); i++) {
-					result += vpool[i]
+					result += player.name == "Sheba" ? vpool[i] + 1 : vpool[i]
 				}
 			}
 			break

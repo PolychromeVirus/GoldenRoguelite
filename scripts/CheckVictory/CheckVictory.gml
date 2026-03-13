@@ -1,18 +1,28 @@
 function CheckVictory(){
-	var _any_alive = false
-	var _count = instance_number(objMonster)
-	for (var j = 0; j < _count; j++) {
-		if instance_find(objMonster, j).monsterHealth != 0 {
-			_any_alive = true
+	// --- Monster wipe check (poison/venom kills) ---
+	var _any_monster_alive = false
+	var _mon_count = instance_number(objMonster)
+	for (var _m = 0; _m < _mon_count; _m++) {
+		if instance_find(objMonster, _m).monsterHealth != 0 {
+			_any_monster_alive = true
 			break
 		}
 	}
-
-	if _any_alive {
-		global.inCombat = true
-		global.pause = false
-		NextTurn()
-	} else {
+	if (_mon_count > 0 and !_any_monster_alive) {
 		HandleVictory()
+		exit
+	}
+
+	// --- Party wipe check ---
+	var _all_dead = true
+	for (var _w = 0; _w < 4; _w++) {
+		if global.players[_w].hp > 0 { _all_dead = false; break }
+	}
+	if _all_dead {
+		InjectLog("Game Over!")
+		global.inCombat = false
+		global.pause = false
+		room_goto(CharacterSelect)
+		exit
 	}
 }

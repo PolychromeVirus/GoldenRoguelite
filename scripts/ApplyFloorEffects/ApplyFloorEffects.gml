@@ -122,7 +122,7 @@ function ApplyPuzzleReward(_puzzle) {
 	var _name = _puzzle.name
 
 	if (_name == "Catch") {
-		// Peek at next floor — just log the info for now
+		instance_create_depth(0,0,0,objInsightDisplay)
 		InjectLog("You glimpse the challenges ahead!")
 	}
 	else if (_name == "Cloak") {
@@ -142,15 +142,15 @@ function ApplyPuzzleReward(_puzzle) {
 			_pl.psySeal = 0
 			_pl.delude = false
 		}
-		InjectLog("Force cures all status conditions!")
+		InjectLog("Party snapped out of their conditions!")
 	}
 	else if (_name == "Halt") {
 		// Roll d4, on 1 trigger djinni trade
 		if (irandom(3) == 0) {
-			InjectLog("Time distortion reveals a djinni!")
+			InjectLog("You halted a djinni before it could run away!")
 			DjinnDraft()
 		} else {
-			InjectLog("The distortion fades... nothing happens.")
+			InjectLog("A djinni got away...")
 		}
 	}
 	else if (_name == "Move") {
@@ -165,19 +165,18 @@ function ApplyPuzzleReward(_puzzle) {
 			array_push(global.choiceDrawQueue, _p)
 		}
 		ProcessChoiceDrawQueue()
-		InjectLog("Path revealed! Choice draw for all!")
+		InjectLog("Found some hidden items! Choice draw for all!")
 	}
 	else if (_name == "Whirlwind") {
 		global.gold += 10
-		InjectLog("Whirlwind collects 10 gold!")
+		InjectLog("You pick up some coins in the wind!")
 	}
 	else if (_name == "Frost") {
 		// Roll d4, on 1 a djinni joins
 		if (irandom(3) == 0) {
-			InjectLog("A djinni emerges from the ice!")
+			InjectLog("There was a djinni on the other side!")
 			DjinnDraft()
 		} else {
-			InjectLog("The ice melts... nothing happens.")
 		}
 	}
 }

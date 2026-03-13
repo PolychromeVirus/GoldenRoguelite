@@ -48,8 +48,9 @@ function SelectTargets(struct){
 			if (global.players[j].halfheal and _party_heal > 0) { _party_heal = floor(_party_heal / 2) }
 			if _party_heal > 0 and (global.players[j].hp > 0 or struct.dmgtype == "mercury"){global.players[j].hp = min(global.players[j].hp + _party_heal, global.players[j].hpmax)}
 		}
+		NextTurn()
 		return
-	}NextTurn()
+	}
 	if global.lastselected != -1{struct.selected = global.lastselected}
 
 	if struct.target == "enemy" {instance_create_depth(0,0,0,objMonsterTarget, struct)}else{

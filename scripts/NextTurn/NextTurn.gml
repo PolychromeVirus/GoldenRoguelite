@@ -1,14 +1,4 @@
-function NextTurn(override = false){
-	if !global.inCombat and !override { exit }
-
-	TickPassiveForChar(global.turn)
-
-	// Out of combat: just cycle to next player
-	if (!global.inCombat and override) {
-		global.turn = (global.turn + 1) mod 4
-		global.players[global.turn].dicepool = RollDice(global.players[global.turn])
-		exit
-	}
+function NextTurn(){
 
 	// --- Extra turn: skip djinn recovery, PP regen, boss phase — just reroll and go ---
 	if global.players[global.turn].extraTurns > 0 {
@@ -40,12 +30,24 @@ function NextTurn(override = false){
 			}
 		}
 	}
+	
+
+	_AdvanceTurn()
+
+}
+
+
+function _AdvanceTurn(){
+	
+	var _cp = global.players[global.turn]
+	TickPassiveForChar(global.turn)
+	
 	global.justSummoned = false
 	// Clear just_unleashed flags
 	for (var _d = 0; _d < array_length(_cp.djinn); _d++){
 		global.djinnlist[_cp.djinn[_d]].just_unleashed = false
 	}
-
+	
 	// --- Player ATK decay (outgoing player) ---
 	if (_cp.atkmod_fresh) { _cp.atkmod_fresh = false }
 	else if (_cp.atkmod > 0) { _cp.atkmod-- }
@@ -77,47 +79,11 @@ function NextTurn(override = false){
 			if monsterHealth <= 0 { monsterHealth = 0 }
 		}
 	}
-
-	// --- Monster wipe check (poison/venom kills) ---
-	var _any_monster_alive = false
-	var _mon_count = instance_number(objMonster)
-	for (var _m = 0; _m < _mon_count; _m++) {
-		if instance_find(objMonster, _m).monsterHealth != 0 {
-			_any_monster_alive = true
-			break
-		}
-	}
-	if (_mon_count > 0 and !_any_monster_alive) {
-		HandleVictory()
-		exit
-	}
-
-	// --- Party wipe check ---
-	var _all_dead = true
-	for (var _w = 0; _w < 4; _w++) {
-		if global.players[_w].hp > 0 { _all_dead = false; break }
-	}
-	if _all_dead {
-		InjectLog("Game Over!")
-		global.inCombat = false
-		global.pause = false
-		room_goto(CharacterSelect)
-		exit
-	}
-	
-	
-	
-	
+	CheckVictory()
 	// --- Advance turn ---
 	global.playersActed++
 
-	// Count alive players
-	var _alive = 0
-	for (var i = 0; i < 4; i++) {
-		if global.players[i].hp > 0 { _alive++ }
-	}
-
-	if global.playersActed >= _alive {
+	if global.playersActed >= array_length(global.players) {
 		// --- End of round: enemy phase, then back to first player ---
 		global.playersActed = 0
 		global.turnPhase = "enemy"
@@ -130,6 +96,7 @@ function NextTurn(override = false){
 			for (var _i = 0; _i < 4; _i++) {
 				if global.players[global.turn].hp > 0 { break }
 				global.turn = (global.turn + 1) mod 4
+				global.playersActed++
 			}
 
 			_NextTurnSetupPlayer()
@@ -140,6 +107,7 @@ function NextTurn(override = false){
 		for (var _i = 0; _i < 4; _i++) {
 			global.turn = (global.turn + 1) mod 4
 			if global.players[global.turn].hp > 0 { break }
+			global.playersActed++
 		}
 
 		global.turnPhase = "boss"
@@ -207,16 +175,11 @@ function _NextTurnSetupPlayer() {
 		// Skip to next alive player without triggering another boss phase
 		for (var _sk = 0; _sk < 4; _sk++) {
 			global.turn = (global.turn + 1) mod 4
+			global.playersActed++
 			if global.players[global.turn].hp > 0 { break }
 		}
 		// Party wipe check
-		if global.players[global.turn].hp <= 0 {
-			InjectLog("Game Over!")
-			global.inCombat = false
-			global.pause = false
-			room_goto(CharacterSelect)
-			return
-		}
+		CheckVictory()
 	}
 
 	var _cur = global.players[global.turn]
@@ -225,7 +188,7 @@ function _NextTurnSetupPlayer() {
 	if _cur.sleep {
 		if irandom(1) == 0 {
 			InjectLog(_cur.name + " is asleep!")
-			NextTurn()
+			_AdvanceTurn()
 			return
 		} else {
 			InjectLog(_cur.name + " woke up!")
@@ -238,7 +201,7 @@ function _NextTurnSetupPlayer() {
 		if irandom(1) == 0 {
 			InjectLog(_cur.name + " is stunned!")
 			_cur.stun--
-			NextTurn()
+			_AdvanceTurn()
 			return
 		} else {
 			_cur.stun--
@@ -259,7 +222,7 @@ function _NextTurnSetupPlayer() {
 			var _curseRoll = irandom(5) + 1
 			if (_curseRoll <= 2) {
 				InjectLog(_cur.name + " couldn't move due to a curse!")
-				NextTurn()
+				_AdvanceTurn()
 				return
 			}
 		}

@@ -17,7 +17,7 @@ Flint,Djinni,Venus,Jupiter,Flint,10,10,10,3,1,0,2,x,x,x,x,x,Gaia,,,Herb,Mace,,,1
 Cannon,Djinni,Mars,Mercury,Cannon,10,10,10,3,1,0,2,x,x,x,x,x,Volcano,,,Herb,Mace,,,,1,,,,,,,,,,0,Reverse Dice Pool,,,
 Waft,Djinni,Jupiter,Venus,Waft,10,10,10,3,1,0,2,x,x,x,x,x,Whirlwind,,,Psy Crystal,Mace,,,,,1,,,,,,,,,0,Reverse Dice Pool,,,
 Sleet,Djinni,Mercury,Mars,Sleet,10,10,10,3,1,0,2,x,x,x,x,x,Prism,,,Antidote,Mace,,,,,,1,,,,,,,,0,Reverse Dice Pool,,,
-Matthew,Squire,Venus,Jupiter,Matthew,10,10,10,3,1,0,2,x,x,,x,,,Quake,Cure,Herb,Short Sword,,,1,,,,,,,,,,,0,"Knows ""Retreat""",,,
+Matthew,Squire,Venus,Jupiter,Matthew,10,10,10,3,1,0,2,x,x,,x,,Retreat,Quake,Cure,Herb,Short Sword,,,1,,,,,,,,,,,0,"Knows ""Retreat""",,,
 Tyrell,Guard,Mars,Mercury,Tyrell,10,10,10,3,1,0,1,,x,,x,x,,Volcano,Fume,Herb,Long Sword,,,,1,,,,,,,,,,0,ATK tokens apply twice,,,
 Karis,Wind Seer,Jupiter,Venus,Karis,10,10,10,3,1,0,3,x,,x,,,,Sleep,Ray,Psy Crystal,Wooden Stick,,,,,1,,,,,,,,,0,Status locked in for 1 turn,,,
 Rief,Water Seer,Mercury,Mars,Rief,10,10,10,3,1,0,3,,,x,,x,,Ply,Douse,Antidote,Wooden Stick,,,,,,1,,,,,,,,0,Healing +1,,,

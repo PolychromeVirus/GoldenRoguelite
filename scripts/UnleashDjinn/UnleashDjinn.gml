@@ -236,11 +236,11 @@ function UnleashDjinn(djinnID, playerID) {
 			exit
 			break
 
-		case "Iron":    // Venus: +2 DEF to all
+		case "Iron":    // Venus: +3 DEF to all
 			for (var _i = 0; _i < array_length(global.players); _i++) {
-				if global.players[_i].hp > 0 { global.players[_i].defmod += 2 }
+				if global.players[_i].hp > 0 { global.players[_i].defmod += 3 }
 			}
-			InjectLog(djinn.name + " boosted DEF +2 for all")
+			InjectLog("The party's defenses are bolstered!")
 			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			global.pause = false
@@ -389,7 +389,7 @@ function UnleashDjinn(djinnID, playerID) {
 			break
 		case "Quartz":
 			var healval = irandom(5)
-			if healval <= 4{_struct.onConfirm.heal_hp_ratio = .5}else{_struct.heal = 9999}
+			if healval <= 4{_struct.onConfirm.heal_hp_ratio = .5}else{_struct.healing = 9999}
 			_struct.revive = 1
 			_struct.target = "ally"
 			break
@@ -450,7 +450,7 @@ function UnleashDjinn(djinnID, playerID) {
 			var _djinnsel=[]
 			for (var i = 0; i < array_length(global.players); ++i) {
 			    for (var j = 0; j < array_length(global.players[i].djinn); ++j) {
-				    if global.djinnlist[global.players[i].djinn[j]].spent = true and global.djinnlist[global.players[i].djinn[j]].ready = true{
+				    if global.djinnlist[global.players[i].djinn[j]].spent == true and global.djinnlist[global.players[i].djinn[j]].ready == true{
 						array_push(_djinnsel,global.players[i].djinn[j])
 					}
 				}
@@ -584,6 +584,7 @@ function UnleashDjinn(djinnID, playerID) {
 		if irandom(1) == 0{
 			_struct.dam = 9999
 		}
+		break
 			
 		default:
 			show_debug_message("UnleashDjinn: '" + djinn.name + "' has no implementation yet")

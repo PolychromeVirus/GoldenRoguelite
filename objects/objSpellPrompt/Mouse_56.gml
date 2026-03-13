@@ -11,11 +11,11 @@ if instance_exists(objConfirm) && instance_position(mouse_x, mouse_y, objConfirm
 }
 
 if instance_exists(objButton2) && instance_position(mouse_x, mouse_y, objButton2) != noone {
-	if objCancel.clickable {
-		var _cb = on_decline
-		ClearOptions()
-		global.pause = false
-		_cb()
-		instance_destroy()
-	}
+
+	var _cb = on_decline
+	ClearOptions()
+	global.pause = false
+	_cb()
+	instance_destroy()
+
 }

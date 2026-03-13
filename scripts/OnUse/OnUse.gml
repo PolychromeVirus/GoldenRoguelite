@@ -121,5 +121,10 @@ function OnUse(item,slot,player = -1){
 			_struct.statuses = {inflict_sleep: true}
 			SelectTargets(_struct)
 			break
+		case "Lucky Medal":
+			for (var i = 0;i<array_length(global.players);i++){
+				global.players[i].extraTurns += 1
+			}
+			break
 	}
 }

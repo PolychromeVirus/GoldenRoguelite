@@ -10,8 +10,9 @@ function isUsable(item){
 	var itemtype = global.itemcardlist[item].type
 	
 	if itemtype != "Healing" and itemtype != "Battle"{
+		if global.itemcardlist[item].name == "Lucky Medal" and global.inCombat{return true}
 		return false
 	}
-	
+	if itemtype == "Battle" and !global.inCombat{return false}
 	return true
 }
