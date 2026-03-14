@@ -1,3 +1,16 @@
+// Game over countdown
+if global.gameover {
+    global.gameover_timer--
+    if global.gameover_timer <= 0 {
+        global.gameover = false
+        // Restore background color
+        var _bg = layer_background_get_id(layer_get_id("Background"))
+        layer_background_blend(_bg, c_white)
+        room_goto(CharacterSelect)
+    }
+    exit
+}
+
 // Central pause state manager — derive global.pause from what menus exist
 if instance_exists(objStatDisplay)
 	or isCombatMenu()
@@ -25,9 +38,9 @@ if instance_exists(objStatDisplay)
 
 var _bg_layer = layer_background_get_id(layer_get_id("Background"))
 
-if room != CharacterSelect{
+if room != CharacterSelect and !global.gameover{
 	if !global.inTown and !global.inCombat and !layer_background_get_sprite(global.genbackground){
-	
+
 		layer_background_sprite(_bg_layer, global.genbackground)
 	}
 }

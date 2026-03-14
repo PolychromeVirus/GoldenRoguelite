@@ -1,3 +1,7 @@
+if global.gameover {
+    exit
+}
+
   //Column layout:                                                                                                          - _margin (2) — left edge padding before first column
   //- _endMargin (15) — right edge padding after last column                                                                - _colW — total width of each player's column (calculated, then -15 extra)
   //- _portraitGap (2) — horizontal gap between portrait and the text/bars area
@@ -41,7 +45,7 @@ if global.charselect == false{
 
 	draw_set_font(GoldenSun)
 
-	if global.pause == false and !isCombatMenu(){
+	if (global.pause == false or instance_exists(objCharTarget)) and !isCombatMenu(){
 		// --- New portrait layout ---
 		var _guiW = display_get_gui_width()
 		var _portraitSize = 144

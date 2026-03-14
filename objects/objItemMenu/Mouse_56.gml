@@ -119,7 +119,7 @@ if mode == 0 {
 			_struct.itemid = SelectedItem
 			_struct.slot = selected
 			ClearOptions()
-			instance_create_depth(0,0,0,objCharTarget,_struct)
+			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
 			instance_destroy()
 		}
 	}

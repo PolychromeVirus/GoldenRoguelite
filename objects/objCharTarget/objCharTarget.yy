@@ -58,8 +58,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"HalfMenuCharSelector",
-    "path":"sprites/HalfMenuCharSelector/HalfMenuCharSelector.yy",
+    "name":"ThreeQuarterMenu",
+    "path":"sprites/ThreeQuarterMenu/ThreeQuarterMenu.yy",
   },
   "spriteMaskId":null,
   "visible":true,

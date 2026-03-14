@@ -86,6 +86,7 @@ function _AdvanceTurn(){
 	for (var _i = 0; _i < 4; _i++) {
 			global.turn = (global.turn + 1) mod 4
 			if global.players[global.turn].hp > 0 { break }
+			TickPassiveForChar(global.turn)
 			global.playersActed++
 		}
 	

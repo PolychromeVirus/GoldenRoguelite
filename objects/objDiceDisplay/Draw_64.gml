@@ -38,6 +38,7 @@ if !global.inCombat and !global.pause{
 	exit
 }
 if global.turnPhase == "enemy" {exit}
+if global.gameover {exit}
 var dpool = global.players[global.turn].dicepool
 if array_length(dpool) == 0 { exit }
 if global.pause and !isCombatMenu(){exit}

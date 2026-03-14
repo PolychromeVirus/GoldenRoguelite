@@ -12,7 +12,7 @@ if dying and death_timer > 0 {
 	var _phase1_start = DEATH_PRE_DELAY
 	var _phase2_start = DEATH_PRE_DELAY + DEATH_FADE_FRAMES
 	var _phase3_start = DEATH_PRE_DELAY + DEATH_FADE_FRAMES + DEATH_SHRINK_FRAMES
-
+	shader_set(shGreyscale)
 	if _elapsed < _phase1_start {
 		// Pre-delay: draw frozen frame, let flash play
 		draw_sprite_ext(sprite_index, death_frame, x, y,
@@ -20,7 +20,7 @@ if dying and death_timer > 0 {
 	} else if _elapsed < _phase2_start {
 		// Phase 1: desaturate + fade alpha
 		var _p = (_elapsed - _phase1_start) / DEATH_FADE_FRAMES // 0→1
-		var _grey = merge_colour(c_white, c_dkgray, _p)
+		var _grey = c_grey
 		var _alpha = lerp(1.0, 0.3, _p)
 		draw_sprite_ext(sprite_index, death_frame, x, y,
 			image_xscale, image_yscale, image_angle, _grey, _alpha)
@@ -52,6 +52,7 @@ if dying and death_timer > 0 {
 		image_yscale = 1
 	}
 } else {
+	if global.gameover { shader_set(shGreyscale) }
 	draw_self()
 
 	if (flash_timer > 0) {
@@ -68,15 +69,30 @@ if dying and death_timer > 0 {
 		draw_sprite_stretched(Mercury_Star_Clean,0,x-8,y-sprite_height-18,16,16)
 	}
 
+	// Defense modifier indicator
+	if defmod != 0 and monsterHealth > 0 and !global.gameover {
+		var _dx = mark ? x + 10 : x - 8
+		var _dy = y - sprite_height - 18
+		draw_sprite_stretched(Bronze_Shield1426, 0, _dx, _dy, 16, 16)
+		draw_set_font(GoldenSunItalic)
+		var _def_str = string(defmod)
+		draw_set_color(c_black)
+		draw_text(_dx+2, _dy + 2, _def_str)
+		draw_set_color(defmod > 0 ? c_lime : c_red)
+		draw_text(_dx + 1, _dy + 1, _def_str)
+		draw_set_color(c_white)
+	}
+
 	
-	if monsterHealth > 0 {draw_rectangle_colour(hpx, y+2,hpx2,y+4,c_red,c_red,c_red,c_red, false);
+	if monsterHealth > 0 and !global.gameover{draw_rectangle_colour(hpx, y+2,hpx2,y+4,c_red,c_red,c_red,c_red, false);
 		draw_rectangle_colour(hpx, y+2,(hpx)+diff,y+4,c_blue,c_blue,c_blue,c_blue, false)}
 
 	// Draw status icons below HP bar
-	if monsterHealth > 0 {
+	if monsterHealth > 0 and !global.gameover{
 		var _statuses = GetStatus(id)
 		for (var _s = 0; _s < array_length(_statuses); _s++) {
 			draw_sprite_ext(_statuses[_s], 0, hpx + _s * 10, y + 6, 0.5, 0.5, 0, c_white, 1)
 		}
 	}
 }
+shader_reset()

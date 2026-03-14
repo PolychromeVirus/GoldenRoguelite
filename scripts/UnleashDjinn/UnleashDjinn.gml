@@ -187,7 +187,7 @@ function UnleashDjinn(djinnID, playerID) {
 			break
 
 		case "Fizz":    // Mercury: heal one for half max HP
-			_struct.healing = floor(caster.hpmax / 2)
+			_struct.healingratio = 0.5
 			_struct.target = "ally"
 			break
 

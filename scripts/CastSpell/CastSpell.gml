@@ -511,10 +511,8 @@ function CastSpell(spellID, playerID) {
 				break
 			}
 			// Stage 1: target one ally
-			struct.defup= 3
-			ClearOptions()
-			instance_create_depth(0, 0, 0, objCharTarget, struct)
-			instance_destroy(objPsynergyMenu)
+			struct.target = "ally"
+			struct.defup = 3
 			break
 
 		case "Impact":      // ATK up tokens on allies
@@ -536,11 +534,8 @@ function CastSpell(spellID, playerID) {
 				break
 			}
 			// Stage 1: target one ally
-			struct.atkup= 3
-			ClearOptions()
-			instance_create_depth(0, 0, 0, objCharTarget, struct)
-			instance_destroy(objPsynergyMenu)
-			exit
+			struct.target = "ally"
+			struct.atkup = 3
 			break
 		case "Halt":        // auto-prompted at boss phase start, not castable from menu
 			InjectLog(spell.name + " activates automatically at the start of boss fights.")
@@ -579,11 +574,8 @@ function CastSpell(spellID, playerID) {
 				break
 			}
 			// Stage 1: target one ally
+			struct.target = "ally"
 			struct.removebuffs = true
-			ClearOptions()
-			instance_create_depth(0, 0, 0, objCharTarget, struct)
-			instance_destroy(objPsynergyMenu)
-			exit
 			break
 		case "Break":       // remove stat changes from enemy
 			struct.statuses.inflict_clearstats= true
@@ -608,10 +600,7 @@ function CastSpell(spellID, playerID) {
 				NextTurn()
 				exit
 			}
-			ClearOptions()
-			instance_create_depth(0, 0, 0, objCharTarget, struct)
-			instance_destroy(objPsynergyMenu)
-			exit
+			struct.target = "ally"
 			break
 		case "Catch":       // auto-prompted on combat victory, not castable from menu
 			InjectLog(spell.name + " activates automatically after winning combat.")
@@ -622,8 +611,10 @@ function CastSpell(spellID, playerID) {
 			break
 		case "Cloak":       // shield ally until next turn
 			if global.inCombat {
-				instance_create_depth(0,0,0,objCharTarget,{cloak: playerID, healing: 0})
-				exit
+				DestroyAllBut()
+				DeleteButtons()
+				struct.cloak = true
+				struct.target = "ally"
 			}
 			break
 		case "Move":        // TODO: shuffle current puzzle

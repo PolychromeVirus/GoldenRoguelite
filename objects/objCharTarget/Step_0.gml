@@ -1,6 +1,1 @@
-if selected > array_length(global.players)-1{
-	selected = array_length(global.players)-1
-}
-if selected < 0{
-	selected = 0
-}
+// No carousel bounds checking needed — 2x2 grid is fixed

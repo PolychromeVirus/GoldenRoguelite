@@ -71,6 +71,8 @@ function InitGlobalVars(){
 	global.charselect = true
 	global.gold = 0
 	global.camwidth = 1536
+	global.gameover = false
+	global.gameover_timer = 0
 	global.inCombat = false
 	global.inTown = false
 	global.inBossRewards = false

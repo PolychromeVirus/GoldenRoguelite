@@ -55,7 +55,6 @@ function TickPassives() {
 }
 
 function TickPassiveForChar(char) {
-
 	//Tick down passives owned by the chosen player (end of round is calculated as this player's turn)
 	for (var i = array_length(global.passiveEffects) - 1; i >= 0; i--) {
 	    if global.passiveEffects[i].casterID == char {
@@ -71,11 +70,13 @@ function TickPassiveForChar(char) {
 	}
 	var _char = global.players[char]
 	//clear effects controlled by outgoing player
-	if _char.cloaking < 5{
+	show_debug_message(_char.cloaking)
+	if _char.cloaking < 5{show_debug_message(global.players[_char.cloaking].name)}
+	if _char.cloaking < 5 and !_char.cloak_fresh{
 		global.players[_char.cloaking].cloak = false
+		InjectLog(global.players[_char.cloaking].name + " became visible!")
 		_char.cloaking = 5
-		InjectLog(_char.name + " became visible!")
-	}
+	}else if _char.cloaking < 5 and _char.cloak_fresh{_char.cloak_fresh = false}
 
 }
 

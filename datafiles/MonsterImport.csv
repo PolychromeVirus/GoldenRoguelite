@@ -35,3 +35,7 @@ Mercury,Star Magician,Star_Magician,90,Mars,TRUE,4
 Mercury,Sentinel,Sentinel,190,Venus,TRUE,0
 Mars,Agatio,Agatio,140,Mercury,TRUE,3
 Mars,Karst,Karst,140,Mercury,TRUE,3
+Mars,Anger Ball,Anger_Ball,20,Mercury,TRUE,10
+Venus,Guardian Ball,Guardian_Ball,20,Jupiter,TRUE,10
+Mercury,Refresh Ball,Refresh_Ball,20,Mars,TRUE,10
+Jupiter,Thunder Ball,Thunder_Ball,20,Venus,TRUE,10

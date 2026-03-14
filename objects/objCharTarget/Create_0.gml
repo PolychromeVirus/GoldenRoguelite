@@ -1,22 +1,20 @@
-//spells = []
+// Grid origin derived from object position (room coords * 6 = GUI coords)
+gridX = x * 6 + 48
+gridY = y * 6 + 48
+cellW = 500
+cellH = 200
+cellStrideY = 250  // vertical spacing between row origins (cellH + padding)
+portraitSize = 128
+barW = 200
+barH = 14
+itemSize = 32
 
-//for (var i = 0; i<array_length(global.players[global.turn].spells); i++){
-//	for (var j = 0; j<array_length(global.psynergylist); j++){
-//		if global.psynergylist[j].name == global.players[global.turn].spells[i]{
-//			array_push(spells, global.psynergylist[j])
-//		}
-//	}
-//}
-
-var button1 = 132
-var button2 = 160
-
-if instance_number(objCancel) > 0{
-	instance_destroy(objCancel)	
+if instance_number(objCancel) > 0 {
+	instance_destroy(objCancel)
 }
-if instance_number(objConfirm) > 0{
-	instance_destroy(objConfirm)	
+if instance_number(objConfirm) > 0 {
+	instance_destroy(objConfirm)
 }
 
-instance_create_depth(button1,92,0,objConfirm)
-instance_create_depth(button2,92,0,objCancel)
+// No objConfirm — click-to-confirm on portraits
+instance_create_depth(BUTTON5, BOTTOMROW, 0, objCancel)

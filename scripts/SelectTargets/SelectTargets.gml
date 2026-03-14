@@ -54,7 +54,7 @@ function SelectTargets(struct){
 	if global.lastselected != -1{struct.selected = global.lastselected}
 
 	if struct.target == "enemy" {instance_create_depth(0,0,0,objMonsterTarget, struct)}else{
-		instance_create_depth(0,0,0,objCharTarget, struct)}
+		instance_create_depth(0,TARGETHEIGHT,0,objCharTarget, struct)}
 }
 
 /// @function ApplyDamageToTargets(struct)

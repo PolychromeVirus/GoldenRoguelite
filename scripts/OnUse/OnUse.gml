@@ -36,19 +36,19 @@ function OnUse(item,slot,player = -1){
 	switch global.itemcardlist[item].name{
 		case "Herb":
 			_struct.healing = 3
-			instance_create_depth(0,0,0,objCharTarget,_struct)
+			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
 			break
 		case "Nut":
 			_struct.healing = 6
-			instance_create_depth(0,0,0,objCharTarget,_struct)
+			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
 			break
 		case "Antidote":
 			_struct.removepoison = true
-			instance_create_depth(0,0,0,objCharTarget,_struct)
+			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
 			break
 		case "Psy Crystal":
 			_struct.ppheal = 3
-			instance_create_depth(0,0,0,objCharTarget,_struct)
+			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
 			break
 		case "Mist Potion":
 			for (var i = 0;i<array_length(global.players);i++){
@@ -64,16 +64,16 @@ function OnUse(item,slot,player = -1){
 			break
 		case "Potion":
 			_struct.healing = 20
-			instance_create_depth(0,0,0,objCharTarget,_struct)
+			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
 			break
 		case "Vial":
 			_struct.healing = 10
-			instance_create_depth(0,0,0,objCharTarget,_struct)
+			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
 			break
 		case "Water of Life":
 			_struct.revive = true
 			_struct.healing = 9999
-			instance_create_depth(0,0,0,objCharTarget,_struct)
+			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
 			break
 		case "Oil Drop":
 			array_push(global.discard, global.players[global.turn].inventory[slot])

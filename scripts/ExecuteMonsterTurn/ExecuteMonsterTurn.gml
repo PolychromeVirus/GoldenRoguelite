@@ -101,18 +101,63 @@ function ExecuteMonsterTurn(mon_id) {
 			
 		}
 
-		// --- Special moves: stub ---
+		// --- Special moves ---
 		if _move.special {
-			
-			if _move.movename == "Flee"{
+
+			if _move.movename == "Flee" {
 				monsterHealth = 0
 				sprite_index = FLED
 				global.gold = global.goldAtCombatStart
 				global.enemyFled = true
 				CheckVictory()
 			}
-			
-			InjectLog(name + " uses " + _move.movename + "! (not yet implemented)")
+
+			if _move.movename == "Mystic Call" {
+				var _dead_slot = noone
+				with (objMonster) {
+					if monsterHealth <= 0 { _dead_slot = id; break }
+				}
+
+				if _dead_slot != noone {
+					var _ball_names = ["Anger Ball", "Guardian Ball", "Refresh Ball", "Thunder Ball"]
+					var _ballname = _ball_names[irandom(3)]
+
+					var _template = undefined
+					for (var _m = 0; _m < array_length(global.monsterlist); _m++) {
+						if global.monsterlist[_m].name == _ballname {
+							_template = variable_clone(global.monsterlist[_m])
+							break
+						}
+					}
+
+					if _template != undefined {
+						_template.maxhp += 3 * global.hpcurse
+						_template.monsterHealth = _template.maxhp
+						_template.res += global.rescurse
+						_template.atk += global.atkcurse
+
+						with (_dead_slot) {
+							name          = _template.name
+							sprite_index  = _template.alias
+							maxhp         = _template.maxhp
+							monsterHealth = _template.monsterHealth
+							weakness      = _template.weakness
+							element       = _template.element
+							atk           = _template.atk
+							res           = _template.res
+							poison = false; venom = false; stun = 0
+							sleep = false; delude = false; lose_turn = false
+							dying = false; death_timer = -1
+						}
+						InjectLog(name + " calls " + _ballname + "!")
+					}
+				} else {
+					InjectLog(name + " calls... but no one is missing!")
+				}
+				return
+			}
+
+			InjectLog(name + " uses " + _move.movename + "!")
 			return
 		}
 
@@ -231,6 +276,8 @@ function ExecuteMonsterTurn(mon_id) {
 			for (var _t = 0; _t < array_length(_player_targets); _t++) {
 				var _pidx = _player_targets[_t]
 				var _p = global.players[_pidx]
+				
+				if _p.cloak {continue}
 
 				for (var _h = 0; _h < _hit_count; _h++) {
 					var _final = _base_dam
