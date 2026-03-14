@@ -49,3 +49,6 @@
 
 ## Animation / UX Overhaul
 - [ ] Full pass on combat animations, transitions, and visual feedback
+
+## Controls Overhaul
+- [ ] Audit all menus for mouse-only or keyboard-only input and ensure full support for both across the board

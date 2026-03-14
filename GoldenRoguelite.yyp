@@ -188,6 +188,7 @@
     {"id":{"name":"objMonsterStat","path":"objects/objMonsterStat/objMonsterStat.yy",},},
     {"id":{"name":"objMonsterTarget","path":"objects/objMonsterTarget/objMonsterTarget.yy",},},
     {"id":{"name":"objMultiKillTarget","path":"objects/objMultiKillTarget/objMultiKillTarget.yy",},},
+    {"id":{"name":"objNewrun","path":"objects/objNewrun/objNewrun.yy",},},
     {"id":{"name":"objNextTurn","path":"objects/objNextTurn/objNextTurn.yy",},},
     {"id":{"name":"objPassiveVisualizer","path":"objects/objPassiveVisualizer/objPassiveVisualizer.yy",},},
     {"id":{"name":"objPortrait","path":"objects/objPortrait/objPortrait.yy",},},
