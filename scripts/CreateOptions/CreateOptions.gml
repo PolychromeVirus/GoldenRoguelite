@@ -3,7 +3,7 @@
 function CreateOptions(){
 	if room == CharacterSelect {
 		instance_create_layer(4,BOTTOMROW,layer_get_id("Instances"),objBegin)
-		instance_create_layer(32,BOTTOMROW,layer_get_id("Instances"),objLoadGame)
+		if file_exists("Save.txt") { instance_create_layer(32,BOTTOMROW,layer_get_id("Instances"),objLoadGame) }
 		if !instance_exists(objLibrary) {
 			instance_create_depth(200,BOTTOMROW,0,objLibrary)
 		}
