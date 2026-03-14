@@ -54,26 +54,31 @@ function _ApplyBossItem(_item_id, _player_index) {
 		case "Apple":
 			_p.atk += 1
 			_p.base_atk += 1
+			array_push(_p.permanent_upgrades, _item_id)
 			InjectLog(_p.name + " gained +1 ATK!")
 			break
 		case "Cookie":
 			_p.ppmax += 3
 			_p.base_ppmax += 3
+			array_push(_p.permanent_upgrades, _item_id)
 			InjectLog(_p.name + " gained +3 Max PP!")
 			break
 		case "Hard Nut":
 			_p.def += 1
 			_p.base_def += 1
+			array_push(_p.permanent_upgrades, _item_id)
 			InjectLog(_p.name + " gained +1 DEF!")
 			break
 		case "Power Bread":
 			_p.hpmax += 3
 			_p.base_hpmax += 3
 			_p.hp += 3
+			array_push(_p.permanent_upgrades, _item_id)
 			InjectLog(_p.name + " gained +3 Max HP!")
 			break
 		case "Mint":
 			_p.mint = true
+			array_push(_p.permanent_upgrades, _item_id)
 			InjectLog(_p.name + " gained a permanent reroll!")
 			break
 		case "Lucky Medal":

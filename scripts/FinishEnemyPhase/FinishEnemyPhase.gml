@@ -12,10 +12,10 @@ function FinishEnemyPhase() {
 	for (var _i = 0; _i < 4; _i++) {
 		if global.players[_i].hp > 0 { _all_dead = false; break }
 	}
-	if _all_dead {
+	if _all_dead && !global.gameover {
 		InjectLog("You died...")
 		global.gameover = true
-		global.gameover_timer = 300
+		global.gameover_timer = 240
 		DeleteButtons()
 		with (objMonster) { image_speed = 0 }
 		var _bg = layer_background_get_id(layer_get_id("Background"))

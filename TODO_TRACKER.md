@@ -40,12 +40,12 @@
 
 ## Architectural
 - [ ] DestroyAllBut refactor — use pushed instance IDs instead of growing object array
-- [ ] Item menu "Give" — use quick character picker pattern
+- [x] Item menu "Give" — use quick character picker pattern
 
 ## Code Cleanup
 - [x] Remove stale TODO comments in PassiveEffects.gml (lines 4-9) for implemented passives
 - [x] Remove TODO comments on Mud/Vine cases in UnleashDjinn.gml
-- [ ] Update notes/character_passive_todo.md to reflect current state
+- [x] Update notes/character_passive_todo.md to reflect current state (deleted — superseded by TODO_TRACKER)
 
 ## Animation / UX Overhaul
 - [ ] Full pass on combat animations, transitions, and visual feedback

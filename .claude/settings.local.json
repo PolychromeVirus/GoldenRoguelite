@@ -12,7 +12,8 @@
       "Bash(ls -d \"C:\\\\Users\\\\polyc\\\\GameMakerProjects\\\\GoldenRoguelite/objects\"/obj* 2>/dev/null | sed 's|.*/||' | sort)",
       "Bash(ls -d \"/mnt/c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects\"/obj* 2>/dev/null | xargs -n1 basename | sort)",
       "Bash(cd \"C:\\\\Users\\\\polyc\\\\GameMakerProjects\\\\GoldenRoguelite\" && ls -d objects/obj* | sed 's|objects/||' | sort)",
-      "Bash(find /c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects -name \"obj*\" -type d | xargs -I {} bash -c 'ls {} | grep -q Draw && echo {}')"
+      "Bash(find /c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects -name \"obj*\" -type d | xargs -I {} bash -c 'ls {} | grep -q Draw && echo {}')",
+      "Bash(find:*)"
     ]
   },
   "outputStyle": "default"

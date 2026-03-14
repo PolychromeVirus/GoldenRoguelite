@@ -87,6 +87,7 @@ function InitChars(){
 			extraTurns: 0,
 			rerolls: [],
 			broken_armor: [],
+			permanent_upgrades: [],
 			dicepool: [[], [], [], [], []],
 			delaydata: {},
 			onAttack: [],

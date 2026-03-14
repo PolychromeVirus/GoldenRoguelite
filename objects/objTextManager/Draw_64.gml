@@ -1,6 +1,6 @@
 if global.gameover {
-    if global.gameover_timer < 240 {
-        var _fade = 1 - (global.gameover_timer / 240)
+    if global.gameover_timer < 180 {
+        var _fade = 1 - (global.gameover_timer / 180)
         draw_set_alpha(_fade)
         draw_set_color(c_black)
         draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false)

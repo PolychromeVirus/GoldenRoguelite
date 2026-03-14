@@ -62,6 +62,7 @@ function LoadGame(){
 		// Backfill base stats for old saves
 		for (var _bi = 0; _bi < array_length(global.players); _bi++) {
 			var _bp = global.players[_bi]
+			if !variable_struct_exists(_bp, "permanent_upgrades") { _bp.permanent_upgrades = [] }
 			if !variable_struct_exists(_bp, "base_hpmax") { _bp.base_hpmax = _bp.hpmax }
 			if !variable_struct_exists(_bp, "base_ppmax") { _bp.base_ppmax = _bp.ppmax }
 			if !variable_struct_exists(_bp, "base_ppdiscount") { _bp.base_ppdiscount = _bp.ppdiscount }

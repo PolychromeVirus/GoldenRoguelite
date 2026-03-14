@@ -34,6 +34,13 @@ function InitGlobalVars(){
 	#macro PORTRAIT3 763/6
 	#macro PORTRAIT4 1142/6
 	
+	#macro CREDITCOLUMN 4
+
+	#macro CREDIT1 4
+	#macro CREDIT2 40
+	#macro CREDIT3 76
+	#macro CREDIT4 112
+	
 	
 	global.floor = 1
 	global.dungeon = 0

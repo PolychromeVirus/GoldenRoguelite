@@ -6,7 +6,7 @@ if global.gameover {
         // Restore background color
         var _bg = layer_background_get_id(layer_get_id("Background"))
         layer_background_blend(_bg, c_white)
-        room_goto(CharacterSelect)
+        room_goto(PostGame)
     }
     exit
 }

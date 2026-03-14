@@ -192,6 +192,7 @@
     {"id":{"name":"objPassiveVisualizer","path":"objects/objPassiveVisualizer/objPassiveVisualizer.yy",},},
     {"id":{"name":"objPortrait","path":"objects/objPortrait/objPortrait.yy",},},
     {"id":{"name":"objPostBattle","path":"objects/objPostBattle/objPostBattle.yy",},},
+    {"id":{"name":"objPostGame","path":"objects/objPostGame/objPostGame.yy",},},
     {"id":{"name":"objPsynergy","path":"objects/objPsynergy/objPsynergy.yy",},},
     {"id":{"name":"objPsynergyDraft","path":"objects/objPsynergyDraft/objPsynergyDraft.yy",},},
     {"id":{"name":"objPsynergyLibrary","path":"objects/objPsynergyLibrary/objPsynergyLibrary.yy",},},
@@ -219,6 +220,7 @@
     {"id":{"name":"CharacterSelect","path":"rooms/CharacterSelect/CharacterSelect.yy",},},
     {"id":{"name":"MainGame","path":"rooms/MainGame/MainGame.yy",},},
     {"id":{"name":"MainGameTester","path":"rooms/MainGameTester/MainGameTester.yy",},},
+    {"id":{"name":"PostGame","path":"rooms/PostGame/PostGame.yy",},},
     {"id":{"name":"_BuildRandomPuzzleChallenge","path":"scripts/_BuildRandomPuzzleChallenge/_BuildRandomPuzzleChallenge.yy",},},
     {"id":{"name":"ApplyFloorEffects","path":"scripts/ApplyFloorEffects/ApplyFloorEffects.yy",},},
     {"id":{"name":"Autosave","path":"scripts/Autosave/Autosave.yy",},},
@@ -1839,6 +1841,7 @@
     {"roomId":{"name":"CharacterSelect","path":"rooms/CharacterSelect/CharacterSelect.yy",},},
     {"roomId":{"name":"MainGame","path":"rooms/MainGame/MainGame.yy",},},
     {"roomId":{"name":"MainGameTester","path":"rooms/MainGameTester/MainGameTester.yy",},},
+    {"roomId":{"name":"PostGame","path":"rooms/PostGame/PostGame.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
