@@ -38,6 +38,21 @@ function LoadGame(){
 		//global.rescurse = _save[16]
 		//global.atkcurse = _save[17]
 		
+		// Backfill artifactlist for old saves
+		if (!variable_global_exists("artifactlist") || !is_array(global.artifactlist)) {
+			global.artifactlist = []
+		}
+
+		// Re-append artifact structs to itemcardlist (restores artifact itemcard indices)
+		// itemcardlist was rebuilt from CSVs by InitGlobal; artifacts extend it from index N onward
+		if (array_length(global.artifactlist) > 0) {
+			for (var _ai = 0; _ai < array_length(global.artifactlist); _ai++) {
+				var _art = global.artifactlist[_ai]
+				array_push(global.itemcardlist, _art)
+				_art.itemcard_id = array_length(global.itemcardlist) - 1
+			}
+		}
+
 		// Reload dungeon troops for current dungeon
 		if (array_length(global.dungeonlist) > global.dungeon) {
 			var _dun = global.dungeonlist[global.dungeon]

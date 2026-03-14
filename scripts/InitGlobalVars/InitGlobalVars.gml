@@ -52,6 +52,7 @@ function InitGlobalVars(){
 	global.currentTown = -1
 	global.townVisited = []
 	global.townFindQueue = []
+	global.artifactlist = []
 
 	global.players = [variable_clone(global.characterlist[0]),
 					variable_clone(global.characterlist[1]),

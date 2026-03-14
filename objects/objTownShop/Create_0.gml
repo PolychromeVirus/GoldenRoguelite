@@ -93,6 +93,48 @@ if (variable_struct_exists(_town, "cached_shop") && array_length(_town.cached_sh
 		}
 	}
 
+	// Add artifact shop entries
+	if (_town.art_price > 0 && array_length(global.artifactlist) > 0) {
+		// Build set of itemcard_ids currently owned by any player
+		var _owned = {}
+		for (var _p = 0; _p < array_length(global.players); _p++) {
+			var _pl = global.players[_p]
+			// weapon slot
+			if (variable_struct_exists(_pl, "weapon") && variable_struct_exists(_pl.weapon, "itemcard_id")) {
+				_owned[$ string(_pl.weapon.itemcard_id)] = true
+			}
+			// inventory
+			for (var _ii = 0; _ii < array_length(_pl.inventory); _ii++) {
+				var _inv_id = _pl.inventory[_ii]
+				if (variable_struct_exists(global.itemcardlist[_inv_id], "itemcard_id")) {
+					_owned[$ string(global.itemcardlist[_inv_id].itemcard_id)] = true
+				}
+			}
+			// armor slots
+			for (var _ai = 0; _ai < array_length(_pl.armor); _ai++) {
+				var _arm_id = _pl.armor[_ai]
+				if (_arm_id >= 0 && variable_struct_exists(global.itemcardlist[_arm_id], "itemcard_id")) {
+					_owned[$ string(global.itemcardlist[_arm_id].itemcard_id)] = true
+				}
+			}
+		}
+
+		// Filter and shuffle
+		var _avail = []
+		for (var _ai = 0; _ai < array_length(global.artifactlist); _ai++) {
+			var _art = global.artifactlist[_ai]
+			if (!variable_struct_exists(_owned, string(_art.itemcard_id))) {
+				array_push(_avail, _art)
+			}
+		}
+		_avail = array_shuffle(_avail)
+		var _art_count = min(irandom_range(6, 10), array_length(_avail))
+		for (var _ai = 0; _ai < _art_count; _ai++) {
+			var _art = _avail[_ai]
+			array_push(shoplist, { id: _art.itemcard_id, category: "Artifact", price: _town.art_price, count: 1, name: _art.name })
+		}
+	}
+
 	// Add summon shop entry
 	if (_town.sum_price > 0) {
 		var _available = []
@@ -107,9 +149,9 @@ if (variable_struct_exists(_town, "cached_shop") && array_length(_town.cached_sh
 		}
 	}
 
-	// Sort shoplist: Item → Weapon → Armor → Psynergy → Summon
+	// Sort shoplist: Item → Weapon → Artifact → Armor → Psynergy → Summon
 	var _sort_order = function(_a, _b) {
-		var _ord = { Item: 0, Weapon: 1, Armor: 2, Psynergy: 3, Summon: 4 }
+		var _ord = { Item: 0, Weapon: 1, Artifact: 2, Armor: 3, Psynergy: 4, Summon: 5 }
 		var _oa = variable_struct_exists(_ord, _a.category) ? _ord[$ _a.category] : 5
 		var _ob = variable_struct_exists(_ord, _b.category) ? _ord[$ _b.category] : 5
 		if (_oa != _ob) { return _oa - _ob }

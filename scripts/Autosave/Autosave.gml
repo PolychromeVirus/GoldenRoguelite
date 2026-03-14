@@ -24,7 +24,8 @@ function Autosave(){
 		currentTown: global.currentTown,
 		floorRequired: global.floorRequired,
 		floorEffects: global.floorEffects,
-		floorName: global.floorName
+		floorName: global.floorName,
+		artifactlist: global.artifactlist
 	}
 	
 	

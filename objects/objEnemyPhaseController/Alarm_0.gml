@@ -30,8 +30,8 @@ if (mon_index >= array_length(mon_list)) {
 			if monsterHealth <= 0 { monsterHealth = 0 }
 		}
 	}
-	CheckVictory()
-	
+	if (global.inCombat) { CheckVictory() }
+
 	instance_destroy()
 	exit
 }
@@ -51,6 +51,6 @@ with (objMonster) {
 if (!_any_alive) {
 	mon_index = array_length(mon_list) // skip remaining
 }
-CheckVictory()
+if (global.inCombat) { CheckVictory() }
 
 alarm[0] = 60 // ~0.75 sec between monsters

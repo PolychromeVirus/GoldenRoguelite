@@ -42,9 +42,11 @@ function HandleVictory() {
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function CombatCleanup(){
-	// Restore overworld background to dungeon default
+	// Restore overworld background — use boss background on final floor
 	var _bg_layer = layer_background_get_id(layer_get_id("Background"))
-	var _dun_bg = global.dungeonlist[global.dungeon].background
+	var _dun = global.dungeonlist[global.dungeon]
+	var _is_boss_floor = (global.dungeonFloor == array_length(global.dungeonFloors))
+	var _dun_bg = _is_boss_floor ? _dun.boss_background : _dun.background
 	layer_background_sprite(_bg_layer, _dun_bg)
 
 	RollArmorBreaks()

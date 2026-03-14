@@ -76,6 +76,24 @@ if (instance_position(mouse_x, mouse_y, objConfirm)) {
 					}
 					break
 
+				case "Artifact":
+					// Same as Weapon but artifacts don't come from discard pile
+					var _target = -1
+					for (var _p = 0; _p < array_length(global.players); _p++) {
+						if (array_length(global.players[_p].inventory) < 5) {
+							_target = _p
+							break
+						}
+					}
+					if (_target == -1) {
+						InjectLog("All inventories are full!")
+					} else {
+						array_push(global.players[_target].inventory, _entry.id)
+						_bought = true
+						InjectLog(global.players[_target].name + " received " + _entry.name)
+					}
+					break
+
 				case "Psynergy":
 					// Enter character pick mode
 					psy_pending = selected

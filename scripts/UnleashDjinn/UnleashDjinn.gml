@@ -160,8 +160,9 @@ function UnleashDjinn(djinnID, playerID) {
 			break
 		case "Tonic":  // Mercury: clear all tokens
 			_struct.onConfirm.removebad = true
+			_struct.onConfirm.removepoison = true
 			_struct.target = "ally"
-			_struct.num = 4
+			_struct.num = 1
 			break
 
 		case "Crystal": // Venus: heal all for charged all

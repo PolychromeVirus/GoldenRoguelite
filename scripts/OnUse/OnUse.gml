@@ -125,6 +125,7 @@ function OnUse(item,slot,player = -1){
 			for (var i = 0;i<array_length(global.players);i++){
 				global.players[i].extraTurns += 1
 			}
+			NextTurn()
 			break
 	}
 }

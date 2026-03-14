@@ -125,6 +125,9 @@ function _AdvanceTurn(){
 /// @desc Set up the new current player's turn (called after enemy phase completes)
 function _NextTurnSetupPlayer() {
 	
+	// Always rebuild dice pool so passive effects (Steam, Kindle, etc.) apply immediately
+	CreateDicePool()
+
 	if global.turnPhase == "enemy"{
 	// --- Player DEF decay (all living players, at start of new player round) ---
 		for (var _pd = 0; _pd < 4; _pd++) {
@@ -135,8 +138,6 @@ function _NextTurnSetupPlayer() {
 			else if (_pp.defmod < 0) { _pp.defmod++ }
 			if _pp.reflect{_pp.reflect = false}
 		}
-		
-		CreateDicePool()
 		
 		//root and regen ticks
 		for (var _r = 0; _r < array_length(global.players); _r++) {

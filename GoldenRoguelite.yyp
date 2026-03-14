@@ -222,6 +222,7 @@
     {"id":{"name":"_BuildRandomPuzzleChallenge","path":"scripts/_BuildRandomPuzzleChallenge/_BuildRandomPuzzleChallenge.yy",},},
     {"id":{"name":"ApplyFloorEffects","path":"scripts/ApplyFloorEffects/ApplyFloorEffects.yy",},},
     {"id":{"name":"Autosave","path":"scripts/Autosave/Autosave.yy",},},
+    {"id":{"name":"BuildArtifactList","path":"scripts/BuildArtifactList/BuildArtifactList.yy",},},
     {"id":{"name":"CalcPreview","path":"scripts/CalcPreview/CalcPreview.yy",},},
     {"id":{"name":"CastSpell","path":"scripts/CastSpell/CastSpell.yy",},},
     {"id":{"name":"CastSummon","path":"scripts/CastSummon/CastSummon.yy",},},

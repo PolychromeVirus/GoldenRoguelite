@@ -9,6 +9,9 @@ function StartDungeon(_dungeon_index) {
 	global.dungeonTroops = LoadTroopCSV(_troop_file)
 	global.genbackground = _dun.background
 
+	// Build artifact pool from previous chapter (skip ch0)
+	_BuildArtifactList()
+
 	// Pre-generate all floors
 	_PreGenerateFloors(_dun)
 	//create this chapter's deck

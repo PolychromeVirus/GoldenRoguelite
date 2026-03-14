@@ -49,6 +49,7 @@ for (var i = 0; i < array_length(shoplist); i++) {
 				case "Mercury": _catcol = global.c_psynergy; break
 			}
 			break
+		case "Artifact": _catcol = c_yellow; break
 		case "Summon": _catcol = global.c_summon; break
 	}
 
@@ -108,12 +109,17 @@ if (selected >= 0 && selected < array_length(shoplist)) {
 		_desctext = _sp.text
 	} else if (_sel.category == "Summon") {
 		_desctext = global.summonlist[_sel.id].name + " Summon"
+	} else if (_sel.category == "Artifact") {
+		var _art = global.itemcardlist[_sel.id]
+		var _bonustext = variable_struct_exists(_art, "artifact_bonus_text") ? _art.artifact_bonus_text : ""
+		_desctext = (_bonustext != "" ? "[" + _bonustext + "]\n" : "") + _art.text
 	} else {
 		_desctext = global.itemcardlist[_sel.id].text
 	}
 	var _slotinfo = ""
 	
 	switch _sel.category{
+		case "Artifact":
 		case "Weapon":
 		case "Item":
 			_slotinfo = global.itemcardlist[_sel.id].type

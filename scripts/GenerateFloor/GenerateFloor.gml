@@ -23,6 +23,12 @@ function LoadFloor() {
 	global.noHealOnCombatEnd = false
 	global.cloakActive = false
 	global.onFloor = false
+
+	// Update overworld background — boss floor uses boss_background
+	var _bg_layer = layer_background_get_id(layer_get_id("Background"))
+	var _dun = global.dungeonlist[global.dungeon]
+	var _is_boss_floor = (global.dungeonFloor == array_length(global.dungeonFloors))
+	layer_background_sprite(_bg_layer, _is_boss_floor ? _dun.boss_background : _dun.background)
 }
 
 /// @function GenerateFloor()
