@@ -14,7 +14,8 @@
       "Bash(cd \"C:\\\\Users\\\\polyc\\\\GameMakerProjects\\\\GoldenRoguelite\" && ls -d objects/obj* | sed 's|objects/||' | sort)",
       "Bash(find /c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects -name \"obj*\" -type d | xargs -I {} bash -c 'ls {} | grep -q Draw && echo {}')",
       "Bash(find:*)",
-      "WebFetch(domain:manual.gamemaker.io)"
+      "WebFetch(domain:manual.gamemaker.io)",
+      "Bash(cd:*)"
     ]
   },
   "outputStyle": "default"

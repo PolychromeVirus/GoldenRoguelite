@@ -52,3 +52,16 @@
 
 ## Controls Overhaul
 - [ ] Audit all menus for mouse-only or keyboard-only input and ensure full support for both across the board
+
+## UX — Audio
+- [ ] Source Golden Sun OST rip + SFX rip and import into GMS2
+- [ ] `PlayBGM(track)` wrapper — checks if already playing before restarting
+- [ ] BGM zones: overworld/floor map, combat, town, boss fight, dungeon complete fanfare
+- [ ] SFX: button click/confirm, cancel, damage hit, healing, status inflict, dice roll, djinn unleash, level up/card draw
+
+## UX — Button Reactivity
+- [ ] Add `pressed` bool to objButton2 Create (default false)
+- [ ] Add Mouse Pressed (Left) event to objButton2 — set pressed=true, play click SFX
+- [ ] Add Mouse Released (Left) event — reset pressed=false
+- [ ] Draw event: invert colours when pressed (e.g. second sprite frame or image_blend swap)
+- [ ] Add hover state — tint or border highlight on mouse-over

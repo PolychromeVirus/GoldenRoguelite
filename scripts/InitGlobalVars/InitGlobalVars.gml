@@ -2,6 +2,8 @@ function InitGlobalVars(){
 	global.darken = false
 	global.textdisplay = ""
 	global.pause = false
+	global.option_buttons = []
+	global.challenge_buttons = []
 	global.turn = 0
 	global.errormessage = ""
 	global.genbackground = Sol_Sanctum
@@ -10,6 +12,15 @@ function InitGlobalVars(){
 	global.rescurse = 0
 	global.atkcurse = 0
 	
+	#macro INPUT_CONFIRM  0
+	#macro INPUT_CANCEL   1
+	#macro INPUT_UP       2
+	#macro INPUT_DOWN     3
+	#macro INPUT_LEFT     4
+	#macro INPUT_RIGHT    5
+	#macro INPUT_INFO     6
+	#macro INPUT_TAB      7
+
 	#macro BOTTOMROW 124
 	#macro TOPROW 32
 	
@@ -40,6 +51,11 @@ function InitGlobalVars(){
 	#macro CREDIT2 40
 	#macro CREDIT3 76
 	#macro CREDIT4 112
+	
+	#macro CONFIRMSOUND audio_play_sound(MenuPositive,0,0)
+	#macro CANCELSOUND audio_play_sound(MenuNegative,0,0)
+	#macro MENUMOVE audio_play_sound(MenuMove,0,0)
+	#macro HITSOUND audio_play_sound(Damage,0,0)
 	
 	
 	global.floor = 1

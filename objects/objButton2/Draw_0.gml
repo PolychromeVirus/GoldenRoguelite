@@ -1,1 +1,1 @@
-draw_sprite_stretched(image,0,x,y, 24, 24)
+draw_sprite_stretched_ext(image,0,x,y, 24, 24, image_blend, image_alpha)

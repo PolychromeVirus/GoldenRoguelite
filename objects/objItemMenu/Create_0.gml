@@ -1,4 +1,6 @@
 mode = 0 // 0 = inventory, 1 = equipment
+btn_selected = 0
+bottom_buttons = []
 lastmode = -1
 others = []
 otherslast = []

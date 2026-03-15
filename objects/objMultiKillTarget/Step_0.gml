@@ -1,3 +1,12 @@
+if InputPressed(INPUT_LEFT) {
+    if selected == 0 { selected = array_length(monsters) - 1 }
+    else { selected -= 1 }
+}
+if InputPressed(INPUT_RIGHT) {
+    if selected == array_length(monsters) - 1 { selected = 0 }
+    else { selected += 1 }
+}
+
 if array_length(monsters) == 0 { instance_destroy(); exit }
 if selected >= array_length(monsters) { selected = array_length(monsters) - 1 }
 if selected < 0 { selected = 0 }

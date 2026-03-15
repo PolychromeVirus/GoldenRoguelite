@@ -12,3 +12,12 @@ if array_length(dice) < 1{instance_destroy(objQuarterMenu)}else{
 	}
 
 }
+
+if InputPressed(INPUT_UP) {
+    if selected == 0 { selected = array_length(dice) - 1 }
+    else { selected -= 1 }
+}
+if InputPressed(INPUT_DOWN) {
+    if selected == array_length(dice) - 1 { selected = 0 }
+    else { selected += 1 }
+}

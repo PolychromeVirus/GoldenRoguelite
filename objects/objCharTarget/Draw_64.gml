@@ -20,12 +20,13 @@ for (var _i = 0; _i < array_length(global.players); _i++) {
 
 	var _greyed = (_selectcolor == c_grey)
 
-	// Background box
+	// Background box — highlight on mouse hover or keyboard selection
 	if !_greyed and !(variable_instance_exists(self, "confirmed") and confirmed) {
-		// Hover highlight
 		var _mx = device_mouse_x_to_gui(0)
 		var _my = device_mouse_y_to_gui(0)
-		if _mx >= _cx and _mx < _cx + cellW and _my >= _cy and _my < _cy + cellH {
+		var _hovered = (using_kbd and _i == kbd_selected)
+		                or (!using_kbd and _mx >= _cx and _mx < _cx + cellW and _my >= _cy and _my < _cy + cellH)
+		if _hovered {
 			draw_set_alpha(0.15)
 			draw_set_color(c_white)
 			draw_rectangle(_cx, _cy, _cx + cellW - 4, _cy + cellH - 4, false)

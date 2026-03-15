@@ -20,3 +20,13 @@ global.textdisplay = "HP: " + string(mon.monsterHealth) + "/" + string(mon.maxhp
 if mon.atkmod != 0 { _status_text += " ATK" + (mon.atkmod > 0 ? "+" : "") + string(mon.atkmod) }
 if mon.defmod != 0 { _status_text += " DEF" + (mon.defmod > 0 ? "+" : "") + string(mon.defmod) }
 if _status_text != "" { global.textdisplay += _status_text }
+
+if InputPressed(INPUT_LEFT) {
+    selected = (selected == 0) ? array_length(monsters) - 1 : selected - 1
+}
+if InputPressed(INPUT_RIGHT) {
+    selected = (selected == array_length(monsters) - 1) ? 0 : selected + 1
+}
+if InputPressed(INPUT_CONFIRM) and clickable {
+    logic()
+}

@@ -1,6 +1,9 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function DeleteButtons(){
+	global.option_buttons = []
+	global.challenge_buttons = []
+	instance_destroy(objOptionCursor)
 	instance_destroy(objAttack)
 	instance_destroy(objBegin)
 	instance_destroy(objButton2)

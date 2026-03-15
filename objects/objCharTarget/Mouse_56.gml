@@ -1,20 +1,22 @@
 // Click-to-confirm on 2x2 grid
 if variable_instance_exists(self, "confirmed") and confirmed { exit }
 
-var _mx = device_mouse_x_to_gui(0)
-var _my = device_mouse_y_to_gui(0)
+if !use_kbd_selected {
+    var _mx = device_mouse_x_to_gui(0)
+    var _my = device_mouse_y_to_gui(0)
 
-var _col = floor((_mx - gridX) / cellW)
-var _row = floor((_my - gridY) / cellStrideY)
-if _col < 0 or _col > 1 or _row < 0 or _row > 1 { exit }
-// Ignore clicks in the padding between rows
-var _localY = (_my - gridY) - _row * cellStrideY
-if _localY > cellH { exit }
-var _clicked = _row * 2 + _col
-if _clicked < 0 or _clicked >= array_length(global.players) { exit }
+    var _col = floor((_mx - gridX) / cellW)
+    var _row = floor((_my - gridY) / cellStrideY)
+    if _col < 0 or _col > 1 or _row < 0 or _row > 1 { exit }
+    // Ignore clicks in the padding between rows
+    var _localY = (_my - gridY) - _row * cellStrideY
+    if _localY > cellH { exit }
+    var _clicked = _row * 2 + _col
+    if _clicked < 0 or _clicked >= array_length(global.players) { exit }
 
-// Set selected for confirm logic
-selected = _clicked
+    selected = _clicked
+}
+use_kbd_selected = false
 
 var caster = global.players[global.turn]
 var sel = global.players[selected]
