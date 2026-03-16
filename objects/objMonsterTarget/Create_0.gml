@@ -8,9 +8,28 @@
 //	}
 //}
 
+
+// Cancel any pending ButtonManager alarm so a queued _build_buttons() doesn't fire
+with (objButtonManager) { alarm[0] = -1 }
+
+// Hide menu stack instances (and their panes) so they don't render behind the targeter
+for (var _i = 0; _i < array_length(global.menu_stack); _i++) {
+    var _inst = global.menu_stack[_i]
+    if instance_exists(_inst) {
+        _inst.visible = false
+        if variable_instance_exists(_inst, "pane") and instance_exists(_inst.pane) {
+            _inst.pane.visible = false
+        }
+    }
+}
+DeleteButtons()
+
 var button1 = 36
 var button2 = 64
 
+using_kbd = false
+_prev_mx  = device_mouse_x_to_gui(0)
+_prev_my  = device_mouse_y_to_gui(0)
 monsters = []
 var count = instance_number(objMonster)
 for (var i = 0; i < count; i++) {
@@ -24,8 +43,8 @@ instance_create_depth(button2,124,0,objCancel)
 alarm_set(0,1)
 
 function logic(){
-	
-	HITSOUND
+	confirmed = true   // tell Destroy_0 not to call CreateOptions
+	while array_length(global.menu_stack) > 0 { PopMenu() }
 
 	var _struct = variable_clone(global.AggressionSchema)
 	global.lastselected = selected
@@ -81,8 +100,7 @@ function logic(){
 			}
 			else
 			{
-				global.pause = false
-				instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+				instance_create_depth(0, 0, 0, TurnDelay, { wait: 30, on_complete: NextTurn })
 			}
 		}
 		exit

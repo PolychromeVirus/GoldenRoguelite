@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"NextFloorSound",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":1.2242631,
+  "exportDir":"",
+  "name":"NextFloorSound",
+  "parent":{
+    "name":"SFX",
+    "path":"folders/Sounds/SFX.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"NextFloorSound.wav",
+  "volume":1.0,
+}

@@ -164,11 +164,16 @@ if (variable_struct_exists(_town, "cached_shop") && array_length(_town.cached_sh
 }
 
 psy_pending = -1 // index into shoplist when picking a character for psynergy
+side = "left"
 
 DeleteButtons()
-
-instance_create_depth(sprite_width, 0, 0, objHalfMenu)
 
 var sprite = {image: yes, text: "Buy"}
 instance_create_depth(BUTTON1, BOTTOMROW, 0, objConfirm, sprite)
 instance_create_depth(BUTTON2, BOTTOMROW, 0, objCancel)
+
+_build_buttons = method(id, function() {
+    var sprite = {image: yes, text: "Buy"}
+    instance_create_depth(BUTTON1, BOTTOMROW, 0, objConfirm, sprite)
+    instance_create_depth(BUTTON2, BOTTOMROW, 0, objCancel)
+})

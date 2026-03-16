@@ -8,7 +8,7 @@ function StartDungeon(_dungeon_index) {
 	var _troop_file = string_replace_all(_dun.name, " ", "_") + "_Troops.csv"
 	global.dungeonTroops = LoadTroopCSV(_troop_file)
 	global.genbackground = _dun.background
-
+	global.genBGM = asset_get_index("BGM_" + string_replace_all(_dun.name, " ", "_"))
 	// Build artifact pool from previous chapter (skip ch0)
 	_BuildArtifactList()
 
@@ -22,14 +22,19 @@ function StartDungeon(_dungeon_index) {
 	
 	for (var i = 0; i < array_length(global.players); ++i) {
 	    var _curr = global.players[i]
-		
+
 		_curr.hp = variable_clone(_curr.hpmax)
 		_curr.pp = 3 * (_dungeon_index + 1)
+		CreateDicePool(_curr)
+		_curr.dicepool = RollDice(_curr)
 	}
 	
 	
 	// Load the first floor
 	LoadFloor()
+	audio_stop_all()
+	audio_play_sound(global.genBGM,1,1)
+	
 }
 
 /// @function _GenerateDeck(dun)

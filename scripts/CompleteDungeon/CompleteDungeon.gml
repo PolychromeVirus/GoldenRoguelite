@@ -28,7 +28,6 @@ function CompleteDungeon() {
 	}
 
 	global.inBossRewards = true
-	global.pause = true
 	_ShowNextBossReward()
 }
 
@@ -41,7 +40,50 @@ function _ShowNextBossReward() {
 	DeleteButtons()
 	ClearOptions()
 	DestroyAllBut()
-	instance_create_depth(0, 0, 0, objBossRewardPicker)
+
+	var _item_id = global.bossRewardQueue[0]
+	var _item    = global.itemcardlist[_item_id]
+	var _num     = 4 - array_length(global.bossRewardQueue) + 1
+
+	PushMenu(objMenuGrid, {
+		gridY: 400,
+		draw_header: method({item: _item, num: _num}, function() {
+			draw_set_font(GoldenSun)
+			var _cx = 400
+			var _cy = 48
+			var _title = "Boss Reward! (" + string(num) + " / 4)"
+			draw_set_color(c_black)
+			draw_text(_cx + 4, _cy + 4, _title)
+			draw_set_color(c_yellow)
+			draw_text(_cx, _cy, _title)
+			_cy += 40
+			var _alias = item.alias
+			if asset_get_index(_alias) != -1 {
+				draw_sprite_stretched(asset_get_index(_alias), 0, _cx, _cy, 64, 64)
+			}
+			draw_set_color(c_black)
+			draw_text(_cx + 68 + 4, _cy + 16 + 4, item.name)
+			draw_set_color(c_white)
+			draw_text(_cx + 68, _cy + 16, item.name)
+			_cy += 80
+			var _desc = item.text
+			draw_set_color(c_black)
+			draw_text_ext(_cx + 4, _cy + 4, _desc, 40, 660)
+			draw_set_color(c_white)
+			draw_text_ext(_cx, _cy, _desc, 40, 660)
+			_cy += string_height_ext(_desc, 40, 660) + 20
+			draw_set_color(c_black)
+			draw_text(_cx + 4, _cy + 4, "Choose a character:")
+			draw_set_color(global.c_important)
+			draw_text(_cx, _cy, "Choose a character:")
+		}),
+		on_confirm: method({item_id: _item_id}, function(player_index) {
+			PopMenu()
+			_ApplyBossItem(item_id, player_index)
+			array_delete(global.bossRewardQueue, 0, 1)
+			_ShowNextBossReward()
+		}),
+	})
 }
 
 /// Applies a boss item to the chosen player
@@ -155,13 +197,12 @@ function _StartMysticDraught(_player_index) {
 	global.draftPool = _bases
 	global.draftPlayerIndex = _player_index
 	global.draftQueue = []  // Empty so _DraftNext finishes after one pick
-	instance_create_depth(0, 0, 100, objPsynergyDraft)
+	PushMenu(objMenuCarousel, _BuildPsynergyDraftConfig())
 }
 
 /// Advances to the next dungeon after all boss rewards are assigned
 function _FinishDungeonTransition() {
 	global.inBossRewards = false
-	global.pause = false
 	DeleteButtons()
 	DestroyAllBut()
 	ClearOptions()

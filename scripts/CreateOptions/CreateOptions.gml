@@ -15,7 +15,6 @@ function CreateOptions(){
 		if instance_number(objOptionCursor) < 1 {
 			instance_create_depth(0, 0, -1, objOptionCursor)
 		}
-		global.pause = false
 		return
 	}
 	if global.inCombat{

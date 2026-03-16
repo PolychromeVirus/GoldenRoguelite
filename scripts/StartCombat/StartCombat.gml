@@ -89,12 +89,12 @@ function StartCombat(_troop_override) {
 	}
 
 	var _halt_caster = _has_boss ? FindSpellCaster("Halt") : -1
-
+	
+	BattleMusic(_has_boss)
+	
 	if (_halt_caster >= 0) {
-		instance_create_depth(0, 0, -100, objSpellPrompt, {
-			spell_name: "Halt",
-			caster_index: _halt_caster,
-			on_confirm: function() {
+		SpellPrompt("Halt", _halt_caster,
+			function() {
 				// Skip boss pre-turn phase; boss acts after player 1 via NextTurn
 				global.turnPhase = "player"
 				global.players[global.turn].dicepool = RollDice(global.players[global.turn])
@@ -102,14 +102,14 @@ function StartCombat(_troop_override) {
 				if global.players[global.turn].pp > global.players[global.turn].ppmax { global.players[global.turn].pp = global.players[global.turn].ppmax }
 				CreateOptions()
 			},
-			on_decline: function() {
+			function() {
 				RunEnemyPhase(true)
 				global.turnPhase = "player"
 				global.players[global.turn].dicepool = RollDice(global.players[global.turn])
 				global.players[global.turn].pp += global.players[global.turn].ppinc
 				if global.players[global.turn].pp > global.players[global.turn].ppmax { global.players[global.turn].pp = global.players[global.turn].ppmax }
 			}
-		})
+		)
 	} else {
 		RunEnemyPhase(true)
 

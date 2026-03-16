@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"_2_15_Battle___Colosso_",
+  "audioGroupId":{
+    "name":"BattleThemes",
+    "path":"audiogroups/BattleThemes",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":82.62637,
+  "exportDir":"",
+  "name":"_2_15_Battle___Colosso_",
+  "parent":{
+    "name":"BGM",
+    "path":"folders/Sounds/BGM.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"_2_15_Battle___Colosso_.mp3",
+  "volume":1.0,
+}

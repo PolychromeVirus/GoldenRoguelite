@@ -7,7 +7,9 @@ otherslast = []
 
 DeleteButtons()
 
-instance_create_depth(sprite_width,sprite_height/2,0,objQuarterMenu)
-
 clickable = false
 alarm_set(0,1)
+
+_build_buttons = method(id, function() {
+    lastmode = -1  // force Step_0 to rebuild buttons next step
+})

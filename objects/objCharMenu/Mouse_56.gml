@@ -4,6 +4,5 @@ if instance_position(mouse_x,mouse_y,objConfirm){
 	if array_length(_p.starters) > 0 {
 		array_push(_p.spells, _p.starters[starter_selected])
 	}
-	global.pause = false
 	instance_destroy(objCharMenu)
 }

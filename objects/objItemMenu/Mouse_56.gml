@@ -37,12 +37,8 @@ if _clicked != noone and _clicked.object_index == objButton2 {
 					array_delete(_player.inventory, selected, 1)
 					array_push(_player.inventory, equippedweapon)
 					CreateDicePool()
-					if global.inCombat {
-						ClearOptions()
-						global.pause = false
-						instance_destroy()
-						instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
-					}_player.dicepool = RollDice(_player)
+					_player.dicepool = RollDice(_player)
+					if global.inCombat { PopMenu(); NextTurn(); exit }
 				} else {
 					var _itemSlot = global.itemcardlist[SelectedItem].slot
 					var _conflictIdx = -1
@@ -54,11 +50,30 @@ if _clicked != noone and _clicked.object_index == objButton2 {
 					}
 
 					if _conflictIdx >= 0 {
-						instance_create_depth(0, 0, -100, objSwapPrompt, {
-							new_item: SelectedItem,
-							old_item: _player.armor[_conflictIdx],
-							armor_index: _conflictIdx,
-							inv_slot: selected
+						var _new_name = global.itemcardlist[SelectedItem].name
+						var _old_name = global.itemcardlist[_player.armor[_conflictIdx]].name
+						PushMenu(objMenuDialog, {
+							text:    "Replace " + _old_name + "?",
+							subtext: "Equip " + _new_name,
+							buttons: [
+								{
+									label: "Swap",
+									on_click: method({ pl: _player, ni: SelectedItem, ai: _conflictIdx, sl: selected }, function() {
+										var _old = pl.armor[ai]
+										array_delete(pl.armor, ai, 1)
+										array_push(pl.inventory, _old)
+										array_delete(pl.inventory, sl, 1)
+										array_push(pl.armor, ni)
+										CreateDicePool()
+										if global.inCombat { global.players[global.turn].dicepool = RollDice(global.players[global.turn]); PopMenu(); PopMenu(); NextTurn() }
+										else { PopMenu() }
+									}),
+								},
+								{
+									label: "Cancel",
+									on_click: function() { PopMenu() },
+								},
+							],
 						})
 					} else {
 						if array_length(_player.armor) < 4 {
@@ -66,12 +81,8 @@ if _clicked != noone and _clicked.object_index == objButton2 {
 						}
 						array_delete(_player.inventory, selected, 1)
 						CreateDicePool()
-						if global.inCombat {
-							ClearOptions()
-							global.pause = false
-							instance_destroy()
-							instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
-						}_player.dicepool = RollDice(_player)
+						_player.dicepool = RollDice(_player)
+						if global.inCombat { PopMenu(); NextTurn(); exit }
 					}
 				}
 			}
@@ -91,7 +102,6 @@ if mode == 0 {
 				ClearOptions()
 				DeleteButtons()
 				OnUse(SelectedItem,selected,_player)
-				instance_destroy()
 			}
 		}
 
@@ -118,9 +128,7 @@ if mode == 0 {
 			_struct.target = "ally"
 			_struct.itemid = SelectedItem
 			_struct.slot = selected
-			ClearOptions()
-			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
-			instance_destroy()
+			PushMenu(objMenuGrid, _BuildCharTargetConfig(_struct))
 		}
 	}
 }

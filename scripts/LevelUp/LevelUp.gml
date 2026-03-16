@@ -12,23 +12,31 @@ function LevelUp(playerIndex = -1) {
 		array_push(global.draftQueue, playerIndex)
 	}
 
-	global.pause = true
 	_DraftNext()
 }
 
 /// Pops the next player from global.draftQueue and opens their draft (or ends if empty).
 function _DraftNext() {
 	if array_length(global.draftQueue) == 0 {
-		global.pause = false
 		DestroyAllBut()
 		ClearOptions()
 		Autosave()
 		if (global.inBossRewards) {
-			global.pause = true
 			_AdvanceBossRewardQueue()
 		} else if (global.inTown) {
 			ProcessTownFinds()
 		} else {
+			// Reveal: 10% chance of bonus djinn draft when all queues are empty
+			if !irandom(9) and array_length(global.menu_stack) == 0 and array_length(global.choiceDrawQueue) == 0 and array_length(global.postBattleQueue) == 0 {
+				var _cast = FindSpellCaster("Reveal")
+				if _cast != -1 {
+					SpellPrompt("Reveal", _cast,
+						function() { DjinnDraft() },
+						function() {}
+					)
+					return
+				}
+			}
 			CreateOptions()
 		}
 		return
@@ -96,7 +104,7 @@ function _DraftNext() {
 		}
 
 		global.draftPlayerIndex = _idx
-		instance_create_depth(0, 0, 100, objPsynergyDraft)
+		PushMenu(objMenuCarousel, _BuildPsynergyDraftConfig())
 	} else {
 		// Non-psynergy character — placeholder for gimmick characters
 		switch player.name {

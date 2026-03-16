@@ -16,4 +16,3 @@ for (var _ci = 0; _ci < array_length(global.floorChallenges); _ci++) {
 	}
 }
 StartCombat(_troop)
-global.pause = false

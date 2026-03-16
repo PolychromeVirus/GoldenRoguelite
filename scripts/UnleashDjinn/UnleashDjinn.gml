@@ -1,9 +1,10 @@
 function UnleashDjinn(djinnID, playerID) {
 	
 	var _struct = variable_clone(global.AggressionSchema)
-	
+
 	var djinn   = global.djinnlist[djinnID]
 	var caster  = global.players[playerID]
+	_struct.source  = "djinni"
 	_struct.dmgtype = djinn.element
 
 	// If spent, set to ready instead of unleashing
@@ -11,9 +12,7 @@ function UnleashDjinn(djinnID, playerID) {
 		djinn.ready = true
 		djinn.spent = false
 		InjectLog(djinn.name + " was set to ready")
-		instance_destroy(objDjinniMenu)
 		ClearOptions()
-		global.pause = false
 		NextTurn()
 		return
 	}
@@ -152,9 +151,7 @@ function UnleashDjinn(djinnID, playerID) {
 				_p.hp = min(_p.hp + (_p.hpmax / 2), _p.hpmax)
 			}
 			InjectLog(djinn.name + " healed all adepts!")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
-			global.pause = false
 			NextTurn()
 			exit
 			break
@@ -201,9 +198,7 @@ function UnleashDjinn(djinnID, playerID) {
 				if _p.hp > 0 { _p.pp = min(_p.pp + _pp, _p.ppmax) }
 			}
 			InjectLog(djinn.name + " restored " + string(_pp) + " PP to all")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
-			global.pause = false
 			NextTurn()
 			exit
 			break
@@ -215,9 +210,7 @@ function UnleashDjinn(djinnID, playerID) {
 				if _p.hp > 0 { _p.pp = min(_p.pp + _pp, _p.ppmax) }
 			}
 			InjectLog(djinn.name + " restored " + string(_pp) + " PP to all")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
-			global.pause = false
 			NextTurn()
 			exit
 			break
@@ -229,9 +222,7 @@ function UnleashDjinn(djinnID, playerID) {
 				if global.players[_i].hp > 0 { global.players[_i].atkmod += 2 }
 			}
 			InjectLog(djinn.name + " boosted ATK +2 for all")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
-			global.pause = false
 			NextTurn()
 			exit
 			break
@@ -241,9 +232,7 @@ function UnleashDjinn(djinnID, playerID) {
 				if global.players[_i].hp > 0 { global.players[_i].defmod += 3 }
 			}
 			InjectLog("The party's defenses are bolstered!")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
-			global.pause = false
 			NextTurn()
 			exit
 			break
@@ -254,9 +243,7 @@ function UnleashDjinn(djinnID, playerID) {
 				if global.players[_i].hp > 0 { global.players[_i].defmod += 2 }
 			}
 			InjectLog(djinn.name + " boosted DEF +2 for all")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
-			global.pause = false
 			NextTurn()
 			exit
 			break
@@ -291,14 +278,12 @@ function UnleashDjinn(djinnID, playerID) {
 				// Second attack (no unleash)
 				array_push(global.attackQueue, WeaponAttack(true,false), WeaponAttack(false,false))
 				InjectLog("Gust grants a second attack!")
-				instance_destroy(objDjinniMenu)
 				ClearOptions()
 				ProcessAttackQueue()
 				exit
 			}else{
 				WeaponAttack(true,true)
 				
-				instance_destroy(objDjinniMenu)
 			
 				exit
 			}
@@ -309,7 +294,6 @@ function UnleashDjinn(djinnID, playerID) {
 			AddPassive("_mud",3,Venus875,"Mud",{},playerID)
 			InjectLog("Enemies moves restricted!")
 			
-			instance_destroy(objDjinniMenu)
 			NextTurn()
 			ClearOptions()
 			exit
@@ -318,7 +302,6 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Vine": // skips all enemy attempt targeting
 			AddPassive("_vine",3,Venus875,"Vine",{},playerID)
 			InjectLog("Enemies got all tangled up!")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			NextTurn()
 			exit
@@ -329,13 +312,30 @@ function UnleashDjinn(djinnID, playerID) {
 			_struct.mold = true
 			break
 		case "Flower":
-			instance_create_depth(0,0,0,objAssignMenu,{dieset:"venus", num: 4, element: "Venus", target: "ally"})
+			var _flower_dice = BuildDiceArray(global.players[playerID], "venus")
+			var _flower_max  = min(4, array_length(global.players), array_length(_flower_dice))
+			PushMenu(objDicePicker, {
+				dice:          _flower_dice,
+				max_select:    _flower_max,
+				confirm_label: "Assign",
+				title:         "Pick " + string(_flower_max) + " dice",
+				on_confirm:    method({}, function(sel) {
+					for (var _i = 0; _i < array_length(sel); _i++) {
+						var _s = variable_clone(global.AggressionSchema)
+						_s.source = "djinni"; _s.healing = sel[_i].pip
+						_s.num = 1; _s.dmgtype = "venus"; _s.target = "ally"
+						array_push(global.attackQueue, _s)
+					}
+					PopMenu()
+					ClearOptions()
+					ProcessAttackQueue()
+				}),
+			})
 			exit
 			break
 		case "Shade":
 			AddPassive("damage_half",1,Mercury865,"Shade",{},playerID)
 			InjectLog("The party is surrounded by a barrier")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			NextTurn()
 			exit
@@ -343,7 +343,6 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Granite":
 			AddPassive("damage_half",1,Venus875,"Granite",{},playerID)
 			InjectLog("The party is surrounded by a barrier")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			NextTurn()
 			exit
@@ -351,7 +350,6 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Flash":
 			AddPassive("damage_cap_1",1,Mars863,"Flash",{},playerID)
 			InjectLog("The party is surrounded by a barrier")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			NextTurn()
 			exit
@@ -359,7 +357,6 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Ground":
 			AddPassive("skip_enemies", 1, Venus875, "Ground", {}, playerID)
 			InjectLog("The enemies are unable to move!")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			NextTurn()
 			exit
@@ -379,7 +376,6 @@ function UnleashDjinn(djinnID, playerID) {
 				curr.regheal = 0
 			}
 			InjectLog("Allies are cleansed!")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			NextTurn()
 			exit
@@ -407,16 +403,40 @@ function UnleashDjinn(djinnID, playerID) {
 			break
 		case "Meld":
 			// Pick another adept's weapon, attack with caster's dice
-			instance_destroy(objDjinniMenu)
-			ClearOptions()
-			instance_create_depth(0, 0, 0, objMeldPicker)
+			var _meld_caster = global.players[playerIndex]
+			var _meld_original = _meld_caster.weapon
+			var _meld_items = []
+			for (var _mp = 0; _mp < array_length(global.players); _mp++) {
+				var _mwep = global.itemcardlist[global.players[_mp].weapon]
+				_meld_caster.weapon = global.players[_mp].weapon
+				var _mpreview = WeaponAttack(true, false)
+				array_push(_meld_items, { name: _mwep.name, detail: "Damage: " + string(_mpreview.dam), data: { weapon_id: global.players[_mp].weapon } })
+			}
+			_meld_caster.weapon = _meld_original
+			PopMenu()
+			PushMenu(objMenuCarousel, {
+				items:         _meld_items,
+				confirm_label: "Attack",
+				on_confirm:    method({ _mc: _meld_caster, _mo: _meld_original }, function(i, item) {
+					_mc.weapon = item.data.weapon_id
+					WeaponAttack(true, true)
+					_mc.weapon = _mo
+				}),
+			})
 			exit
 			break
 		case "Petra":
-			instance_destroy(objDjinniMenu)
-			ClearOptions()
-			DeleteButtons()
-			instance_create_depth(0,0,0,objMolochPicker,{source:"djinni", caster_id: playerID})
+			PushMenu(objMenuSlider, {
+				minim: 1, maxim: 20, value: 1,
+				confirm_label: "Restrict",
+				label: function(v) { return "Restrict enemy move #" + string(v) },
+				on_confirm: method({ pid: playerID }, function(v) {
+					AddPassive("reroll_move", 3, Venus875, "Petra", { number: v }, pid)
+					InjectLog("Petra restricts the enemies options!")
+					PopMenu()
+					NextTurn()
+				}),
+			})
 			exit
 			break
 		case "Dew":
@@ -426,7 +446,6 @@ function UnleashDjinn(djinnID, playerID) {
 			break
 		case "Steam":
 			AddPassive("_element", 3, Mercury865,"Steam",{},playerID)
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			NextTurn()
 			exit
@@ -454,14 +473,12 @@ function UnleashDjinn(djinnID, playerID) {
 			}
 			array_shuffle(_djinnsel)
 			_djinnsel[0].spent = false
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			NextTurn()
 			exit
 			break
 		case "Kindle":
 			AddPassive("_melee", 3, Mars863,"Kindle",{},playerID)
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			NextTurn()
 			exit
@@ -485,9 +502,7 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Reflux":
 			caster.reflect = true
 			InjectLog(caster.name + " is ready to strike back!")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
-			global.pause = false
 			NextTurn()
 			exit
 			break
@@ -500,9 +515,7 @@ function UnleashDjinn(djinnID, playerID) {
 			for (var i = 0; i < QueryDice(caster,"all","charge"); ++i) {
 			    array_push(global.attackQueue,variable_clone(_struct))
 			}
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
-			global.pause = false
 			NextTurn()
 			exit
 			break
@@ -514,7 +527,6 @@ function UnleashDjinn(djinnID, playerID) {
 				}
 			}
 			InjectLog("Everyone can reroll their dice!")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			CreateOptions()
 			NextTurn()
@@ -546,7 +558,6 @@ function UnleashDjinn(djinnID, playerID) {
 				}
 			}
 			InjectLog("Everyone can reroll their dice!")
-			instance_destroy(objDjinniMenu)
 			ClearOptions()
 			CreateOptions()
 			NextTurn()
@@ -586,8 +597,6 @@ function UnleashDjinn(djinnID, playerID) {
 		default:
 			show_debug_message("UnleashDjinn: '" + djinn.name + "' has no implementation yet")
 			InjectLog(djinn.name + " has no effect yet")
-			instance_destroy(objDjinniMenu)
-			global.pause = false
 			NextTurn()
 			break
 			
@@ -597,7 +606,6 @@ function UnleashDjinn(djinnID, playerID) {
 		_struct.num = 3
 	}
 
-	instance_destroy(objDjinniMenu)
 	ClearOptions()
 	SelectTargets(_struct)
 }

@@ -333,8 +333,6 @@ function CastSpell(spellID, playerID) {
 			global.pendingPPCost = 0
 			caster.pp = caster.pp + QueryDice(caster, "all", "charge")
 			if caster.pp >= caster.ppmax{caster.pp = caster.ppmax}
-			instance_destroy(objPsynergyMenu)
-			global.pause = false
 			NextTurn()
 			exit
 			break
@@ -362,15 +360,33 @@ function CastSpell(spellID, playerID) {
 			var _venus_charge = QueryDice(caster, "venus", "charge")
 			var _res_value = (spell.stage >= 2) ? _venus_charge : floor(_venus_charge / 2)
 			if (_res_value < 1) { _res_value = 1 }
-			ClearOptions()
-			DeleteButtons()
-			instance_destroy(objPsynergyMenu)
-			instance_create_depth(0, 0, 0, objResonatePicker, {
-				res_value: _res_value,
-				res_countdown: 1,
-				res_caster_idx: playerID,
-				res_caster_name: caster.name,
-				res_cost: _cost
+				PushMenu(objMenuDialog, {
+				text:    "Resonate: Boost Range or Damage?",
+				subtext: "(Value: +" + string(_res_value) + ")",
+				buttons: [
+					{
+						label: "Range", sprite: Resonate,
+						on_click: method({ val: _res_value, cd: 1, idx: playerID, nm: caster.name, cost: _cost }, function() {
+							AddPassive("_Resonate", cd, Resonate, "Resonate", { mode: "range", amount: val }, idx)
+							InjectLog(nm + " casts Resonate! (+" + string(val) + " range)")
+							global.players[idx].pp -= cost
+							global.pendingPPCost = 0
+							PopMenu()
+							NextTurn()
+						})
+					},
+					{
+						label: "Damage", sprite: Resonate,
+						on_click: method({ val: _res_value, cd: 1, idx: playerID, nm: caster.name, cost: _cost }, function() {
+							AddPassive("_Resonate", cd, Resonate, "Resonate", { mode: "damage", amount: val }, idx)
+							InjectLog(nm + " casts Resonate! (+" + string(val) + " damage)")
+							global.players[idx].pp -= cost
+							global.pendingPPCost = 0
+							PopMenu()
+							NextTurn()
+						})
+					},
+				],
 			})
 			exit
 			break
@@ -395,10 +411,23 @@ function CastSpell(spellID, playerID) {
 			global.pendingPPCost = 0
 			if (spell.stage >= 2) {
 				// Stage 2+: unleash any djinn from any party member
-				ClearOptions()
-				DeleteButtons()
-				instance_destroy(objPsynergyMenu)
-				instance_create_depth(0, 0, 0, objEchoPicker)
+				var _echo_items = []
+				for (var _ep = 0; _ep < array_length(global.players); _ep++) {
+					for (var _ed = 0; _ed < array_length(global.players[_ep].djinn); _ed++) {
+						var _eid = global.players[_ep].djinn[_ed]
+						var _edj = global.djinnlist[_eid]
+						array_push(_echo_items, { name: _edj.name, detail: global.players[_ep].name, data: { djinnID: _eid, ownerIndex: _ep } })
+					}
+				}
+				PopMenu()
+				PushMenu(objMenuCarousel, {
+					items:         _echo_items,
+					confirm_label: "Unleash",
+					filter:        method({ _ei: _echo_items }, function(i) { return !global.djinnlist[_ei[i].data.djinnID].ready and !global.djinnlist[_ei[i].data.djinnID].spent }),
+					on_confirm:    method({ _pid: playerID }, function(i, item) {
+						UnleashDjinn(item.data.djinnID, _pid)
+					}),
+				})
 			} else {
 				NextTurn()
 			}
@@ -468,22 +497,75 @@ function CastSpell(spellID, playerID) {
 			ProcessAttackQueue()
 			exit
 			break
-		case "Plasma":      // assign Jupiter pip values to targets
-			DeleteButtons()
-			var _plasma_num = 3
-			var _plasma_repeat = false
-			if (spell.stage == 2) { _plasma_num = 5; _plasma_repeat = true }
-			if (spell.stage >= 3) { _plasma_num = 7 }
-			instance_create_depth(0,0,0,objAssignMenu, {dieset: "jupiter", num:_plasma_num, target:"enemy", element: "Jupiter", repeater: _plasma_repeat})
+		case "Plasma":      // pick N jupiter dice, each targets one enemy
+			var _plasma_num  = (spell.stage >= 3) ? 7 : ((spell.stage == 2) ? 5 : 3)
+			var _plasma_dice = BuildDiceArray(caster, "jupiter")
+			var _plasma_max  = min(_plasma_num, instance_number(objMonster), array_length(_plasma_dice))
+			PushMenu(objDicePicker, {
+				dice:          _plasma_dice,
+				max_select:    _plasma_max,
+				confirm_label: "Assign",
+				title:         "Pick " + string(_plasma_max) + " dice",
+				on_confirm:    method({}, function(sel) {
+					for (var _i = 0; _i < array_length(sel); _i++) {
+						var _s = variable_clone(global.AggressionSchema)
+						_s.source = "psynergy"; _s.dam = sel[_i].pip
+						_s.num = 1; _s.dmgtype = "jupiter"; _s.target = "enemy"
+						array_push(global.attackQueue, _s)
+					}
+					PopMenu()
+					ClearOptions()
+					ProcessAttackQueue()
+				}),
+			})
 			exit
 			break
 			break
 		case "Force":       // variable PP cost, user-selected elemental subset
 			
-			ClearOptions()
-			DeleteButtons()
-			instance_create_depth(0, 0, 0, objForcePicker)
-			instance_destroy(objPsynergyMenu)
+				var _force_caster   = caster
+			var _force_cost_per = _cost_per
+			var _force_pips     = []
+			for (var _fp = POOL_VENUS; _fp <= POOL_MERCURY; _fp++) {
+				var _fd = _force_caster.dicepool[_fp]
+				for (var _fi = 0; _fi < array_length(_fd); _fi++) { array_push(_force_pips, _fd[_fi]) }
+			}
+			array_sort(_force_pips, false)
+			var _force_max  = min(array_length(_force_pips), floor(_force_caster.pp / _force_cost_per))
+			if _force_max <= 0 {
+				InjectLog("Not enough PP for Force!")
+				global.pendingPPCost = 0
+				instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+				exit
+				break
+			}
+			PushMenu(objMenuSlider, {
+				minim:         1,
+				maxim:         _force_max,
+				value:         1,
+				confirm_label: "Cast",
+				label:   method({ cp: _force_cost_per, mx: _force_max }, function(v) {
+					return "Dice to use: " + string(v) + " / " + string(mx) + "   PP cost: " + string(v * cp)
+				}),
+				preview: method({ pips: _force_pips }, function(v) {
+					var _d = 0
+					for (var _i = 0; _i < v; _i++) { _d += pips[_i] }
+					return "Damage: " + string(_d)
+				}),
+				on_confirm: method({ pips: _force_pips, cp: _force_cost_per, pid: playerID }, function(v) {
+					var _d = 0
+					for (var _i = 0; _i < v; _i++) { _d += pips[_i] }
+					global.pendingPPCost = v * cp
+					var _s = variable_clone(global.AggressionSchema)
+					_s.source  = "psynergy"
+					_s.dam     = _d
+					_s.num     = 1
+					_s.dmgtype = "none"
+					_s.target  = "enemy"
+					PopMenu()
+					SelectTargets(_s)
+				}),
+			})
 			exit
 			break
 		case "Dull":        // ATK down 3 on enemies
@@ -504,8 +586,6 @@ function CastSpell(spellID, playerID) {
 					}
 				}
 				InjectLog("All allies gain 3 DEF!")
-				instance_destroy(objPsynergyMenu)
-				global.pause = false
 				NextTurn()
 				exit
 				break
@@ -528,8 +608,6 @@ function CastSpell(spellID, playerID) {
 					}
 				}
 				InjectLog("All allies gain 3 ATK!")
-				instance_destroy(objPsynergyMenu)
-				global.pause = false
 				NextTurn()
 				break
 			}
@@ -540,8 +618,6 @@ function CastSpell(spellID, playerID) {
 		case "Halt":        // auto-prompted at boss phase start, not castable from menu
 			InjectLog(spell.name + " activates automatically at the start of boss fights.")
 			global.pendingPPCost = 0
-			instance_destroy(objPsynergyMenu)
-			global.pause = false
 			exit
 			break
 		case "Delude":      // inflict delusion on 3 opponents
@@ -567,8 +643,6 @@ function CastSpell(spellID, playerID) {
 					}
 				}
 				InjectLog("All stat changes cleared from party!")
-				instance_destroy(objPsynergyMenu)
-				global.pause = false
 				NextTurn()
 				exit
 				break
@@ -595,8 +669,6 @@ function CastSpell(spellID, playerID) {
 					global.players[_rs].venom = false
 				}
 				InjectLog("All allies are cured!")
-				instance_destroy(objPsynergyMenu)
-				global.pause = false
 				NextTurn()
 				exit
 			}
@@ -605,8 +677,6 @@ function CastSpell(spellID, playerID) {
 		case "Catch":       // auto-prompted on combat victory, not castable from menu
 			InjectLog(spell.name + " activates automatically after winning combat.")
 			global.pendingPPCost = 0
-			instance_destroy(objPsynergyMenu)
-			global.pause = false
 			exit
 			break
 		case "Cloak":       // shield ally until next turn
@@ -622,8 +692,6 @@ function CastSpell(spellID, playerID) {
 				caster.pp -= _cost
 				global.pendingPPCost = 0
 				OnMove()
-				instance_destroy(objPsynergyMenu)
-				global.pause = false
 				exit
 			}
 			break
@@ -640,8 +708,6 @@ function CastSpell(spellID, playerID) {
 				}
 				global.onFloor = false
 				InjectLog(caster.name + " casts " + spell.name + "! The floor resets.")
-				instance_destroy(objPsynergyMenu)
-				global.pause = false
 				CreateOptions()
 				exit
 			}
@@ -665,8 +731,6 @@ function CastSpell(spellID, playerID) {
 			break
 		default:
 			show_debug_message("CastSpell: '" + spell.name + "' has no implementation yet")
-			instance_destroy(objPsynergyMenu)
-			global.pause = false
 			return
 	}
 
@@ -693,9 +757,7 @@ function CastSpell(spellID, playerID) {
 	if caster.name == "Lyza" and struct.dam == 0{struct.dam += caster.jupiter}
 	
 	// Offensive spell dispatch — dam is fully calculated above
-	instance_destroy(objPsynergyMenu)
 	DeleteButtons()
-	global.pause = false
 	SelectTargets(struct)
 }
 

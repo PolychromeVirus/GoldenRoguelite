@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"BGM_Venus_Lighthouse",
+  "audioGroupId":{
+    "name":"BGM",
+    "path":"audiogroups/BGM",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":170.00597,
+  "exportDir":"",
+  "name":"BGM_Venus_Lighthouse",
+  "parent":{
+    "name":"BGM",
+    "path":"folders/Sounds/BGM.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"BGM_Venus_Lighthouse.mp3",
+  "volume":1.0,
+}

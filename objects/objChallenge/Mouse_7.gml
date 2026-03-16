@@ -14,13 +14,9 @@ if (_ch.type == "combat" or _ch.type == "boss") {
 	DestroyAllBut()
 	CreateOptions()
 	StartCombat(_ch.troop)
-	global.pause = false
 }
 
 // Puzzle challenge — show puzzle prompt
 if (_ch.type == "puzzle") {
-	instance_create_depth(0, 0, -100, objPuzzlePrompt, {
-		puzzle_index: _ch.puzzle_index,
-		challenge_index: challenge_index
-	})
+	PuzzlePrompt(_ch.puzzle_index, challenge_index)
 }

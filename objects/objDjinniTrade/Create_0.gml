@@ -11,8 +11,11 @@ for (var i = 0; i < array_length(global.players); i++) {
 
 targetSlot = 0
 
-DeleteButtons()
+_build_buttons = method(id, function() {
+    var confirmSprite = {image: Switch, text: "Confirm"}
+    instance_create_depth(BUTTON1, BOTTOMROW, 0, objConfirm, confirmSprite)
+    instance_create_depth(BUTTON2, BOTTOMROW, 0, objCancel)
+    clickable = true
+})
 
-var confirmSprite = {image: Switch,text:"Confirm"}
-instance_create_depth(BUTTON1,BOTTOMROW,0,objConfirm,confirmSprite)
-instance_create_depth(BUTTON2,BOTTOMROW,0,objCancel)
+clickable = false

@@ -1,3 +1,8 @@
+// Draw backgrounds in GUI space — two full halves
+var _hw = sprite_get_width(HalfMenu) * 6
+draw_sprite_ext(HalfMenuMiddleSelector, 0, 0, 0, 6, 6, 0, c_white, 1)
+draw_sprite_ext(HalfMenu, 0, _hw, 0, 6, 6, 0, c_white, 1)
+
 var drawx = 50
 var drawy = 300
 var offset = 4

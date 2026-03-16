@@ -6,23 +6,11 @@ if mode == 0 {
 	if selected < 0{
 		selected = 0
 	}
-
-	if array_length(global.players[global.turn].inventory) < 1{instance_destroy(objQuarterMenu)}else{
-
-		if instance_number(objQuarterMenu) < 1{
-			instance_create_depth(sprite_width,sprite_height/2,0,objQuarterMenu)
-		}
-
-	}
 } else {
 	// Equipment mode: weapon + armor
 	var _equiplen = 1 + array_length(global.players[global.turn].armor)
 	if selected > _equiplen - 1 { selected = _equiplen - 1 }
 	if selected < 0 { selected = 0 }
-
-	if instance_number(objQuarterMenu) < 1{
-		instance_create_depth(sprite_width,sprite_height/2,0,objQuarterMenu)
-	}
 }
 
 // Rebuild others list

@@ -1,5 +1,8 @@
 function NextTurn(){
 
+	// Clear any stale menus left on the stack
+	while array_length(global.menu_stack) > 0 { PopMenu() }
+
 	// --- Extra turn: skip djinn recovery, PP regen, boss phase — just reroll and go ---
 	if global.players[global.turn].extraTurns > 0 {
 		global.players[global.turn].extraTurns--

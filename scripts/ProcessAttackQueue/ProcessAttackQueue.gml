@@ -4,15 +4,13 @@
 function ProcessAttackQueue() {
 	if array_length(global.attackQueue) == 0 {
 		// Queue empty — proceed to next turn
-		global.pause = false
 		instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
 		return
 	}
 	
 	var a = variable_clone(global.attackQueue[0])
-	
 	array_delete(global.attackQueue, 0, 1)
 
-	//SelectTargets(entry.num, entry.target, entry.dam, entry.type, entry.statuses)
+	a.committed = true   // cancel on this targeter ends the turn, not returns to menu
 	SelectTargets(a)
 }

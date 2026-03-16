@@ -1,11 +1,17 @@
 /// @function HandleVictory()
 /// @desc Called from all victory paths. Checks for Catch prompt, then runs CombatCleanup + objPostBattle.
+function VictoryMusic() {
+	audio_stop_all()
+	audio_play_sound(Victory, 1, false)
+}
+
 function HandleVictory() {
 	global.attackQueue = []
 	InjectLog("Combat Victory!")
 	global.firstPlayer = global.turn
 	global.inCombat = false
 	global.catchBonus = -1
+	VictoryMusic()
 
 	var _catch_caster = FindSpellCaster("Catch")
 	if (_catch_caster >= 0) {
@@ -13,26 +19,21 @@ function HandleVictory() {
 		global._pendingCatchCaster = _catch_caster
 		instance_create_depth(0, 0, 0, TurnDelay, { wait: 1, on_complete: function() {
 			var _cc = global._pendingCatchCaster
-			instance_create_depth(0, 0, -100, objSpellPrompt, {
-				spell_name: "Catch",
-				caster_index: _cc,
-				on_confirm: method({ cc: _cc }, function() {
+			SpellPrompt("Catch", _cc,
+				method({ cc: _cc }, function() {
 					global.catchBonus = cc
-					global.pause = false
 					CombatCleanup()
 					ClearOptions()
 					instance_create_depth(0, 0, -10, objPostBattle)
 				}),
-				on_decline: function() {
-					global.pause = false
+				function() {
 					CombatCleanup()
 					ClearOptions()
 					instance_create_depth(0, 0, -10, objPostBattle)
 				}
-			})
+			)
 		}})
 	} else {
-		global.pause = false
 		CombatCleanup()
 		ClearOptions()
 		instance_create_depth(0, 0, -10, objPostBattle)

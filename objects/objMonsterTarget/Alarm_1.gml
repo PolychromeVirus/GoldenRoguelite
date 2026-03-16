@@ -25,7 +25,6 @@ if repeater > 1 {
 	if array_length(global.attackQueue) > 0 {
 		ProcessAttackQueue()
 	} else {
-		global.pause = false
 		instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
 	}
 }

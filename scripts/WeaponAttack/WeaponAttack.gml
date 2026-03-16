@@ -3,9 +3,8 @@
 function WeaponAttack(unleash = true, attack = true, splash = -1){
 	if instance_exists(objStatDisplay) { objStatDisplay.viewPlayer = global.turn }
 
-	if instance_number(objMonsterTarget) > 0 {
+	if attack and instance_number(objMonsterTarget) > 0 {
 		DeleteButtons()
-		global.pause = false
 		exit
 	}
 	var _struct = variable_clone(global.AggressionSchema)
@@ -13,7 +12,6 @@ function WeaponAttack(unleash = true, attack = true, splash = -1){
 		DestroyAllBut()
 		DeleteButtons()
 	}
-	global.pause = false
 	var player      = global.players[global.turn]
 	var weapon_type = global.itemcardlist[player.weapon].type
 	var _atkmod = variable_clone(player.atkmod)

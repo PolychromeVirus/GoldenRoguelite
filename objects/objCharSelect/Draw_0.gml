@@ -3,7 +3,7 @@ var pad = 8
 var drawx = x+32 / 2
 var drawy = y+32 + pad
 var name = global.players[selector.selector].name
-var namestart = (x+32 / 2) - (string_width(name) / 2)
+var namestart = max(x, (x+32 / 2) - (string_width(name) / 2))
 
 draw_set_font(GoldenSunItalic)
 

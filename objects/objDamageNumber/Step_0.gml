@@ -1,1 +1,1 @@
-if global.gameover{instance_destroy()}
+if global.gameover{audio_stop_all();audio_play_sound(_09_Game_Over__Variation_,1,1);instance_destroy()}

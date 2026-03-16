@@ -136,13 +136,11 @@ if (instance_position(mouse_x, mouse_y, objConfirm)) {
 if (instance_position(mouse_x, mouse_y, objCancel)) {
 	global.inTown = false
 	global.currentTown = -1
-	global.pause = false
 
 	// Restore overworld background to dungeon default
 	var _bg_layer = layer_background_get_id(layer_get_id("Background"))
 	var _dun_bg = global.dungeonlist[global.dungeon].background
 	layer_background_sprite(_bg_layer, _dun_bg)
-	DeleteButtons()
-	instance_destroy()
+	PopMenu()
 	CreateOptions()
 }

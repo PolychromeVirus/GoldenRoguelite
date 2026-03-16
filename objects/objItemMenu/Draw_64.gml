@@ -1,3 +1,9 @@
+// Background — drawn in GUI space so it sits in front of the HUD
+draw_sprite_ext(HalfMenuMiddleSelector, 0, 0, 0, 6, 6, 0, c_white, 1)
+var _hw = sprite_get_width(HalfMenu) * 6
+var _hh = sprite_get_height(HalfMenu) * 6
+draw_sprite_ext(QuarterMenu, 0, _hw, _hh / 2, 6, 6, 0, c_white, 1)
+
 var drawx = 50
 var drawy = 300
 var offset = 4

@@ -1,7 +1,6 @@
 if (mon_index >= array_length(mon_list)) {
 	// Done — cleanup + callback
 	FinishEnemyPhase()
-	global.pause = false
 	if (on_complete != undefined) { on_complete() }
 	
 	var _poison_amt = 1

@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"_1_17_Battle___Saturos_",
+  "audioGroupId":{
+    "name":"BossThemes",
+    "path":"audiogroups/BossThemes",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":177.16351,
+  "exportDir":"",
+  "name":"_1_17_Battle___Saturos_",
+  "parent":{
+    "name":"BGM",
+    "path":"folders/Sounds/BGM.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"_1_17_Battle___Saturos_.mp3",
+  "volume":1.0,
+}

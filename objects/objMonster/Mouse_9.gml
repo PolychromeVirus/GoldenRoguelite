@@ -1,7 +1,6 @@
 if !global.pause{
 	DeleteButtons()
 	DestroyAllBut(objMonsterStat)
-	global.pause = true
 	var target = {};
 	var _var_names = variable_struct_get_names(id); // Get names from the instance's internal struct
 

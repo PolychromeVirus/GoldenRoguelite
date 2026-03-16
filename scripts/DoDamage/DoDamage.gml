@@ -21,6 +21,15 @@ function SplashWithResist(_struct, _source, _tempdam, _mon) {
 }
 
 function DoDamage(struct){
+	// Hit sound based on attack source
+	switch struct.source {
+		case "attack":
+		case "onAttack": HITSOUND;   break
+		case "psynergy": if struct.num > 1 { BIGHITMULT } else { BIGHIT } break
+		case "summon":   SUMMONHIT;  break
+		case "djinni":   BIGHIT;     break
+	}
+
 	var dam      = struct.dam
 	var dmgtype  = struct.dmgtype
 	var pierce   = struct.pierce
@@ -30,8 +39,9 @@ function DoDamage(struct){
 	var troop = struct.troop
 	
 	if struct.caster.name == "Jules"{dmgtype = "normal"}
-	
-	
+
+	var _status_inflicted = false
+
     // Determine element color for damage numbers
     var _dam_col = ElementColor(dmgtype)
 	var tempdam = dam
@@ -83,6 +93,7 @@ function DoDamage(struct){
             if mon.monsterHealth <= 0 {
                 mon.monsterHealth = 0
                 global.gold += 1
+				audio_stop_sound(DeathSoundMedium);audio_play_sound(DeathSoundMedium,1,0)
             }
         }
 		var _icon_x = mon.x
@@ -107,13 +118,13 @@ function DoDamage(struct){
 		if variable_struct_exists(stats, "inflict_mark") { mon.mark = stats.inflict_mark}
 		if mon.boss{attempt = irandom(1) == 1}
 		if mon.monsterHealth > 0 and attempt{
-			if variable_struct_exists(stats, "inflict_poison") { mon.poison = stats.inflict_poison; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Poison }) }
-			if variable_struct_exists(stats, "inflict_venom") { mon.venom = stats.inflict_venom; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Poison_Flow }) }
-			if variable_struct_exists(stats, "inflict_stun") { mon.stun = stats.inflict_stun; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Bolt }) }
-			if variable_struct_exists(stats, "inflict_sleep") { mon.sleep = stats.inflict_sleep; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Sleep }) }
-			if variable_struct_exists(stats, "inflict_delude") { mon.delude = stats.inflict_delude; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Delude }) }
-			if variable_struct_exists(stats, "inflict_psyseal") { mon.psyseal = stats.inflict_psyseal; attempted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Psy_Seal }) }
-			if variable_struct_exists(stats, "inflict_lose_turn") and stats.inflict_lose_turn > 0 { mon.lose_turn = true; stats.inflict_lose_turn--; attempted = true}
+			if variable_struct_exists(stats, "inflict_poison") { mon.poison = stats.inflict_poison; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Poison }) }
+			if variable_struct_exists(stats, "inflict_venom") { mon.venom = stats.inflict_venom; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Poison_Flow }) }
+			if variable_struct_exists(stats, "inflict_stun") { mon.stun = stats.inflict_stun; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Bolt }) }
+			if variable_struct_exists(stats, "inflict_sleep") { mon.sleep = stats.inflict_sleep; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Sleep }) }
+			if variable_struct_exists(stats, "inflict_delude") { mon.delude = stats.inflict_delude; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Delude }) }
+			if variable_struct_exists(stats, "inflict_psyseal") { mon.psyseal = stats.inflict_psyseal; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Psy_Seal }) }
+			if variable_struct_exists(stats, "inflict_lose_turn") and stats.inflict_lose_turn > 0 { mon.lose_turn = true; stats.inflict_lose_turn--; attempted = true; _status_inflicted = true }
 
 
 		}else if attempted and !attempt{InjectLog(mon.name + " resisted status!")}
@@ -130,7 +141,8 @@ function DoDamage(struct){
 
 		if variable_struct_exists(stats, "locked") and stats.locked == true { mon.locked = struct.statuses.locked}
 	}
-	
+	if _status_inflicted { INFLICT }
+
 	var _unleash = struct.unleash
 	// Unleash: instant kill non-boss targets
 	if variable_struct_exists(_unleash, "instant_kill") and _unleash.instant_kill {

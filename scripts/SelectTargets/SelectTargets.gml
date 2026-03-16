@@ -53,8 +53,23 @@ function SelectTargets(struct){
 	}
 	if global.lastselected != -1{struct.selected = global.lastselected}
 
-	if struct.target == "enemy" {instance_create_depth(0,0,0,objMonsterTarget, struct)}else{
-		instance_create_depth(0,TARGETHEIGHT,0,objCharTarget, struct)}
+	if struct.target == "enemy" {
+		instance_create_depth(0,0,0,objMonsterTarget, struct)
+	} else {
+		var _cfg = _BuildCharTargetConfig(struct)
+		// Skip prompt if no valid targets exist (all filtered out)
+		if !is_undefined(_cfg.filter) {
+			var _any_valid = false
+			for (var _fi = 0; _fi < array_length(global.players); _fi++) {
+				if !_cfg.filter(_fi) { _any_valid = true; break }
+			}
+			if !_any_valid {
+				_FinishCharTarget(struct)
+				exit
+			}
+		}
+		PushMenu(objMenuGrid, _cfg)
+	}
 }
 
 /// @function ApplyDamageToTargets(struct)
@@ -77,13 +92,11 @@ function ApplyDamageToTargets(struct) {
 
 	if _any_alive {
 		global.inCombat = true
-		global.pause = false
 		NextTurn()
 	} else {
 		InjectLog("Combat Victory!")
 		global.firstPlayer = global.turn
 		global.inCombat = false
-		global.pause = false
 		CombatCleanup()
 		ClearOptions()
 		instance_create_depth(0, 0, -10, objPostBattle)

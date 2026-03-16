@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"_PushSummonSpellMenu",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"_PushSummonSpellMenu",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
