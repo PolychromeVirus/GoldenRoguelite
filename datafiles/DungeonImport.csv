@@ -1,4 +1,4 @@
 name,floors,background,troop_csv,boss,curse_chance,reward_schedule,towns,min_challenges,max_challenges,boss_background
 Mercury Lighthouse,8,Mercury_Lighthouse,Ch1Troops,Saturos,30,4:levelup;6:djinn;8:levelup,Vale;Vault;Kolima;Imil,1,3,Mercury_Lighthouse_Aerie
 Venus Lighthouse,8,Venus_Lighthouse,Ch2Troops,Fusion Dragon,45,3:levelup;7:levelup;8:djinn,Xian;Tolbi;Lalivero,2,3,Venus_Lighthouse_Aerie
-Jupiter Lighthouse,8,Jupiter_Lighthouse,Ch3Troops,Agatio,50,3:levelup;4:djinn;6:summon;8:levelup,Air's Rock;Gaia Rock;Aqua Rock;Magma Rock,2,4,Jupiter_Lighthouse_Aerie
+Jupiter Lighthouse,8,Jupiter_Lighthouse,Ch3Troops,Agatio;Karst,50,3:levelup;4:djinn;6:summon;8:levelup,Air's Rock;Gaia Rock;Aqua Rock;Magma Rock,2,4,Jupiter_Lighthouse_Aerie
