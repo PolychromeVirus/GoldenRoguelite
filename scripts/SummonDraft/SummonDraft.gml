@@ -90,13 +90,13 @@ function SummonDraft() {
 				if global.inTown { ProcessTownFinds() } else { ProcessPostBattleQueue() }
 				Autosave()
 				// Reveal check
-				if !irandom(9) and array_length(global.postBattleQueue) == 0 {
+				if !irandom(9) {
 					var _cast = FindSpellCaster("Reveal")
 					if _cast != -1 {
 						SpellPrompt("Reveal", _cast,
-						function() { SummonDraft() },
-						function() {}
-					)
+							function() { SummonDraft() },
+							function() {}
+						)
 					}
 				}
 			}),

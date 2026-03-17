@@ -5,6 +5,7 @@ function DrawCard(player, choice = false){
 		array_push(global.choiceDrawQueue, { player: player })
 		return ["", false]
 	}
+	if array_length(global.deck) == 0{InjectLog("The deck is empty!");return ["Nothing", true]}
 	var top = global.deck[0]
 	var _name = global.itemcardlist[top].name
 	if array_length(player.inventory) < 5 and !global.itemcardlist[top].onDraw{

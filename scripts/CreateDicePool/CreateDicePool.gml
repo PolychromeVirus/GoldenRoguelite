@@ -35,6 +35,8 @@ function CreateDicePool(){
 		currplayer.jupiter = 0
 		currplayer.mercury = 0
 		currplayer.cursed = false
+		currplayer.provoke = false
+		currplayer.reflect = 0
 		
 		var _res = ""
 		var _element = CheckPassive("_element")

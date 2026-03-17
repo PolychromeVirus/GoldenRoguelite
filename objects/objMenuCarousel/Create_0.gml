@@ -6,7 +6,8 @@ if !variable_instance_exists(id, "description")   { description   = "none" }
 if !variable_instance_exists(id, "title")         { title         = "" }
 if !variable_instance_exists(id, "filter")        { filter        = undefined }
 if !variable_instance_exists(id, "on_info")       { on_info       = undefined }
-if !variable_instance_exists(id, "confirm_label") { confirm_label = "Select" }
+if !variable_instance_exists(id, "confirm_label")  { confirm_label  = "Select" }
+if !variable_instance_exists(id, "confirm_sprite") { confirm_sprite = yes }
 if !variable_instance_exists(id, "read_only")     { read_only     = false }
 if !variable_instance_exists(id, "side")          { side          = "left" }
 if !variable_instance_exists(id, "draw_pane")     { draw_pane     = undefined }
@@ -30,7 +31,7 @@ if description == "half" {
 
 _build_buttons = method(id, function() {
     if !read_only {
-        var _confirm_spr = { image: yes, text: confirm_label }
+        var _confirm_spr = { image: confirm_sprite, text: confirm_label }
         instance_create_depth(BUTTON1, BOTTOMROW, 0, objConfirm, _confirm_spr)
     }
     instance_create_depth(BUTTON2, BOTTOMROW, 0, objCancel)

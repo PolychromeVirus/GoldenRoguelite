@@ -140,6 +140,14 @@ function DoDamage(struct){
 		else if variable_struct_exists(stats, "inflict_haunt") and !_hauntatt{ InjectLog(mon.name + " resisted a spirit!") }
 
 		if variable_struct_exists(stats, "locked") and stats.locked == true { mon.locked = struct.statuses.locked}
+
+		// Start status resist timer if any status was inflicted and timer isn't already running
+		if mon.status_resist > 0 and mon.status_timer == 0 {
+			var _has_status = mon.poison or mon.venom or mon.sleep or mon.delude
+				or mon.psyseal or mon.lose_turn or mon.locked or mon.mark
+				or mon.stun > 0 or mon.haunt > 0
+			if _has_status { mon.status_timer = mon.status_resist }
+		}
 	}
 	if _status_inflicted { INFLICT }
 

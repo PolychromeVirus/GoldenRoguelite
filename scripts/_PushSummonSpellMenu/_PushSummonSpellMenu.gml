@@ -49,7 +49,7 @@ function _PushSummonSpellMenu(pick) {
 	var _items = []
 	for (var _ii = 0; _ii < array_length(_maxSpellIDs); _ii++) {
 		var _sp = global.psynergylist[_maxSpellIDs[_ii]]
-		var _prevDam = CalcPreview(_maxSpellIDs[_ii], pick.playerID)
+		var _prevDam = CalcPreview("spell",_maxSpellIDs[_ii], pick.playerID)
 		var _detail  = "Dmg: " + string(_prevDam) + "  Range: " + string(_sp.range)
 		array_push(_items, { name: _sp.name, detail: _detail, data: { spellID: _filteredSpells[_ii] } })
 	}

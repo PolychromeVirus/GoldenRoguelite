@@ -63,6 +63,20 @@ function logic(){
     for (var _t = 0; _t < array_length(_indices); _t++) {
         array_push(targets, monsters[_indices[_t]])
     }
+
+    // Scatter: pick a random target for the first hit (subsequent hits re-pick in Alarm_1)
+    if variable_struct_exists(unleash, "scatter") and unleash.scatter {
+        var _len = array_length(monsters)
+        if variable_struct_exists(unleash, "scatter_any") and unleash.scatter_any {
+            targets = [monsters[irandom(_len - 1)]]
+        } else {
+            var _candidates = []
+            if selected > 0 { array_push(_candidates, selected - 1) }
+            array_push(_candidates, selected)
+            if selected < _len - 1 { array_push(_candidates, selected + 1) }
+            targets = [monsters[_candidates[irandom(array_length(_candidates) - 1)]]]
+        }
+    }
 	var _names = variable_instance_get_names(id)
 	
 	for (var i=0;i<array_length(_names);i++){

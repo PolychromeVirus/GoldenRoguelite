@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"SummonDraft",
+  "%Name":"TickMonsterStatuses",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"SummonDraft",
+  "name":"TickMonsterStatuses",
   "parent":{
     "name":"Scripts",
     "path":"folders/Scripts.yy",

@@ -1,3 +1,6 @@
+var _slen = array_length(global.menu_stack)
+if _slen == 0 or global.menu_stack[_slen - 1] != id { exit }
+
 var _player = global.players[global.turn]
 
 var _clicked = instance_position(mouse_x, mouse_y, objButton2)
@@ -70,7 +73,8 @@ if _clicked != noone and _clicked.object_index == objButton2 {
 									}),
 								},
 								{
-									label: "Cancel",
+									label:    "Cancel",
+									sprite:   no,
 									on_click: function() { PopMenu() },
 								},
 							],
@@ -78,11 +82,13 @@ if _clicked != noone and _clicked.object_index == objButton2 {
 					} else {
 						if array_length(_player.armor) < 4 {
 							array_push(_player.armor, SelectedItem)
+							array_delete(_player.inventory, selected, 1)
+							CreateDicePool()
+							_player.dicepool = RollDice(_player)
+							if global.inCombat { PopMenu(); NextTurn(); exit }
+						} else {
+							InjectLog("No free armor slot!")
 						}
-						array_delete(_player.inventory, selected, 1)
-						CreateDicePool()
-						_player.dicepool = RollDice(_player)
-						if global.inCombat { PopMenu(); NextTurn(); exit }
 					}
 				}
 			}

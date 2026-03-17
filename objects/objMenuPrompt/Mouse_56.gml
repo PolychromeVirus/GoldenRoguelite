@@ -6,7 +6,6 @@ if _btn != noone
    and _btn.clickable
 {
 	var _cb = _btn._cb
-	// objCancel's own Mouse_7 will call PopMenu(); avoid double-pop
-	if _btn.object_index != objCancel { PopMenu() }
+	PopMenu()
 	_cb()
 }

@@ -25,7 +25,7 @@ function StartDungeon(_dungeon_index) {
 
 		_curr.hp = variable_clone(_curr.hpmax)
 		_curr.pp = 3 * (_dungeon_index + 1)
-		CreateDicePool(_curr)
+		CreateDicePool()
 		_curr.dicepool = RollDice(_curr)
 	}
 	

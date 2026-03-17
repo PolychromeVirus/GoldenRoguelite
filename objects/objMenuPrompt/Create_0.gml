@@ -19,7 +19,7 @@ _build_buttons = function() {
 	var _start_x = 128 - (_n - 1) * _spacing / 2
 	for (var _i = 0; _i < _n; _i++) {
 		var _btn  = buttons[_i]
-		var _obj  = (_btn.sprite == no) ? objCancel : objButton2
+		var _obj  = objButton2
 		var _inst = instance_create_depth(
 			_start_x + _i * _spacing, BOTTOMROW, 0,
 			_obj,
@@ -29,3 +29,4 @@ _build_buttons = function() {
 		_inst._owner_id = id
 	}
 }
+_build_buttons()

@@ -5,6 +5,8 @@ if !variable_instance_exists(id, "buttons") { buttons = [] }
 _btn_instances = []
 
 _build_buttons = method(id, function() {
+    DeleteButtons()
+    _btn_instances = []
     var _n = array_length(buttons)
     // right-align buttons — last N slots of bottom row
     var _positions = [BUTTON2, BUTTON3, BUTTON4, BUTTON5]
@@ -19,3 +21,4 @@ _build_buttons = method(id, function() {
 })
 
 clickable = false
+_build_buttons()

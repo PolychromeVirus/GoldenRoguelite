@@ -89,6 +89,7 @@ function InitGlobalVars(){
 	global.townVisited = []
 	global.townFindQueue = []
 	global.artifactlist = []
+	
 
 	global.players = [variable_clone(global.characterlist[0]),
 					variable_clone(global.characterlist[1]),
@@ -130,6 +131,7 @@ function InitGlobalVars(){
 	global.c_armor = #ffe45f
 	global.c_psynergy = #e7abff
 	global.c_summon = #e7abff
+	global.c_menu = #006080
 
 	global.lastselected = -1
 	global.passiveEffects = []
@@ -139,6 +141,7 @@ function InitGlobalVars(){
 	global.knownSummons = []
 	global.postBattleDraws = []
 	global.enemyFled = false
+	global.miniBossDrops = []
 	global.goldAtCombatStart = 0
 
 	global.AggressionSchema = {target: "enemy", num: 1, dam: 0, repeater: 0, dmgtype: "normal", unleash: {}, onConfirm: {}, splash: -1, 

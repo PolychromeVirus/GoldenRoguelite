@@ -56,6 +56,12 @@ function _AdvanceTurn(){
 	else if (_cp.atkmod > 0) { _cp.atkmod-- }
 	else if (_cp.atkmod < 0) { _cp.atkmod++ }
 
+	// --- Psyseal countdown (outgoing player) ---
+	if (_cp.psyseal > 0) {
+		_cp.psyseal--
+		if (_cp.psyseal <= 0) { InjectLog(_cp.name + "'s psynergy is restored!") }
+	}
+
 	// --- Poison/venom tick for ALL players and monsters ---
 	var _poison_amt = 1
 	var _poison_passive = CheckPassive("poison_buff")
@@ -119,6 +125,7 @@ function _AdvanceTurn(){
 		global.turnPhase = "boss"
 		ClearOptions()
 		RunEnemyPhase(true, function() {
+			TickMonsterStatuses()
 			_NextTurnSetupPlayer()
 		})
 	}
@@ -215,7 +222,7 @@ function _NextTurnSetupPlayer() {
 		}
 	}
 
-	// --- Curse check (cursed armor: d6, 1-2 = skip turn) ---
+// --- Curse check (cursed armor: d6, 1-2 = skip turn) ---
 	if _cur.cursed {
 		// Cleric's Ring negates curse turn-skip
 		var _hasClerics = false
@@ -261,5 +268,20 @@ function _NextTurnSetupPlayer() {
 	// Recreate action buttons for the new player's turn
 	if global.inCombat and !instance_exists(objAttack) {
 		CreateOptions()
+	}
+
+	// Planet Diver stage 2 detonation — fires automatically on the next turn after charging
+	if global.inCombat and variable_struct_exists(_cur, "planetary") and _cur.planetary.active {
+		_cur.planetary.active = false
+		_cur.halfheal = false
+		var _pkt = variable_clone(global.AggressionSchema)
+		_pkt.source  = "psynergy"
+		_pkt.dam     = _cur.planetary.damage
+		_pkt.dmgtype = _cur.planetary.element
+		_pkt.target  = "enemy"
+		_pkt.num     = 1
+		DeleteButtons()
+		InjectLog(_cur.name + " unleashes the planetary strike!")
+		SelectTargets(_pkt)
 	}
 }

@@ -89,14 +89,14 @@ for (var _i = 0; _i < array_length(global.players); _i++) {
         }
     }
 
-    for (var _j = 0; _j < array_length(_p.equip_spells); _j++) {
-        if (_p.equip_spells[_j] < 0) { continue }
-        var _sspr = asset_get_index(global.psynergylist[_p.equip_spells[_j]].alias)
-        if (_sspr != -1) {
-            draw_sprite_stretched(_sspr, 0, _px, _y4, _iconSize, _iconSize)
-            _px += _iconSize + 2
-        }
-    }
+    //for (var _j = 0; _j < array_length(_p.equip_spells); _j++) {
+    //    if (_p.equip_spells[_j] < 0) { continue }
+    //    var _sspr = asset_get_index(global.psynergylist[_p.equip_spells[_j]].alias)
+    //    if (_sspr != -1) {
+    //        draw_sprite_stretched(_sspr, 0, _px, _y4, _iconSize, _iconSize)
+    //        _px += _iconSize + 2
+    //    }
+    //}
 
 }
 

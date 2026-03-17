@@ -4,8 +4,8 @@ var _mx      = device_mouse_x_to_gui(0)
 var _my      = device_mouse_y_to_gui(0)
 var _dicesize = 52
 var _dicepad  = 10
-var _startx   = 50
-var _starty   = 350
+var _startx   = spr_x + 50
+var _starty   = spr_y + 80
 
 // Confirm button
 if instance_exists(objConfirm) and instance_position(mouse_x, mouse_y, objConfirm) {

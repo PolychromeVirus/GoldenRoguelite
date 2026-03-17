@@ -80,7 +80,9 @@ function DrawCharCell(player_index, cx, cy, greyed, hovered) {
 
     // ATK / DEF stats
     var _stat_x   = _bx + barW + 10
-    var _atk_total = _p.atk + (variable_struct_exists(_p, "atkmod") ? _p.atkmod : 0)
+    var _atkmod_display = variable_struct_exists(_p, "atkmod") ? _p.atkmod : 0
+    if (_p.name == "Garet" or _p.name == "Tyrell") { _atkmod_display *= 2 }
+    var _atk_total = _p.atk + _atkmod_display
     var _def_total = _p.def + (variable_struct_exists(_p, "defmod") ? _p.defmod : 0)
     var _atk_str  = "ATK " + string(_atk_total)
     var _def_str  = "DEF " + string(_def_total)
@@ -141,37 +143,36 @@ function DrawCharCell(player_index, cx, cy, greyed, hovered) {
         _ex += itemSize + 2
     }
 
-    // Status row
-    var _sx       = _bx
-    var _sy       = _ey + itemSize + 10
+    // Status icons — same row as equipment, continuing from inventory
+    _ex += 8
     var _iconSize = 28
 
     if variable_struct_exists(_p, "atkmod") and _p.atkmod != 0 {
-        draw_sprite_stretched(_p.atkmod > 0 ? attack_up : attack_down, 0, _sx, _sy, _iconSize, _iconSize)
-        _sx += _iconSize + 2
+        draw_sprite_stretched(_p.atkmod > 0 ? attack_up : attack_down, 0, _ex, _ey, _iconSize, _iconSize)
+        _ex += _iconSize + 2
     }
     if variable_struct_exists(_p, "defmod") and _p.defmod != 0 {
-        draw_sprite_stretched(_p.defmod > 0 ? defense_up : defense_down, 0, _sx, _sy, _iconSize, _iconSize)
-        _sx += _iconSize + 2
+        draw_sprite_stretched(_p.defmod > 0 ? defense_up : defense_down, 0, _ex, _ey, _iconSize, _iconSize)
+        _ex += _iconSize + 2
     }
 
     var _statarray = GetStatus(_p)
     for (var _j = 0; _j < array_length(_statarray); _j++) {
-        draw_sprite_stretched(_statarray[_j], 0, _sx, _sy, _iconSize, _iconSize)
-        _sx += _iconSize + 2
+        draw_sprite_stretched(_statarray[_j], 0, _ex, _ey, _iconSize, _iconSize)
+        _ex += _iconSize + 2
     }
 
     if variable_struct_exists(_p, "rootTokens") and _p.rootTokens > 0 {
-        draw_sprite_stretched(Growth, 0, _sx, _sy, _iconSize, _iconSize)
-        _sx += _iconSize + 2
+        draw_sprite_stretched(Growth, 0, _ex, _ey, _iconSize, _iconSize)
+        _ex += _iconSize + 2
     }
     if variable_struct_exists(_p, "regen") and _p.regen > 0 {
-        draw_sprite_stretched(Ply, 0, _sx, _sy, _iconSize, _iconSize)
-        _sx += _iconSize + 2
+        draw_sprite_stretched(Ply, 0, _ex, _ey, _iconSize, _iconSize)
+        _ex += _iconSize + 2
     }
     if variable_struct_exists(_p, "cloak") and _p.cloak {
-        draw_sprite_stretched(Cloak, 0, _sx, _sy, _iconSize, _iconSize)
-        _sx += _iconSize + 2
+        draw_sprite_stretched(Cloak, 0, _ex, _ey, _iconSize, _iconSize)
+        _ex += _iconSize + 2
     }
 
     draw_set_color(c_white)

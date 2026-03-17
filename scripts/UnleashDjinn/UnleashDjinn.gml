@@ -221,6 +221,7 @@ function UnleashDjinn(djinnID, playerID) {
 			for (var _i = 0; _i < array_length(global.players); _i++) {
 				if global.players[_i].hp > 0 { global.players[_i].atkmod += 2 }
 			}
+			caster.atkmod_fresh = true
 			InjectLog(djinn.name + " boosted ATK +2 for all")
 			ClearOptions()
 			NextTurn()
@@ -231,6 +232,7 @@ function UnleashDjinn(djinnID, playerID) {
 			for (var _i = 0; _i < array_length(global.players); _i++) {
 				if global.players[_i].hp > 0 { global.players[_i].defmod += 3 }
 			}
+			caster.defmod_fresh = true
 			InjectLog("The party's defenses are bolstered!")
 			ClearOptions()
 			NextTurn()
@@ -242,6 +244,7 @@ function UnleashDjinn(djinnID, playerID) {
 			for (var _i = 0; _i < array_length(global.players); _i++) {
 				if global.players[_i].hp > 0 { global.players[_i].defmod += 2 }
 			}
+			caster.defmod_fresh = true
 			InjectLog(djinn.name + " boosted DEF +2 for all")
 			ClearOptions()
 			NextTurn()

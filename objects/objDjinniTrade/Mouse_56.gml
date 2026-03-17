@@ -72,5 +72,6 @@ if _do_confirm {
 	// Rebuild dice pools for affected players
 	CreateDicePool()
 
-	PopMenu()
+	PopMenu() // trade screen
+	PopMenu() // carousel
 }

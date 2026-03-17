@@ -1,4 +1,3 @@
-if instance_exists(objStatDisplay) { objStatDisplay.viewPlayer = global.turn }
 if array_length(global.menu_stack) > 0 { exit }
 if global.players[global.turn].psyseal { exit }
 
@@ -18,11 +17,13 @@ for (var i = 0; i < array_length(_spells); i++) {
     var _desc = _s.text
     if string_length(_desc) > 170 { _desc = string_delete(_desc, 170, string_length(_desc) - 169) + "..." }
     array_push(_items, {
-        name:   _s.name + " - " + string(_s.cost) + " PP",
-        sprite: asset_get_index(_s.alias),
-        detail: _detail,
-        desc:   _desc,
-        data:   { spell_index: _spells[i] },
+        name:         _s.name + " - " + string(_s.cost) + " PP",
+        element:      _s.element,
+        sprite:       asset_get_index(_s.alias),
+        right_sprite: asset_get_index("range_" + _s.range),
+        detail:       _detail,
+        desc:         _desc,
+        data:         { spell_index: _spells[i] },
     })
 }
 

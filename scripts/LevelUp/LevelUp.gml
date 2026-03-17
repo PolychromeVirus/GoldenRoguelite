@@ -26,12 +26,12 @@ function _DraftNext() {
 		} else if (global.inTown) {
 			ProcessTownFinds()
 		} else {
-			// Reveal: 10% chance of bonus djinn draft when all queues are empty
-			if !irandom(9) and array_length(global.menu_stack) == 0 and array_length(global.choiceDrawQueue) == 0 and array_length(global.postBattleQueue) == 0 {
+			// Reveal: 10% chance of bonus level up when all drafts are done
+			if !irandom(9) {
 				var _cast = FindSpellCaster("Reveal")
 				if _cast != -1 {
 					SpellPrompt("Reveal", _cast,
-						function() { DjinnDraft() },
+						function() { LevelUp() },
 						function() {}
 					)
 					return

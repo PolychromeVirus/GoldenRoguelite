@@ -13,6 +13,20 @@ function HandleVictory() {
 	global.catchBonus = -1
 	VictoryMusic()
 
+	// Collect mini-boss set drops before monsters are cleared
+	global.miniBossDrops = []
+	var _mon_count = instance_number(objMonster)
+	for (var _m = 0; _m < _mon_count; _m++) {
+		var _mon = instance_find(objMonster, _m)
+		if variable_struct_exists(_mon, "drop") and _mon.drop != "" {
+			if _mon.drop == "djinn_draft" {
+				array_push(global.miniBossDrops, "djinn_draft")
+			} else if _mon.drop == "choice_draw" and !global.enemyFled {
+				array_push(global.miniBossDrops, "choice_draw")
+			}
+		}
+	}
+
 	var _catch_caster = FindSpellCaster("Catch")
 	if (_catch_caster >= 0) {
 		// Defer prompt to next frame so objMonsterTarget Destroy doesn't wipe it
@@ -66,6 +80,7 @@ function CombatCleanup(){
 		}
 
 		ClearAllTokens(curr)
+		curr.rerolls = []
 		
 		// Recover spent djinn (spent → ready), in-recovery djinn stay
 		for (var _d = 0; _d < array_length(curr.djinn); _d++) {

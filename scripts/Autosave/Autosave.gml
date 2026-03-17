@@ -25,7 +25,8 @@ function Autosave(){
 		floorRequired: global.floorRequired,
 		floorEffects: global.floorEffects,
 		floorName: global.floorName,
-		artifactlist: global.artifactlist
+		artifactlist: global.artifactlist,
+		genBGM: global.genBGM
 	}
 	
 	

@@ -139,7 +139,7 @@ function CastSummon(summonID, playerID){
 			InjectLog("All allies recovered HP!")
 			var _coat_data = { amount: 5 }
 			AddPassive("regen", 5, asset_get_index(summon.alias), "Coatlicue", _coat_data, playerID)
-			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
 			_handled = true
 			break
 
@@ -159,7 +159,7 @@ function CastSummon(summonID, playerID){
 				AddPassive("skip_enemies", 2, asset_get_index(summon.alias), "Ulysses", _uly_data, playerID)
 				InjectLog("Enemies can't move!")
 			}
-			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
 			_handled = true
 			break
 
@@ -177,7 +177,7 @@ function CastSummon(summonID, playerID){
 			AddPassive("damage_cap_1", 1, asset_get_index(summon.alias), "Iris", {}, playerID)
 			AddPassive("damage_half", 2, asset_get_index(summon.alias), "Iris", {}, playerID)
 			InjectLog("Party shielded from damage!")
-			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
 			_handled = true
 			break
 

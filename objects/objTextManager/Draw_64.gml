@@ -37,7 +37,8 @@ var offset = 4
 // ── TOP BAR ───────────────────────────────────────────────────────────────────
 var _targeting = (instance_number(objMonsterTarget) > 0)
 
-if global.charselect == false and !_targeting {
+var _stat_open = (instance_number(objStatDisplay) > 0)
+if global.charselect == false and !_targeting and !_stat_open {
 
     var _guiW        = display_get_gui_width()
     var _portraitFull = 144
@@ -49,6 +50,7 @@ if global.charselect == false and !_targeting {
     var _endMargin    = 15
     var _barH         = 16
     var _nameH        = string_height("HP:")
+	var _ssize = 32
 
     if _half_open and _show_compact {
         // ── COMPACT MODE: single current-player cell ──────────────────────────
@@ -76,7 +78,6 @@ if global.charselect == false and !_targeting {
                            _colX + _portraitOffset + _portraitSize,
                            _portraitOffset + _portraitSize, false)
             draw_set_alpha(1)
-            _p.heal_flash--
         }
 
         // Damage flash
@@ -86,7 +87,6 @@ if global.charselect == false and !_targeting {
                 _colX + _portraitOffset, _portraitOffset,
                 _portraitSize, _portraitSize, c_red, _p.flash_timer / 12)
             gpu_set_blendmode(bm_normal)
-            _p.flash_timer--
         }
 
         // Bars + text
@@ -120,23 +120,26 @@ if global.charselect == false and !_targeting {
         draw_text(_infoX + offset, _ppTextY + offset, _pptext)
         draw_set_color(c_white)
         draw_text(_infoX, _ppTextY, _pptext)
-
+		
+		
+		
         // Status tokens
         var _tokenX = _infoX + string_width(_p.name) + 2
         var _tokenY = _nameY + 6
-        if _p.atkmod < 0 { draw_sprite_stretched(attack_down,  0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if _p.defmod < 0 { draw_sprite_stretched(defense_down, 0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if _p.atkmod > 0 { draw_sprite_stretched(attack_up,    0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if _p.defmod > 0 { draw_sprite_stretched(defense_up,   0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if _p.poison      { draw_sprite_stretched(Poison,       0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if _p.venom       { draw_sprite_stretched(Poison,       0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if _p.stun > 0    { draw_sprite_stretched(Bolt,         0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if _p.sleep       { draw_sprite_stretched(Sleep,        0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if _p.rootTokens > 0 { draw_sprite_stretched(Growth,   0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if _p.regen       { draw_sprite_stretched(Ply,          0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if _p.cloak       { draw_sprite_stretched(Cloak,        0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if array_length(_p.rerolls) > 0 { draw_sprite_stretched(Lucky_Medal1503, 0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-        if variable_struct_exists(_p.delaydata, "revive") and _p.delaydata.revive { draw_sprite_stretched(Revive, 0, _tokenX, _tokenY, 24, 24) }
+        if _p.atkmod < 0 { draw_sprite_stretched(attack_down,  0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.defmod < 0 { draw_sprite_stretched(defense_down, 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.atkmod > 0 { draw_sprite_stretched(attack_up,    0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.defmod > 0 { draw_sprite_stretched(defense_up,   0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.poison      { draw_sprite_stretched(Poison,       0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.venom       { draw_sprite_stretched(Poison_Flow,       0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.stun > 0    { draw_sprite_stretched(Bolt,         0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.sleep       { draw_sprite_stretched(Sleep,        0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.rootTokens > 0 { draw_sprite_stretched(Growth,   0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.regen       { draw_sprite_stretched(Ply,          0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.cloak       { draw_sprite_stretched(Cloak,        0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if _p.psyseal       { draw_sprite_stretched(Psy_Seal,   0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if array_length(_p.rerolls) > 0 { draw_sprite_stretched(Lucky_Medal1503, 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if variable_struct_exists(_p.delaydata, "revive") and _p.delaydata.revive { draw_sprite_stretched(Revive, 0, _tokenX, _tokenY, _ssize, _ssize) }
 
     } else {
         // ── FULL MODE: all players ────────────────────────────────────────────
@@ -209,19 +212,20 @@ if global.charselect == false and !_targeting {
             // Status tokens
             var _tokenX = _infoX + string_width(_p.name) + 2
             var _tokenY = _nameY + 6
-            if _p.atkmod < 0 { draw_sprite_stretched(attack_down,  0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if _p.defmod < 0 { draw_sprite_stretched(defense_down, 0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if _p.atkmod > 0 { draw_sprite_stretched(attack_up,    0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if _p.defmod > 0 { draw_sprite_stretched(defense_up,   0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if _p.poison      { draw_sprite_stretched(Poison,       0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if _p.venom       { draw_sprite_stretched(Poison,       0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if _p.stun > 0    { draw_sprite_stretched(Bolt,         0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if _p.sleep       { draw_sprite_stretched(Sleep,        0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if _p.rootTokens > 0 { draw_sprite_stretched(Growth,   0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if _p.regen       { draw_sprite_stretched(Ply,          0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if _p.cloak       { draw_sprite_stretched(Cloak,        0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if array_length(_p.rerolls) > 0 { draw_sprite_stretched(Lucky_Medal1503, 0, _tokenX, _tokenY, 24, 24); _tokenX += 28 }
-            if variable_struct_exists(_p.delaydata, "revive") and _p.delaydata.revive { draw_sprite_stretched(Revive, 0, _tokenX, _tokenY, 24, 24) }
+            if _p.atkmod < 0 { draw_sprite_stretched(attack_down,  0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.defmod < 0 { draw_sprite_stretched(defense_down, 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.atkmod > 0 { draw_sprite_stretched(attack_up,    0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.defmod > 0 { draw_sprite_stretched(defense_up,   0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.poison      { draw_sprite_stretched(Poison,       0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.venom       { draw_sprite_stretched(Poison,       0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.stun > 0    { draw_sprite_stretched(Bolt,         0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.sleep       { draw_sprite_stretched(Sleep,        0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.rootTokens > 0 { draw_sprite_stretched(Growth,   0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.regen       { draw_sprite_stretched(Ply,          0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.cloak       { draw_sprite_stretched(Cloak,        0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.psyseal     { draw_sprite_stretched(Psy_Seal,     0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if array_length(_p.rerolls) > 0 { draw_sprite_stretched(Lucky_Medal1503, 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if variable_struct_exists(_p.delaydata, "revive") and _p.delaydata.revive { draw_sprite_stretched(Revive, 0, _tokenX, _tokenY, _ssize, _ssize) }
             draw_sprite(topframe, 0, 0, 0)
         }
     }
@@ -295,7 +299,7 @@ if _half_open and _show_compact {
     _eq_y      = 0
 }
 
-if isCombatMenu() and !_half_open {
+if isCombatMenu() and !_half_open and instance_number(objAttack) > 0 {
     startx    = 800
     starty    = 75
     _eq_infoX = 0

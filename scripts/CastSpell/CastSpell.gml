@@ -79,6 +79,7 @@ function CastSpell(spellID, playerID) {
 			if spell.stage == 2{struct.dam += struct.num * 2}
 			
 			if spell.stage == 3{
+				struct.num = 3
 				struct.dam = 0
 				if caster.venus > 0{struct.dam += QueryDice(caster, "venus", "highest")}
 				if caster.mars > 0{struct.dam += QueryDice(caster, "mars", "highest")}
@@ -120,16 +121,16 @@ function CastSpell(spellID, playerID) {
 			} else if spell.stage == 2 {
 				struct.dam = QueryDice(caster, "mercury", "charge") * 2 + QueryDice(caster, "melee", "charge")
 			} else {
-				struct.dam = QueryDice(caster, "mercury", "charge") * 3 + QueryDice(caster, "melee", "charge")
+				struct.dam = QueryDice(caster, "melee", "charge") + QueryDice(caster, "mercury", "charge") * 2
 			}
 			break
 
 		case "Froth":
-			// Stages 1+2: charged all
-			// Stage 3 (Froth Spiral): charged Mercury * 2 
+			// Stages 1+2: charged Mercury
+			// Stage 3 (Froth Spiral): charged Mercury * 2
 			if spell.stage < 3 {
 				if QueryDice(caster, "venus", "charge") >= 2 { struct.statuses.inflict_defdown = 2 }
-				struct.dam = QueryDice(caster, "all", "charge")
+				struct.dam = QueryDice(caster, "mercury", "charge")
 			} else {
 				struct.dam = QueryDice(caster, "mercury", "charge") * 2
 				var _froth_def = QueryDice(caster, "venus", "charge")
@@ -178,25 +179,26 @@ function CastSpell(spellID, playerID) {
 			// Stage 3 (Freeze Prism): top 2 Mercury pips
 			if spell.stage < 3 {
 				struct.dam = QueryDice(caster, "mercury", "highest")
-				var _jup = QueryDice(caster, "jupiter", "affinity")
+				var _jup = QueryDice(caster, "jupiter", "charge")
 				if _jup > 0 {
 					struct.statuses.inflict_lose_turn = _jup
 				}
 			} else {
 				struct.dam = 1
-				struct.repeater = QueryDice(caster, "mercury", "top2")
+				struct.repeater = QueryDice(caster, "mercury", "highest") * 2
 			}
 			break
 
 		case "Quake":
 			// Stage 1: flat 3
 			// Stage 2 (Earthquake): 3 + Venus affinity
-			// Stage 3 (Quake Sphere): Venus affinity * 2
+			// Stage 3 (Quake Sphere): Venus affinity * 2 to 7
 			if spell.stage == 1 {
 				struct.dam = real(spell.damage)
 			} else if spell.stage == 2 {
 				struct.dam = 3 + QueryDice(caster, "venus", "affinity")
 			} else {
+				struct.num = 7
 				struct.dam = QueryDice(caster, "venus", "affinity") * 2
 			}
 			break
@@ -209,9 +211,11 @@ function CastSpell(spellID, playerID) {
 			break
 
 		case "Slash":
-			// All stages: weapon attack damage as Jupiter, ignores DEF
-			// Stage 3 (Sonic Slash): Wind Slash twice → double damage
+			// Stage 1: weapon attack, Normal type, ignores DEF
+			// Stage 2+ (Wind Slash / Sonic Slash): Jupiter type, ignores DEF
+			// Stage 3: Wind Slash × 2
 			struct.dam = weapon_atk
+			if spell.stage == 1 { struct.dmgtype = "normal" }
 			if spell.stage == 3 { struct.dam *= 2 }
 			if spell.stage >= 2 and QueryDice(caster,"mercury","charge") >= 2{struct.slash= true;struct.pierce= true }
 			else{struct.pierce= true}
@@ -258,7 +262,7 @@ function CastSpell(spellID, playerID) {
 			
 			struct.dam = QueryDice(caster, "jupiter", "charge") * 2
 			if spell.stage == 3{
-				struct.dam += QueryDice(caster, "jupiter", "uncharge")
+				struct.dam += QueryDice(caster, "all", "charge") - QueryDice(caster, "jupiter", "charge")
 			}
 			
 			break
@@ -289,10 +293,8 @@ function CastSpell(spellID, playerID) {
 			if spell.stage == 1      { cure_heal = QueryDice(caster, "venus", "highest") }
 			else if spell.stage == 2 { cure_heal = QueryDice(caster, "venus", "top2") }
 			else                     { cure_heal = QueryDice(caster, "venus", "top2") * 2 }
-			var _cure_self = cure_heal
-			if (caster.halfheal and _cure_self > 0) { _cure_self = floor(_cure_self / 2) }
-			caster.hp = min(caster.hp + _cure_self, caster.hpmax)
-			struct.healing = cure_heal
+			struct.healing     = cure_heal
+			struct.caster_heal = cure_heal   // applied on confirm, not eagerly
 			struct.target = "ally"
 			break
 
@@ -303,7 +305,7 @@ function CastSpell(spellID, playerID) {
 			// Stage 3 (Pure Ply): top 2 Mercury pips * 2
 			var ply_heal = 0
 			if spell.stage == 1      { ply_heal = QueryDice(caster, "mercury", "highest"); var _regen = 3; var _regheal = 3 }
-			else if spell.stage == 2 { ply_heal = QueryDice(caster, "mercury", "top2"); var _regen = 3; var _regheal = QueryDice(caster, "mercury", "affinity") }
+			else if spell.stage == 2 { ply_heal = QueryDice(caster, "mercury", "affinity"); var _regen = 3; var _regheal = QueryDice(caster, "mercury", "affinity") }
 			else                     { ply_heal = 9999; var _regen = 3; var _regheal = QueryDice(caster, "mercury", "affinity") }
 			struct.healing = ply_heal
 			struct.regen = _regen
@@ -328,10 +330,10 @@ function CastSpell(spellID, playerID) {
 			break
 
 		case "Psy Drain":
-			// Recover PP equal to charged die count
+			// Recover PP equal to charged die count + 1 (the +1 offsets the unavoidable min cost of 1)
 			caster.pp -= _cost
 			global.pendingPPCost = 0
-			caster.pp = caster.pp + QueryDice(caster, "all", "charge")
+			caster.pp = caster.pp + QueryDice(caster, "all", "charge") + 1
 			if caster.pp >= caster.ppmax{caster.pp = caster.ppmax}
 			NextTurn()
 			exit
@@ -401,7 +403,7 @@ function CastSpell(spellID, playerID) {
 			struct.target = "ally"
 			struct.delayed = true
 			struct.delaydata = {}
-			struct.delaydata.healing = QueryDice(caster,"venus","affinity")
+			struct.delaydata.healing = QueryDice(caster,"venus","affinity") * 2
 			struct.delaydata.revive = true
 			struct.revive = true
 			break
@@ -441,6 +443,8 @@ function CastSpell(spellID, playerID) {
 				struct.dam += tempdam*2
 			}else{struct.dam += QueryDice(caster,"elemental","top2")}
 		}else{
+			caster.pp -= _cost
+			global.pendingPPCost = 0
 			caster.halfheal = true
 			caster.hp = 1
 			caster.planetary = {active: true, damage: QueryDice(caster,"all","values")}
@@ -489,7 +493,12 @@ function CastSpell(spellID, playerID) {
 				array_push(global.attackQueue,variable_clone(struct));
 				InjectLog(caster.name + " unleashes the power of Jupiter! (" + string(QueryDice(caster,"jupiter","charge")) + " Enemies!)")}
 			if caster.mercury and QueryDice(caster,"mercury","charge") > 0 {
-				array_push(global.attackQueue,{num: 1, target: "ally", dam: QueryDice(caster,"mercury","charge"), type: "healing"})
+				var _merc_packet = variable_clone(global.AggressionSchema)
+				_merc_packet.source  = "psynergy"
+				_merc_packet.healing = QueryDice(caster, "mercury", "charge")
+				_merc_packet.target  = "ally"
+				_merc_packet.num     = 1
+				array_push(global.attackQueue, _merc_packet)
 				InjectLog(caster.name + " unleashes the power of Mercury! (+" + string(QueryDice(caster,"mercury","charge")) + " HP)")}
 			DestroyAllBut()
 			ClearOptions()
@@ -498,7 +507,15 @@ function CastSpell(spellID, playerID) {
 			exit
 			break
 		case "Plasma":      // pick N jupiter dice, each targets one enemy
-			var _plasma_num  = (spell.stage >= 3) ? 7 : ((spell.stage == 2) ? 5 : 3)
+		// Stages 1+2: player assigns individual Jupiter dice to individual targets
+		// Stage 3 (Spark Plasma): highest Jupiter pip, scatters to random neighbors once per charged Jupiter die
+		if spell.stage >= 3 {
+			struct.dam           = QueryDice(caster, "jupiter", "highest")
+			struct.repeater      = QueryDice(caster, "jupiter", "charge")
+			struct.num           = 1
+			struct.unleash       = { scatter: true, scatter_any: true }
+		} else {
+			var _plasma_num  = (spell.stage == 2) ? 5 : 3
 			var _plasma_dice = BuildDiceArray(caster, "jupiter")
 			var _plasma_max  = min(_plasma_num, instance_number(objMonster), array_length(_plasma_dice))
 			PushMenu(objDicePicker, {
@@ -519,19 +536,19 @@ function CastSpell(spellID, playerID) {
 				}),
 			})
 			exit
-			break
-			break
+		}
+		break
 		case "Force":       // variable PP cost, user-selected elemental subset
 			
-				var _force_caster   = caster
-			var _force_cost_per = _cost_per
+			var _force_caster   = caster
+			var _force_cost_per = _cost
 			var _force_pips     = []
 			for (var _fp = POOL_VENUS; _fp <= POOL_MERCURY; _fp++) {
 				var _fd = _force_caster.dicepool[_fp]
 				for (var _fi = 0; _fi < array_length(_fd); _fi++) { array_push(_force_pips, _fd[_fi]) }
 			}
 			array_sort(_force_pips, false)
-			var _force_max  = min(array_length(_force_pips), floor(_force_caster.pp / _force_cost_per))
+			var _force_max  = min(array_length(_force_pips), floor(caster.pp / _force_cost_per))
 			if _force_max <= 0 {
 				InjectLog("Not enough PP for Force!")
 				global.pendingPPCost = 0
@@ -609,6 +626,7 @@ function CastSpell(spellID, playerID) {
 				}
 				InjectLog("All allies gain 3 ATK!")
 				NextTurn()
+				exit
 				break
 			}
 			// Stage 1: target one ally
@@ -681,8 +699,6 @@ function CastSpell(spellID, playerID) {
 			break
 		case "Cloak":       // shield ally until next turn
 			if global.inCombat {
-				DestroyAllBut()
-				DeleteButtons()
 				struct.cloak = true
 				struct.target = "ally"
 			}

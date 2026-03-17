@@ -4,7 +4,7 @@
 function ProcessAttackQueue() {
 	if array_length(global.attackQueue) == 0 {
 		// Queue empty — proceed to next turn
-		instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+		instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
 		return
 	}
 	

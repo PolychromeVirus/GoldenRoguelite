@@ -60,23 +60,18 @@ function CalcPreview(action_type, action_id, player) {
 					break
 				case "Diamond Dust":
 					result.dam = weapon_atk
-					if spell.stage == 1 { result.description = string(result.dam) + " (+" + string(max(1, ceil(result.dam * 0.5))) + " splash)" }
 					if spell.stage == 2 { result.dam *= 2 }
 					break
 				case "Frost":
 					if spell.stage == 1 { result.dam = QueryDice(player, "melee", "charge") }
 					else if spell.stage == 2 { result.dam = QueryDice(player, "mercury", "charge") * 2 + QueryDice(player, "melee", "charge") }
-					else { result.dam = QueryDice(player, "mercury", "charge") * 3 + QueryDice(player, "melee", "charge") }
+					else { result.dam = QueryDice(player, "melee", "charge") + QueryDice(player, "mercury", "charge") * 2 }
 					break
 				case "Froth":
 					if spell.stage < 3 {
-						result.dam = QueryDice(player, "all", "charge")
-						if QueryDice(player, "venus", "charge") >= 2 { result.description = string(result.dam) + " (-2 DEF)"; return result }
-					}
-					else {
+						result.dam = QueryDice(player, "mercury", "charge")
+					} else {
 						result.dam = QueryDice(player, "mercury", "charge") * 2
-						var _froth_def = QueryDice(player, "venus", "charge")
-						if (_froth_def > 0) { result.description = string(result.dam) + " (-" + string(_froth_def) + " DEF)"; return result }
 					}
 					break
 				case "Fume":
@@ -97,13 +92,8 @@ function CalcPreview(action_type, action_id, player) {
 				case "Prism":
 					if spell.stage < 3 {
 						result.dam = QueryDice(player, "mercury", "highest")
-						var _jup = QueryDice(player, "jupiter", "affinity")
-						if _jup > 0 { result.description = "Lose turn x" + string(_jup) }
 					} else {
-						var _hits = QueryDice(player, "mercury", "top2")
-						result.dam = 1
-						result.description = "1x" + string(_hits)
-						return result
+						result.dam = QueryDice(player, "mercury", "highest") * 2
 					}
 					break
 				case "Quake":
@@ -137,10 +127,18 @@ function CalcPreview(action_type, action_id, player) {
 					break
 				case "Whirlwind":
 					result.dam = QueryDice(player, "jupiter", "charge") * 2
-					if spell.stage == 3 { result.dam += QueryDice(player, "jupiter", "uncharge") }
+					if spell.stage == 3 { result.dam += QueryDice(player, "all", "charge") - QueryDice(player, "jupiter", "charge") }
 					break
 
 				// Offensive utility spells
+				case "Plasma":
+					if spell.stage >= 3 {
+						result.dam = QueryDice(player, "jupiter", "highest")
+						result.description = string(result.dam) + "x" + string(QueryDice(player, "jupiter", "charge"))
+					} else {
+						result.description = "Assign " + string((spell.stage == 2) ? 5 : 3) + " dice"
+					}
+					return result
 				case "Backstab":
 					result.dam = weapon_atk + 2
 					break
@@ -203,7 +201,7 @@ function CalcPreview(action_type, action_id, player) {
 					result.description = string(_rt) + " Root"
 					return result
 				case "Revive":
-					result.heal = QueryDice(player, "venus", "affinity")
+					result.heal = QueryDice(player, "venus", "affinity") * 2
 					result.targets = "Ally"
 					result.description = "Revive"
 					return result
@@ -346,19 +344,16 @@ function CalcPreview(action_type, action_id, player) {
 					break
 				case "Sap":
 					result.dam = WeaponAttack(true,false).dam
-					result.description = string(result.dam) + " (drain)"
-					return result
+					break
 				case "Geode":
 					result.dam = WeaponAttack(true,false).dam + WeaponAttack(false,false).dam
 					break
 				case "Torch":
 					result.dam = weapon_atk
-					result.description = string(result.dam) + " (pierce)"
-					return result
+					break
 				case "Scorch":
 					result.dam = weapon_atk
-					result.description = string(result.dam) + " (stun)"
-					return result
+					break
 
 				// Heal all
 				case "Spritz":
@@ -424,8 +419,7 @@ function CalcPreview(action_type, action_id, player) {
 					return result
 				case "Fury":
 					result.dam = QueryDice(player, "all", "charge")
-					result.description = string(result.dam) + " (haunt)"
-					return result
+					break
 				case "Gasp":
 					result.description = "Haunt All"
 					return result
@@ -534,15 +528,13 @@ function CalcPreview(action_type, action_id, player) {
 					return result
 				case "Gust":
 					result.dam = WeaponAttack(true,false).dam
-					result.description = string(result.dam) + " (33% x2)"
-					return result
+					break
 				case "Gale":
 					result.description = "50% KO"
 					return result
 				case "Fugue":
 					result.dam = QueryDice(player, "all", "charge")
-					result.description = string(result.dam) + " hits"
-					return result
+					break
 
 				default:
 					result.description = "?"

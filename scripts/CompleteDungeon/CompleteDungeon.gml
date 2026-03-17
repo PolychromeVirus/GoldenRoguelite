@@ -46,14 +46,18 @@ function _ShowNextBossReward() {
 	var _num     = 4 - array_length(global.bossRewardQueue) + 1
 
 	PushMenu(objMenuGrid, {
-		gridY: 400,
+		corner: "bottomleft",
 		draw_header: method({item: _item, num: _num}, function() {
+			// Full-screen backdrop covers the ThreeQuarterMenu underneath
+			draw_sprite_ext(TestMenu, 0, 0, 0, 6, 6, 0, c_white, 1)
+			var _grid = instance_find(objMenuGrid, 0)
+			var _cx  = _grid.spr_x + 50
+			var _cy  = 20
+			var _off = 4
 			draw_set_font(GoldenSun)
-			var _cx = 400
-			var _cy = 48
 			var _title = "Boss Reward! (" + string(num) + " / 4)"
 			draw_set_color(c_black)
-			draw_text(_cx + 4, _cy + 4, _title)
+			draw_text(_cx + _off, _cy + _off, _title)
 			draw_set_color(c_yellow)
 			draw_text(_cx, _cy, _title)
 			_cy += 40
@@ -62,26 +66,26 @@ function _ShowNextBossReward() {
 				draw_sprite_stretched(asset_get_index(_alias), 0, _cx, _cy, 64, 64)
 			}
 			draw_set_color(c_black)
-			draw_text(_cx + 68 + 4, _cy + 16 + 4, item.name)
+			draw_text(_cx + 68 + _off, _cy + 16 + _off, item.name)
 			draw_set_color(c_white)
 			draw_text(_cx + 68, _cy + 16, item.name)
 			_cy += 80
 			var _desc = item.text
 			draw_set_color(c_black)
-			draw_text_ext(_cx + 4, _cy + 4, _desc, 40, 660)
+			draw_text_ext(_cx + _off, _cy + _off, _desc, 40, 600)
 			draw_set_color(c_white)
-			draw_text_ext(_cx, _cy, _desc, 40, 660)
-			_cy += string_height_ext(_desc, 40, 660) + 20
+			draw_text_ext(_cx, _cy, _desc, 40, 600)
+			_cy = _grid.gridY - 36
 			draw_set_color(c_black)
-			draw_text(_cx + 4, _cy + 4, "Choose a character:")
+			draw_text(_cx + _off, _cy + _off, "Choose a character:")
 			draw_set_color(global.c_important)
 			draw_text(_cx, _cy, "Choose a character:")
 		}),
 		on_confirm: method({item_id: _item_id}, function(player_index) {
 			PopMenu()
+			// _ApplyBossItem handles queue advance via _AdvanceBossRewardQueue()
+			// (or exits early for special items like Shiny Gem / Mystic Draught)
 			_ApplyBossItem(item_id, player_index)
-			array_delete(global.bossRewardQueue, 0, 1)
-			_ShowNextBossReward()
 		}),
 	})
 }

@@ -20,16 +20,17 @@ function ProcessPostBattleQueue() {
 			}
 			global.activeChallengeIndex = -1
 		}
-		// Reveal: 10% chance of bonus djinn draft when all queues are empty
-		if !irandom(9) and array_length(global.menu_stack) == 0 and array_length(global.choiceDrawQueue) == 0 {
-			var _cast = FindSpellCaster("Reveal")
-			if _cast != -1 {
-				SpellPrompt("Reveal", _cast,
-					function() { DjinnDraft() },
-					function() {}
-				)
-				return
+		// Mini-boss set drops (djinn bosses, mimics)
+		if array_length(global.miniBossDrops) > 0 {
+			var _drop = global.miniBossDrops[0]
+			array_delete(global.miniBossDrops, 0, 1)
+			if _drop == "djinn_draft" {
+				DjinnDraft()
+			} else if _drop == "choice_draw" {
+				array_push(global.choiceDrawQueue, { player: global.players[global.firstPlayer] })
+				ProcessChoiceDrawQueue()
 			}
+			return
 		}
 		CreateOptions()
 		Autosave()

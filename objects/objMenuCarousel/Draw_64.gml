@@ -47,6 +47,13 @@ for (var i = 0; i < _len; i++) {
     var _col = _filtered ? c_grey : (variable_struct_exists(_item, "color") ? _item.color : c_white)
 
     var _ix = _list_x
+    if variable_struct_exists(_item, "element") and _item.element != "" {
+        var _espr = asset_get_index(_item.element + "_Star_Clean")
+        if _espr != -1 {
+            draw_sprite_stretched(_espr, 0, _ix, _dy + 4, 40, 40)
+            _ix += 48
+        }
+    }
     if variable_struct_exists(_item, "sprite") and _item.sprite != -1 {
         var _spr   = _item.sprite
         var _scale = max(1, floor(48 / sprite_get_width(_spr)))
@@ -60,12 +67,22 @@ for (var i = 0; i < _len; i++) {
     draw_set_color(_col)
     draw_text(_ix, _dy + 8, _item.name)
 
+    var _panel_w = sprite_get_width(HalfMenuMiddleSelector) * 6
+    var _pad_r   = 48
+    var _right_x = (side == "right") ? _panel_w * 2 - _pad_r : _panel_w - _pad_r
+    if variable_struct_exists(_item, "right_sprite") and _item.right_sprite != -1 {
+        var _rspr = _item.right_sprite
+        var _rh   = 32
+        var _rw   = round(_rh * sprite_get_width(_rspr) / sprite_get_height(_rspr))
+        draw_sprite_stretched(_rspr, 0, _right_x - _rw, _dy + 11, _rw, _rh)
+        _right_x -= _rw + 8
+    }
     if variable_struct_exists(_item, "detail") and _item.detail != "" {
         draw_set_halign(fa_right)
         draw_set_color(c_black)
-        draw_text(_list_x + 660 + _offset, _dy + 8 + _offset, _item.detail)
+        draw_text(_right_x + _offset, _dy + 8 + _offset, _item.detail)
         draw_set_color(_col)
-        draw_text(_list_x + 660, _dy + 8, _item.detail)
+        draw_text(_right_x, _dy + 8, _item.detail)
         draw_set_halign(fa_left)
     }
 }

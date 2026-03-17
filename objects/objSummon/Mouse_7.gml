@@ -1,4 +1,3 @@
-if instance_exists(objStatDisplay) { objStatDisplay.viewPlayer = global.turn }
 
 // Don't push if a menu is already open
 if array_length(global.menu_stack) > 0 { exit }

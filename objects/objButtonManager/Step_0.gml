@@ -5,7 +5,9 @@ var _top = (array_length(global.menu_stack) > 0)
 if _top != _prev_top {
     _prev_top = _top
     DeleteButtons()
-    if global.turnPhase == "player" {
-        alarm[0] = 1
+    if global.turnPhase == "player" or MenuExists() {
+        if instance_number(objMonsterTarget) == 0 and instance_number(objCharMenu) == 0 {
+            alarm[0] = 1
+        }
     }
 }

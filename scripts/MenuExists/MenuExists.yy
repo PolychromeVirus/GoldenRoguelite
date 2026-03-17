@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"SummonDraft",
+  "%Name":"MenuExists",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"SummonDraft",
+  "name":"MenuExists",
   "parent":{
     "name":"Scripts",
     "path":"folders/Scripts.yy",

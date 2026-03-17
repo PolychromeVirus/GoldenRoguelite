@@ -5,12 +5,18 @@ function _BuildCharTargetConfig(packet) {
         corner: "bottomright",
         filter: method({p: packet}, function(i) {
             var _pl = global.players[i]
-            if p.removepoison and !_pl.poison { return true }
+            if p.removepoison {
+                var _has_any_bad = _pl.poison or _pl.venom
+                if variable_struct_exists(p, "removebad") and p.removebad {
+                    _has_any_bad = _has_any_bad or _pl.sleep or (_pl.stun > 0) or (_pl.psyseal > 0)
+                }
+                if !_has_any_bad { return true }
+            }
             if p.healing > 0 and !p.revive and p.dmgtype != "mercury" {
                 if _pl.hp == 0 { return true }
             }
             if p.healing > 0 and _pl.hp >= _pl.hpmax
-                and !variable_struct_exists(p, "regen") { return true }
+                and !(variable_struct_exists(p, "regen") and p.regen > 0) { return true }
             if p.revive and _pl.hp != 0 { return true }
             if variable_struct_exists(p, "ppheal") and p.ppheal > 0
                 and _pl.pp >= _pl.ppmax { return true }
@@ -80,7 +86,7 @@ function _BuildCharTargetConfig(packet) {
                     choice = true
                 }
 
-                if p.removepoison and sel.poison {
+                if p.removepoison and (sel.poison or sel.venom) {
                     sel.poison = false
                     sel.venom  = false
                     choice = true
@@ -136,6 +142,7 @@ function _BuildCharTargetConfig(packet) {
                     caster.cloak_fresh = true
                     InjectLog(sel.name + " hides away from damage")
                     if caster.name == "Kendall" { caster.defmod += 1; caster.defmod_fresh = true }
+					choice = true
                 }
 
                 if variable_struct_exists(p, "onConfirm") and variable_struct_exists(p.onConfirm, "grant_extra_turn") and p.onConfirm.grant_extra_turn > 0 {
@@ -162,6 +169,15 @@ function _BuildCharTargetConfig(packet) {
                 if variable_global_exists("pendingPPCost") and global.pendingPPCost > 0 {
                     global.players[global.pendingPPCaster].pp -= global.pendingPPCost
                     global.pendingPPCost = 0
+                }
+                // Deferred caster self-heal (e.g. Cure heals both caster and ally)
+                if variable_struct_exists(p, "caster_heal") and p.caster_heal > 0 {
+                    var _ch = p.caster_heal
+                    if caster.halfheal { _ch = floor(_ch / 2) }
+                    if caster.hp < caster.hpmax {
+                        caster.hp = min(caster.hpmax, caster.hp + _ch)
+                        caster.heal_flash = 12
+                    }
                 }
                 if variable_struct_exists(p, "itemid") and p.itemid != -1 {
                     array_push(global.discard, p.itemid)
