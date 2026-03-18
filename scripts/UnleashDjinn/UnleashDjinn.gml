@@ -530,8 +530,6 @@ function UnleashDjinn(djinnID, playerID) {
 				}
 			}
 			InjectLog("Everyone can reroll their dice!")
-			ClearOptions()
-			CreateOptions()
 			NextTurn()
 			exit
 		case "Tinder":
@@ -561,8 +559,7 @@ function UnleashDjinn(djinnID, playerID) {
 				}
 			}
 			InjectLog("Everyone can reroll their dice!")
-			ClearOptions()
-			CreateOptions()
+
 			NextTurn()
 			exit
 		case "Ether":

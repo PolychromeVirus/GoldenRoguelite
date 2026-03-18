@@ -63,7 +63,7 @@ function CreateOptions(){
 		}
 
 		// Town button only available before any challenge is completed
-		if (_completed_count == 0 && array_length(global.dungeonlist) > global.dungeon) {
+		if !global.onFloor {
 			var _dun = global.dungeonlist[global.dungeon]
 			var _has_unvisited_town = false
 			for (var _ti = 0; _ti < array_length(_dun.towns); _ti++) {

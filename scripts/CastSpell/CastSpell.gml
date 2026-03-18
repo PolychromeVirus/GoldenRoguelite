@@ -724,7 +724,6 @@ function CastSpell(spellID, playerID) {
 				}
 				global.onFloor = false
 				InjectLog(caster.name + " casts " + spell.name + "! The floor resets.")
-				CreateOptions()
 				exit
 			}
 			break

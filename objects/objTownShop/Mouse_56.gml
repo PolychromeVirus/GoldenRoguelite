@@ -104,7 +104,6 @@ if (instance_position(mouse_x, mouse_y, objConfirm)) {
 						var _spr = { image: _pi.portrait, text: _pi.name, psy_player: _p }
 						instance_create_depth(BUTTON1 + (_p * 28), BOTTOMROW, 0, _btn_objs[_p], _spr)
 					}
-					instance_create_depth(BUTTON5, BOTTOMROW, 0, objCancel)
 					break
 
 				case "Summon":

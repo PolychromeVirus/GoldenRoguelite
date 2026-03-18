@@ -89,8 +89,6 @@ function ProcessChoiceDrawQueue() {
 			ProcessPostBattleQueue()
 		} else if (global.inTown) {
 			ProcessTownFinds()
-		} else {
-			CreateOptions()
 		}
 	}
 }

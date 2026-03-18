@@ -1,0 +1,8 @@
+############################################################################################
+ERROR in action number 1
+of Draw Event for object objMenuCarousel:
+Push :: Execution Error - Variable Index [4] out of range [4] - -6.spells(100226,4)
+ at gml_Script_anon@1249@gml_Object_objPsynergy_Mouse_7 (line 36) -         return !isCastable(global.psynergylist[spells[i]], global.players[global.turn])
+############################################################################################
+gml_Script_anon@1249@gml_Object_objPsynergy_Mouse_7 (line 36)
+gml_Object_objMenuCarousel_Draw_64 (line 46) -     var _filtered = !is_undefined(filter) and filter(i)

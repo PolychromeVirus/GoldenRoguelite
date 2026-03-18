@@ -7,13 +7,15 @@ function _BuildPsynergyDraftConfig() {
 	// Build item list
 	var _items = []
 	for (var i = 0; i < array_length(_pool); i++) {
-		var _spell = global.psynergylist[_pool[i]]
-		var _spr   = asset_get_index(_spell.alias)
+		var _spell     = global.psynergylist[_pool[i]]
+		var _spr       = asset_get_index(_spell.alias)
+		var _range_spr = asset_get_index("range_" + string(_spell.range))
 		array_push(_items, {
-			name:   _spell.name + " - " + string(_spell.cost) + " PP",
-			sprite: (_spr != -1) ? _spr : -1,
-			detail: _spell.element,
-			data:   { pool_index: i },
+			name:         _spell.name + " - " + string(_spell.cost) + " PP",
+			sprite:       (_spr != -1) ? _spr : -1,
+			element:      _spell.element,
+			right_sprite: (_range_spr != -1) ? _range_spr : -1,
+			data:         { pool_index: i },
 		})
 	}
 
@@ -116,6 +118,7 @@ function _BuildPsynergyDraftConfig() {
 		title:         "Select 1 Psynergy to learn:",
 		description:   "half",
 		confirm_label: "Select",
+		no_cancel:     true,
 		draw_pane:     _draw_pane,
 		on_confirm:    method({ _pool: _pool, _playerIdx: _playerIdx }, function(i, item) {
 			var _selspell = global.psynergylist[_pool[i]]

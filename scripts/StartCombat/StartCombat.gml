@@ -100,7 +100,7 @@ function StartCombat(_troop_override) {
 				global.players[global.turn].dicepool = RollDice(global.players[global.turn])
 				global.players[global.turn].pp += global.players[global.turn].ppinc
 				if global.players[global.turn].pp > global.players[global.turn].ppmax { global.players[global.turn].pp = global.players[global.turn].ppmax }
-				CreateOptions()
+				
 			},
 			function() {
 				RunEnemyPhase(true)

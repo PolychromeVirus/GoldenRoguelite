@@ -35,7 +35,6 @@ function ProcessPostBattleQueue() {
 			}
 			return
 		}
-		CreateOptions()
 		Autosave()
 	}
 }

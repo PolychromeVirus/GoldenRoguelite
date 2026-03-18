@@ -9,6 +9,7 @@ if !variable_instance_exists(id, "on_info")       { on_info       = undefined }
 if !variable_instance_exists(id, "confirm_label")  { confirm_label  = "Select" }
 if !variable_instance_exists(id, "confirm_sprite") { confirm_sprite = yes }
 if !variable_instance_exists(id, "read_only")     { read_only     = false }
+if !variable_instance_exists(id, "no_cancel")     { no_cancel     = false }
 if !variable_instance_exists(id, "side")          { side          = "left" }
 if !variable_instance_exists(id, "draw_pane")     { draw_pane     = undefined }
 if !variable_instance_exists(id, "info_label")    { info_label    = "Info" }
@@ -34,7 +35,7 @@ _build_buttons = method(id, function() {
         var _confirm_spr = { image: confirm_sprite, text: confirm_label }
         instance_create_depth(BUTTON1, BOTTOMROW, 0, objConfirm, _confirm_spr)
     }
-    instance_create_depth(BUTTON2, BOTTOMROW, 0, objCancel)
+    if !no_cancel { instance_create_depth(BUTTON2, BOTTOMROW, 0, objCancel) }
     if !is_undefined(on_info) {
         var _info_spr = { image: Save_Game, text: info_label }
         instance_create_depth(BUTTONRIGHT2, BOTTOMROW, 0, objButton2, _info_spr)
