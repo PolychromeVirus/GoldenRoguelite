@@ -39,7 +39,7 @@
 - [x] CharacterImport.csv columns 37-39 — `onAttackK`/`onAttackV` deprecated; passives hardcoded by name for stability. Omega `matk` handled via name check in InitChars.
 
 ## Architectural
-- [ ] DestroyAllBut refactor — use pushed instance IDs instead of growing object array
+- [x] DestroyAllBut refactor — use pushed instance IDs instead of growing object array (rendered irrelevant from menu_stack overhaul in dev branch)
 - [x] Item menu "Give" — use quick character picker pattern
 
 ## Code Cleanup
@@ -60,8 +60,5 @@
 - [ ] SFX: button click/confirm, cancel, damage hit, healing, status inflict, dice roll, djinn unleash, level up/card draw
 
 ## UX — Button Reactivity
-- [ ] Add `pressed` bool to objButton2 Create (default false)
-- [ ] Add Mouse Pressed (Left) event to objButton2 — set pressed=true, play click SFX
-- [ ] Add Mouse Released (Left) event — reset pressed=false
-- [ ] Draw event: invert colours when pressed (e.g. second sprite frame or image_blend swap)
-- [ ] Add hover state — tint or border highlight on mouse-over
+- [ ] Find ways of making ui buttons reactive
+
