@@ -108,12 +108,14 @@ function CombatCleanup(){
 
 		// Catch bonus: extra card draw for the caster
 		if (global.catchBonus >= 0) {
-			var _cc = global.catchBonus
-			var _extraIndex = global.deck[0]
-			var _extraData = DrawCard(global.players[_cc])
-			var _extraName = _extraData[0]
-			var _extraDisc = _extraData[1]
-			array_push(global.postBattleDraws, {player_index: _cc, card_name: _extraName, item_index: _extraIndex, discarded: _extraDisc})
+			if array_length(global.deck) > 0 {
+				var _cc = global.catchBonus
+				var _extraIndex = global.deck[0]
+				var _extraData = DrawCard(global.players[_cc])
+				var _extraName = _extraData[0]
+				var _extraDisc = _extraData[1]
+				array_push(global.postBattleDraws, {player_index: _cc, card_name: _extraName, item_index: _extraIndex, discarded: _extraDisc})
+			}
 			global.catchBonus = -1
 		}
 	}

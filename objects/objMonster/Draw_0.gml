@@ -36,10 +36,12 @@ if dying and death_timer > 0 {
 
 	// Element flash overlays during all visible phases
 	if (flash_timer > 0) {
+		shader_set(shFlash)
 		gpu_set_blendmode(bm_add)
 		draw_sprite_ext(sprite_index, image_index, x, y,
-			image_xscale, image_yscale, image_angle, flash_color, flash_timer / 12)
+			image_xscale, image_yscale, image_angle, c_white, 1.0)
 		gpu_set_blendmode(bm_normal)
+		shader_reset()
 		flash_timer--
 	}
 
@@ -56,9 +58,11 @@ if dying and death_timer > 0 {
 	draw_self()
 
 	if (flash_timer > 0) {
+		shader_set(shFlash)
 		gpu_set_blendmode(bm_add)
-		draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, flash_color, flash_timer / 12)
+		draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, 1.0)
 		gpu_set_blendmode(bm_normal)
+		shader_reset()
 		flash_timer--
 	}
 
@@ -92,6 +96,38 @@ if dying and death_timer > 0 {
 		var _statuses = GetStatus(id)
 		for (var _s = 0; _s < array_length(_statuses); _s++) {
 			draw_sprite_ext(_statuses[_s], 0, hpx + _s * 10, y + 6, 0.5, 0.5, 0, c_white, 1)
+		}
+	}
+
+	// Animated status overlays
+	if monsterHealth > 0 and !global.gameover {
+		var _t = floor(current_time / 333) // ~3fps
+
+		// Behavior slot: sleep > stun > haunt > delude (mutually exclusive)
+		var _behavior_spr = -1
+		if sleep          { _behavior_spr = sleep1 }
+		else if stun > 0  { _behavior_spr = stun1 }
+		else if haunt > 0 { _behavior_spr = haunt1 }
+		else if delude    { _behavior_spr = delude1 }
+
+		if _behavior_spr != -1 {
+			draw_sprite(_behavior_spr, _t mod sprite_get_number(_behavior_spr),
+				x + STATUS_BEHAVIOR_OX, y - sprite_height + STATUS_BEHAVIOR_OY)
+		}
+
+		// DoT slot: venom > poison (mutually exclusive, can coexist with behavior)
+		if venom {
+			draw_sprite(venom1, _t mod sprite_get_number(venom1),
+				x + STATUS_DOT_OX, y - sprite_height + STATUS_DOT_OY)
+		} else if poison {
+			draw_sprite(poison1, _t mod sprite_get_number(poison1),
+				x + STATUS_DOT_OX, y - sprite_height + STATUS_DOT_OY)
+		}
+
+		// psyseal: always draws on top of everything
+		if psyseal {
+			draw_sprite(psyseal1, _t mod sprite_get_number(psyseal1),
+				x + STATUS_PSYSEAL_OX, y - sprite_height + STATUS_PSYSEAL_OY)
 		}
 	}
 }

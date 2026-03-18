@@ -27,7 +27,10 @@ function ProcessPostBattleQueue() {
 			if _drop == "djinn_draft" {
 				DjinnDraft()
 			} else if _drop == "choice_draw" {
-				array_push(global.choiceDrawQueue, { player: global.players[global.firstPlayer] })
+				array_push(global.choiceDrawQueue, { player: global.players[0] })
+				array_push(global.choiceDrawQueue, { player: global.players[1] })
+				array_push(global.choiceDrawQueue, { player: global.players[2] })
+				array_push(global.choiceDrawQueue, { player: global.players[3] })
 				ProcessChoiceDrawQueue()
 			}
 			return

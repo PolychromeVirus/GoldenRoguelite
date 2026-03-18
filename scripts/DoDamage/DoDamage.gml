@@ -75,19 +75,19 @@ function DoDamage(struct){
         if tempdam >= 9999 and !mon.boss{
             // Instant kill (Charon)
             mon.monsterHealth = 0
-            mon.flash_timer = 12; mon.flash_color = _dam_col
+            mon.flash_timer = FLASH_DURATION; mon.damage_timer = DAMAGE_DURATION; mon.flash_color = _dam_col
             global.gold += 1
             _show_dam = 9999
         } else if tempdam >= 9999 and mon.boss {
             var final_dam = 0
-            mon.flash_timer = 12; mon.flash_color = _dam_col
+            mon.flash_timer = FLASH_DURATION; mon.damage_timer = DAMAGE_DURATION; mon.flash_color = _dam_col
             _show_dam = final_dam
 			InjectLog("The boss resisted death!")
 
         }else if tempdam > 0 {
             var final_dam = max(1, tempdam - _resist + modif)
             mon.monsterHealth -= final_dam
-            mon.flash_timer = 12; mon.flash_color = _dam_col
+            mon.flash_timer = FLASH_DURATION; mon.damage_timer = DAMAGE_DURATION; mon.flash_color = _dam_col
             _show_dam = final_dam
 
             if mon.monsterHealth <= 0 {
@@ -158,7 +158,7 @@ function DoDamage(struct){
 			var _mon = targets[_uk]
 			if _mon.monsterHealth > 0 and !_mon.boss {
 				_mon.monsterHealth = 0
-				_mon.flash_timer = 12; _mon.flash_color = _dam_col
+				_mon.flash_timer = FLASH_DURATION; _mon.damage_timer = DAMAGE_DURATION; _mon.flash_color = _dam_col
 				global.gold += 1
 				instance_create_depth(0,0,-200,objDamageNumber,
 				{ amount: 9999, world_x: _mon.x, world_y: _mon.y - _mon.sprite_height, col: c_white })
@@ -202,7 +202,7 @@ function DoDamage(struct){
 			var _sn = troop[selected - 1]
 			var _sd = SplashWithResist(struct, _unleash, tempdam, _sn)
 			_sn.monsterHealth -= _sd
-			_sn.flash_timer = 12; _sn.flash_color = _splash_col
+			_sn.flash_timer = FLASH_DURATION; _sn.damage_timer = DAMAGE_DURATION; _sn.flash_color = _splash_col
 			InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
 			if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
 			instance_create_depth(0,0,-200,objDamageNumber,
@@ -213,7 +213,7 @@ function DoDamage(struct){
 			var _sn = troop[selected + 1]
 			var _sd = SplashWithResist(struct, _unleash, tempdam, _sn)
 			_sn.monsterHealth -= _sd
-			_sn.flash_timer = 12; _sn.flash_color = _splash_col
+			_sn.flash_timer = FLASH_DURATION; _sn.damage_timer = DAMAGE_DURATION; _sn.flash_color = _splash_col
 			InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
 			if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
 			instance_create_depth(0,0,-200,objDamageNumber,
@@ -285,7 +285,7 @@ function DoDamage(struct){
 					var _target = troop[selected]
 					if _target.monsterHealth > 0 {
 						_target.monsterHealth -= _ndam
-						_target.flash_timer = 12; _target.flash_color = c_red
+						_target.flash_timer = FLASH_DURATION; _target.damage_timer = DAMAGE_DURATION; _target.flash_color = c_red
 						if _target.monsterHealth <= 0 { _target.monsterHealth = 0; global.gold += 1 }
 						InjectLog(_neighbor.name + " strikes " + _target.name + " for " + string(_ndam) + "!")
 						instance_create_depth(0, 0, -200, objDamageNumber,
@@ -304,7 +304,7 @@ function DoDamage(struct){
 			var _sn = troop[selected - 1]
 			var _sd = SplashWithResist(struct, _onConfirm, tempdam, _sn)
 			_sn.monsterHealth -= _sd
-			_sn.flash_timer = 12; _sn.flash_color = _oc_splash_col
+			_sn.flash_timer = FLASH_DURATION; _sn.damage_timer = DAMAGE_DURATION; _sn.flash_color = _oc_splash_col
 			InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
 			if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
 			instance_create_depth(0,0,-200,objDamageNumber,
@@ -314,7 +314,7 @@ function DoDamage(struct){
 			var _sn = troop[selected + 1]
 			var _sd = SplashWithResist(struct, _onConfirm, tempdam, _sn)
 			_sn.monsterHealth -= _sd
-			_sn.flash_timer = 12; _sn.flash_color = _oc_splash_col
+			_sn.flash_timer = FLASH_DURATION; _sn.damage_timer = DAMAGE_DURATION; _sn.flash_color = _oc_splash_col
 			InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
 			if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
 			instance_create_depth(0,0,-200,objDamageNumber,
@@ -330,7 +330,7 @@ function DoDamage(struct){
 		for (var _c = selected - 1; _c >= 0; _c--) {
 			if (troop[_c].monsterHealth <= 0) { continue }
 			troop[_c].monsterHealth -= _cascade_dam
-			troop[_c].flash_timer = 12; troop[_c].flash_color = _dam_col
+			troop[_c].flash_timer = FLASH_DURATION; troop[_c].damage_timer = DAMAGE_DURATION; troop[_c].flash_color = _dam_col
 			InjectLog(troop[_c].name + " takes " + string(_cascade_dam) + " cascade damage!")
 			if (troop[_c].monsterHealth <= 0) {
 				troop[_c].monsterHealth = 0
@@ -343,7 +343,7 @@ function DoDamage(struct){
 		for (var _c = selected + 1; _c < array_length(troop); _c++) {
 			if (troop[_c].monsterHealth <= 0) { continue }
 			troop[_c].monsterHealth -= _cascade_dam
-			troop[_c].flash_timer = 12; troop[_c].flash_color = _dam_col
+			troop[_c].flash_timer = FLASH_DURATION; troop[_c].damage_timer = DAMAGE_DURATION; troop[_c].flash_color = _dam_col
 			InjectLog(troop[_c].name + " takes " + string(_cascade_dam) + " cascade damage!")
 			if (troop[_c].monsterHealth <= 0) {
 				troop[_c].monsterHealth = 0
