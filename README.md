@@ -5,6 +5,8 @@
 
 Rules are inherited from the board game. current rules are in the source code as a reference doc.
 
+See Discord.gg/invite/fr8yAgZzHa for more info on that
+
 Some effects are changed but not many, mostly intuitively. the in game effect text should be accurate.
 
 All spells, djinn, and summon effects are implemented, save for "Call Zombie" which is a character skill for an unimplemented character.
