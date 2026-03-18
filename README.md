@@ -1,5 +1,5 @@
 # Golden Sun Themed Roguelite
-##Based on Lighthouse Dash! by PolychromeVirus
+## Based on Lighthouse Dash! by PolychromeVirus
 
 ---
 
