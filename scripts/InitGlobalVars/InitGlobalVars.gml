@@ -69,12 +69,12 @@ function InitGlobalVars(){
 	#macro FLASH_DURATION   10
 	#macro DAMAGE_DURATION  25
 
-	#macro STATUS_BEHAVIOR_OX  -16   // x offset (centers 32px sprite on monster)
-	#macro STATUS_BEHAVIOR_OY  -8    // y offset from (y - sprite_height) — above head
-	#macro STATUS_DOT_OX       -16   // x offset for venom/poison
-	#macro STATUS_DOT_OY        16   // y offset — lower than behavior slot
-	#macro STATUS_PSYSEAL_OX    8    // x offset — right side of sprite
-	#macro STATUS_PSYSEAL_OY   -8    // y offset — same height as behavior
+	#macro STATUS_BEHAVIOR_OX  0   // x offset (centers 32px sprite on monster)
+	#macro STATUS_BEHAVIOR_OY  0    // y offset from bbox top — negative = above visible area
+	#macro STATUS_DOT_OX        0    // x offset for venom/poison
+	#macro STATUS_DOT_OY        0    // y offset from bbox top — 0 = flush with visible top
+	#macro STATUS_PSYSEAL_OX    0    // x offset — right side of sprite
+	#macro STATUS_PSYSEAL_OY   -2    // y offset from bbox top
 
 	#macro CONFIRMSOUND audio_stop_sound(MenuPositive);audio_play_sound(MenuPositive,0,0)
 	#macro CANCELSOUND audio_stop_sound(MenuNegative);audio_play_sound(MenuNegative,0,0)

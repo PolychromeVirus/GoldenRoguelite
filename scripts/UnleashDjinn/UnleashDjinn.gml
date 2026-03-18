@@ -132,7 +132,7 @@ function UnleashDjinn(djinnID, playerID) {
 
 		case "Scorch":  // Mars: weapon + charged Mars + stun
 			_struct.dam = weapon_atk
-			_struct.statuses = {inflict_stun: 3}
+			_struct.statuses = {inflict_stun: true}
 			break
 
 		// ── Heal all living players ─────────────────────────────────────

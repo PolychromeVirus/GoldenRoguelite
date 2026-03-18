@@ -26,7 +26,7 @@
   ],
   "name":"stun1",
   "nineSlice":null,
-  "origin":0,
+  "origin":1,
   "parent":{
     "name":"Status",
     "path":"folders/Sprites/Status.yy",
@@ -87,7 +87,7 @@
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":0,
+    "xorigin":16,
     "yorigin":0,
   },
   "swatchColours":null,

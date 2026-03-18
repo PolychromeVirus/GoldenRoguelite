@@ -104,7 +104,7 @@ function _AdvanceTurn(){
 		global.playersActed = 0
 		global.turnPhase = "enemy"
 
-		ClearOptions()
+		DeleteButtons()
 		//TickPassives()
 		RunEnemyPhase(false, function() {
 			// Advance to firstPlayer (first alive from there)
@@ -123,7 +123,7 @@ function _AdvanceTurn(){
 		
 
 		global.turnPhase = "boss"
-		ClearOptions()
+		DeleteButtons()
 		RunEnemyPhase(true, function() {
 			TickMonsterStatuses()
 			_NextTurnSetupPlayer()

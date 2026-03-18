@@ -477,7 +477,7 @@ function CastSpell(spellID, playerID) {
 					struct.statuses.inflict_sleep = true
 					break
 				case 2:
-					struct.statuses.inflict_stun = 3
+					struct.statuses.inflict_stun = true
 					break
 				case 3:
 					struct.statuses.inflict_delude = true

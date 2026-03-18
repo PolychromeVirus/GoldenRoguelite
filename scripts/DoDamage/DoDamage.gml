@@ -120,7 +120,7 @@ function DoDamage(struct){
 		if mon.monsterHealth > 0 and attempt{
 			if variable_struct_exists(stats, "inflict_poison") { mon.poison = stats.inflict_poison; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Poison }) }
 			if variable_struct_exists(stats, "inflict_venom") { mon.venom = stats.inflict_venom; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Poison_Flow }) }
-			if variable_struct_exists(stats, "inflict_stun") { mon.stun = stats.inflict_stun; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Bolt }) }
+			if variable_struct_exists(stats, "inflict_stun") and stats.inflict_stun { mon.stun = 3; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Bolt }) }
 			if variable_struct_exists(stats, "inflict_sleep") { mon.sleep = stats.inflict_sleep; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Sleep }) }
 			if variable_struct_exists(stats, "inflict_delude") { mon.delude = stats.inflict_delude; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Delude }) }
 			if variable_struct_exists(stats, "inflict_psyseal") { mon.psyseal = stats.inflict_psyseal; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Psy_Seal }) }
@@ -251,7 +251,7 @@ function DoDamage(struct){
 					if variable_struct_exists(_ss, "inflict_delude") { _sn.delude = _ss.inflict_delude; InjectLog(_sn.name + " is deluded!") }
 					if variable_struct_exists(_ss, "inflict_poison") { _sn.poison = _ss.inflict_poison; InjectLog(_sn.name + " is poisoned!") }
 					if variable_struct_exists(_ss, "inflict_sleep") { _sn.sleep = _ss.inflict_sleep; InjectLog(_sn.name + " fell asleep!") }
-					if variable_struct_exists(_ss, "inflict_stun") { _sn.stun = _ss.inflict_stun; InjectLog(_sn.name + " is stunned!") }
+					if variable_struct_exists(_ss, "inflict_stun") and _ss.inflict_stun { _sn.stun = 3; InjectLog(_sn.name + " is stunned!") }
 				}
 			}
 		}

@@ -102,6 +102,7 @@ if dying and death_timer > 0 {
 	// Animated status overlays
 	if monsterHealth > 0 and !global.gameover {
 		var _t = floor(current_time / 333) // ~3fps
+		var _h = y - sprite_get_yoffset(sprite_index) + sprite_get_bbox_top(sprite_index)
 
 		// Behavior slot: sleep > stun > haunt > delude (mutually exclusive)
 		var _behavior_spr = -1
@@ -112,22 +113,22 @@ if dying and death_timer > 0 {
 
 		if _behavior_spr != -1 {
 			draw_sprite(_behavior_spr, _t mod sprite_get_number(_behavior_spr),
-				x + STATUS_BEHAVIOR_OX, y - sprite_height + STATUS_BEHAVIOR_OY)
+				x + STATUS_BEHAVIOR_OX, _h + STATUS_BEHAVIOR_OY)
 		}
 
 		// DoT slot: venom > poison (mutually exclusive, can coexist with behavior)
 		if venom {
 			draw_sprite(venom1, _t mod sprite_get_number(venom1),
-				x + STATUS_DOT_OX, y - sprite_height + STATUS_DOT_OY)
+				x + STATUS_DOT_OX, _h + STATUS_DOT_OY)
 		} else if poison {
 			draw_sprite(poison1, _t mod sprite_get_number(poison1),
-				x + STATUS_DOT_OX, y - sprite_height + STATUS_DOT_OY)
+				x + STATUS_DOT_OX, _h + STATUS_DOT_OY)
 		}
 
 		// psyseal: always draws on top of everything
 		if psyseal {
 			draw_sprite(psyseal1, _t mod sprite_get_number(psyseal1),
-				x + STATUS_PSYSEAL_OX, y - sprite_height + STATUS_PSYSEAL_OY)
+				x + STATUS_PSYSEAL_OX, _h + STATUS_PSYSEAL_OY)
 		}
 	}
 }
