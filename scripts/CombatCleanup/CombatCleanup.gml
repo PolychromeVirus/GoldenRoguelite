@@ -95,7 +95,7 @@ function CombatCleanup(){
 			_dj.just_unleashed = false
 		}
 
-		if (!global.enemyFled) {
+		if (!global.enemyFled) and array_length(global.deck) {
 			var _itemIndex = global.deck[0]
 			var _cardData = DrawCard(curr)
 			var _cardName = _cardData[0]

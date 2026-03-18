@@ -27,7 +27,10 @@
       "WebSearch",
       "Bash(powershell -Command \"\\(Get-Content 'C:\\\\Users\\\\polyc\\\\GameMakerProjects\\\\GoldenRoguelite\\\\scripts\\\\CalcPreview\\\\CalcPreview.gml' -Raw\\) -replace 'result\\\\.heal = QueryDice\\\\\\(player, \\\\\"venus\\\\\", \\\\\"affinity\\\\\"\\\\\\)\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult\\\\.targets = \\\\\"Ally\\\\\"\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult\\\\.description = \\\\\"Revive\\\\\"', 'result.heal = QueryDice\\(player, \\\\\"venus\\\\\", \\\\\"affinity\\\\\"\\) * 2\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult.targets = \\\\\"Ally\\\\\"\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult.description = \\\\\"Revive\\\\\"' | Set-Content 'C:\\\\Users\\\\polyc\\\\GameMakerProjects\\\\GoldenRoguelite\\\\scripts\\\\CalcPreview\\\\CalcPreview.gml' -NoNewline\")",
       "Bash(powershell -Command \"\n$file = 'C:\\\\Users\\\\polyc\\\\GameMakerProjects\\\\GoldenRoguelite\\\\scripts\\\\CalcPreview\\\\CalcPreview.gml'\n$content = Get-Content $file -Raw\n$bad = 'result.heal = QueryDice\\(player, \\\\\"venus\\\\\", \\\\\"affinity\\\\\"\\) * 2\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult.targets = \\\\\"Ally\\\\\"\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult.description = \\\\\"Revive\\\\\"'\n$good = \\\\\"result.heal = QueryDice\\(player, \\\\`\\\\\"venus\\\\`\\\\\", \\\\`\\\\\"affinity\\\\`\\\\\"\\) * 2\\\\`r\\\\`n\\\\`t\\\\`t\\\\`t\\\\`t\\\\`tresult.targets = \\\\`\\\\\"Ally\\\\`\\\\\"\\\\`r\\\\`n\\\\`t\\\\`t\\\\`t\\\\`t\\\\`tresult.description = \\\\`\\\\\"Revive\\\\`\\\\\"\\\\\"\n\\\\$content = \\\\$content.Replace\\(\\\\$bad, \\\\$good\\)\nSet-Content -Path \\\\$file -Value \\\\$content -NoNewline\n\")",
-      "Bash(wc -l \"/c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects/objStatDisplay\"/*.gml)"
+      "Bash(wc -l \"/c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects/objStatDisplay\"/*.gml)",
+      "Bash(do)",
+      "Read(//c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects/**)",
+      "Bash(done)"
     ]
   },
   "outputStyle": "default",

@@ -62,6 +62,11 @@ function InitGlobalVars(){
 	
 	
 	
+	#macro BTN_BREATH_SPEED  0.04
+	#macro BTN_BREATH_AMP   0.10
+	#macro BTN_PRESS_SCALE  0.82
+	#macro BTN_EASE_OUT     0.2
+
 	#macro CONFIRMSOUND audio_stop_sound(MenuPositive);audio_play_sound(MenuPositive,0,0)
 	#macro CANCELSOUND audio_stop_sound(MenuNegative);audio_play_sound(MenuNegative,0,0)
 	#macro MENUMOVE audio_stop_sound(MenuMove);audio_play_sound(MenuMove,0,0)

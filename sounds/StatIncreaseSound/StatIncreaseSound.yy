@@ -1,6 +1,6 @@
 {
   "$GMSound":"v2",
-  "%Name":"DjinniLeaving",
+  "%Name":"StatIncreaseSound",
   "audioGroupId":{
     "name":"audiogroup_default",
     "path":"audiogroups/audiogroup_default",
@@ -10,9 +10,9 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":1.2777778,
+  "duration":0.7310431,
   "exportDir":"",
-  "name":"DjinniLeaving",
+  "name":"StatIncreaseSound",
   "parent":{
     "name":"SFX",
     "path":"folders/Sounds/SFX.yy",
@@ -21,6 +21,6 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"DjinniLeaving.wav",
+  "soundFile":"StatIncreaseSound.wav",
   "volume":1.0,
 }

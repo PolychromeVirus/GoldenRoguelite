@@ -29,7 +29,8 @@ $RECYCLE.BIN/
  
 # Windows shortcuts
 *.lnk
- 
+*.md
+*.json
 # Mac
  
 ## General
