@@ -130,11 +130,11 @@ function CastSummon(summonID, playerID){
 		case "Coatlicue":
 			_struct.splash = Coatlicue1111
 			for (var _p = 0; _p < array_length(global.players); _p++) {
-				if (global.players[_p].hp > 0) {
+				
 					var _coat_heal = global.players[_p].hpmax - global.players[_p].hp
 					if (global.players[_p].halfheal and _coat_heal > 0) { _coat_heal = floor(_coat_heal / 2) }
 					global.players[_p].hp = min(global.players[_p].hp + _coat_heal, global.players[_p].hpmax)
-				}
+				
 			}
 			InjectLog("All allies recovered HP!")
 			var _coat_data = { amount: 5 }
@@ -167,12 +167,12 @@ function CastSummon(summonID, playerID){
 		case "Iris":
 			_struct.splash = Iris1117
 			for (var _p = 0; _p < array_length(global.players); _p++) {
-				if (global.players[_p].hp > 0) {
+				
 					var _coat_heal = global.players[_p].hpmax - global.players[_p].hp
 					if (global.players[_p].halfheal and _coat_heal > 0) { _coat_heal = floor(_coat_heal / 2) }
 					global.players[_p].hp = min(global.players[_p].hp + _coat_heal, global.players[_p].hpmax)
 				}
-			}
+			
 			InjectLog("All allies healed to full!")
 			AddPassive("damage_cap_1", 1, asset_get_index(summon.alias), "Iris", {}, playerID)
 			AddPassive("damage_half", 2, asset_get_index(summon.alias), "Iris", {}, playerID)

@@ -188,6 +188,7 @@ function _NextTurnSetupPlayer() {
 	if global.players[global.turn].hp <= 0 {
 		// Skip to next alive player without triggering another boss phase
 		for (var _sk = 0; _sk < 4; _sk++) {
+			TickPassiveForChar(global.turn)
 			global.turn = (global.turn + 1) mod 4
 			global.playersActed++
 			if global.players[global.turn].hp > 0 { break }
@@ -227,7 +228,7 @@ function _NextTurnSetupPlayer() {
 		// Cleric's Ring negates curse turn-skip
 		var _hasClerics = false
 		for (var _ci = 0; _ci < array_length(_cur.armor); _ci++) {
-			if (global.itemcardlist[_cur.armor[_ci]].name == "Cleric's ring") {
+			if (global.itemcardlist[_cur.armor[_ci]].name == "Cleric's Ring") {
 				_hasClerics = true
 				break
 			}
@@ -235,8 +236,17 @@ function _NextTurnSetupPlayer() {
 		if (!_hasClerics) {
 			var _curseRoll = irandom(5) + 1
 			if (_curseRoll <= 2) {
-				InjectLog(_cur.name + " couldn't move due to a curse!")
-				_AdvanceTurn()
+				PushMenu(objMenuDialog, {
+					text:    _cur.name + " is under a curse!",
+					subtext: "Their turn is skipped.",
+					buttons: [{
+						label: "Continue", sprite: yes,
+						on_click: function() {
+							PopMenu()
+							_AdvanceTurn()
+						}
+					}]
+				})
 				return
 			}
 		}

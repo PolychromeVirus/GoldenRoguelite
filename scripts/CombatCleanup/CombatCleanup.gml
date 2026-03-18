@@ -79,7 +79,7 @@ function CombatCleanup(){
 			if curr.pp > curr.ppmax{curr.pp = curr.ppmax}
 		}
 
-		ClearAllTokens(curr)
+		ClearCombatState(curr)
 		curr.rerolls = []
 		
 		// Recover spent djinn (spent → ready), in-recovery djinn stay
