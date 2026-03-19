@@ -25,7 +25,8 @@ $RECYCLE.BIN/
 *.msix
 *.msm
 *.msp
-*.zip
+*/*.zip
+Release
  
 # Windows shortcuts
 *.lnk
@@ -63,3 +64,6 @@ Temporary Items
 # GameMaker temporary files
 *.resource_order
 *.old
+Release/GoldenRoguelite.zip
+/Release
+*.zip

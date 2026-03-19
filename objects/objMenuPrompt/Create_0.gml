@@ -3,7 +3,7 @@
 ///   buttons: array of { label, sprite, on_click }
 /// }
 if !variable_instance_exists(id, "lines")   { lines   = [] }
-if !variable_instance_exists(id, "buttons") { buttons = [] }
+if !variable_instance_exists(id, "buttons") { buttons = [{sprite: no, label: "[DEBUG] Cancel"}] }
 
 _spr_w = sprite_get_width(QuarterMenu)  * 6   // 768
 _spr_h = sprite_get_height(QuarterMenu) * 6   // 360
