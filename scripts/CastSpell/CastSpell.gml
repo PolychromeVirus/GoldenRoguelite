@@ -421,8 +421,8 @@ function CastSpell(spellID, playerID) {
 						array_push(_echo_items, { name: _edj.name, detail: global.players[_ep].name, data: { djinnID: _eid, ownerIndex: _ep } })
 					}
 				}
-				PopMenu()
 				PushMenu(objMenuCarousel, {
+					side: "right",
 					items:         _echo_items,
 					confirm_label: "Unleash",
 					filter:        method({ _ei: _echo_items }, function(i) { return !global.djinnlist[_ei[i].data.djinnID].ready and !global.djinnlist[_ei[i].data.djinnID].spent }),
@@ -500,9 +500,9 @@ function CastSpell(spellID, playerID) {
 				_merc_packet.num     = 1
 				array_push(global.attackQueue, _merc_packet)
 				InjectLog(caster.name + " unleashes the power of Mercury! (+" + string(QueryDice(caster,"mercury","charge")) + " HP)")}
-			DestroyAllBut()
-			ClearOptions()
-			DeleteButtons()
+			
+			
+			
 			ProcessAttackQueue()
 			exit
 			break
@@ -531,7 +531,7 @@ function CastSpell(spellID, playerID) {
 						array_push(global.attackQueue, _s)
 					}
 					PopMenu()
-					ClearOptions()
+					
 					ProcessAttackQueue()
 				}),
 			})
@@ -772,7 +772,7 @@ function CastSpell(spellID, playerID) {
 	if caster.name == "Lyza" and struct.dam == 0{struct.dam += caster.jupiter}
 	
 	// Offensive spell dispatch — dam is fully calculated above
-	DeleteButtons()
+	
 	SelectTargets(struct)
 }
 

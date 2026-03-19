@@ -103,7 +103,7 @@ function _AdvanceTurn(){
 		global.playersActed = 0
 		global.turnPhase = "enemy"
 
-		DeleteButtons()
+		
 		//TickPassives()
 		RunEnemyPhase(false, function() {
 			// Advance to firstPlayer (first alive from there)
@@ -122,7 +122,7 @@ function _AdvanceTurn(){
 		
 
 		global.turnPhase = "boss"
-		DeleteButtons()
+		
 		RunEnemyPhase(true, function() {
 			TickMonsterStatuses()
 			_NextTurnSetupPlayer()
@@ -289,7 +289,7 @@ function _NextTurnSetupPlayer() {
 		_pkt.dmgtype = _cur.planetary.element
 		_pkt.target  = "enemy"
 		_pkt.num     = 1
-		DeleteButtons()
+		
 		InjectLog(_cur.name + " unleashes the planetary strike!")
 		SelectTargets(_pkt)
 	}

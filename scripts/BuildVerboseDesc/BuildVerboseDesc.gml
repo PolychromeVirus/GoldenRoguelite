@@ -412,7 +412,7 @@ function _BVD_Djinn(action_id, player, prev) {
 			return string_ext("{0}" + _e + " Damage // {1}", [_pre, _a])
 
 		case "Gust":
-			var _a = _ic ? string(WeaponAttack(false,false).dam) : "Weapon Attack Damage"
+			var _a = _ic ? string(WeaponAttack(true,false).dam) : "Weapon Attack Damage"
 			return string_ext("{0}" + _e + " Damage // {1}", [_pre, _a])
 
 		// ── Healing (all allies) ─────────────────────────────────────────
@@ -430,7 +430,7 @@ function _BVD_Djinn(action_id, player, prev) {
 			return string_ext("{0}Recover {1} + {2} HP", [_pre, _a, _b, _tgt])
 		case "Steel":
 			var _a = _ic ? string(WeaponAttack(true,false).dam) : "Weapon Attack"
-			var _b = _ic ? "and recover " + string(WeaponAttack(true,false).dam_bonus) + " HP"             : "Unleash damage converted to healing"
+			var _b = _ic ? "and recover " + string(WeaponAttack(true,false).unleash.dam_bonus) + " HP"             : "Unleash damage converted to healing"
 			return string_ext("{0}{1} {2}", [_pre, _a, _b, _tgt])
 
 		// ── Healing (single) ─────────────────────────────────────────────
@@ -443,24 +443,26 @@ function _BVD_Djinn(action_id, player, prev) {
 
 		// ── PP recovery ──────────────────────────────────────────────────
 		case "Ember":
-			var _a = _ic ? string(prev.heal) : "Mars Charge"
+			var _a = _ic ? string(prev.description) : "Mars Charge"
 			return string_ext("{0}Restore {1} PP", [_pre, _a, _tgt])
 
 		case "Aroma":
-			var _a = _ic ? string(prev.heal) : "Elemental Charge"
+			var _a = _ic ? string(prev.description) : "Elemental Charge"
 			return string_ext("{0}Restore {1} PP", [_pre, _a, _tgt])
 
 		case "Ether":
-			var _a = _ic ? string(prev.heal) : "All Charges"
+			var _a = _ic ? string(prev.description) : "All Charges"
 			return string_ext("{0}Restore {1} PP", [_pre, _a, _tgt])
 		case "Reflux":
-			var _a = _ic ? string(player.atk) : "ATK"
+			var _mod = (player.name == "Garet" or player.name == "Tyrell") ? player.atkmod * 2 : player.atkmod;
+			var _a = _ic ? string(player.atk + _mod) : "ATK";
+
 			return string_ext("[Self] Attackers take {1}", [_pre, _a, _tgt])
 
 		// ── Revive ───────────────────────────────────────────────────────
-		case "Quartz": return string_ext("{0}Revive {1} (50% Max HP)", [_pre, _tgt])
-		case "Dew":    return string_ext("{0}Revive {1} (Full HP)", [_pre, _tgt])
-		case "Spark":  return string_ext("{0}Revive {1} (1 HP)", [_pre, _tgt])
+		case "Quartz": return string_ext("{0}Revive (50% Max HP, chance to heal to full)", [_pre, _tgt])
+		case "Dew":    return string_ext("{0}Revive (Full HP)", [_pre, _tgt])
+		case "Spark":  return string_ext("{0}Revive (50% Max HP)", [_pre, _tgt])
 		case "Tinder":
 			var _a = _ic ? string(prev.heal) : "Mars Count"
 			return string_ext("{0}Revive {1} ({2} HP)", [_pre, _tgt, _a])

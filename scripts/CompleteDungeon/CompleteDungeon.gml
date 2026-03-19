@@ -37,9 +37,9 @@ function _ShowNextBossReward() {
 		_FinishDungeonTransition()
 		return
 	}
-	DeleteButtons()
-	ClearOptions()
-	DestroyAllBut()
+	
+	
+	
 
 	var _item_id = global.bossRewardQueue[0]
 	var _item    = global.itemcardlist[_item_id]
@@ -207,9 +207,9 @@ function _StartMysticDraught(_player_index) {
 /// Advances to the next dungeon after all boss rewards are assigned
 function _FinishDungeonTransition() {
 	global.inBossRewards = false
-	DeleteButtons()
-	DestroyAllBut()
-	ClearOptions()
+	
+	
+	
 
 	if (global.dungeon + 1 < array_length(global.dungeonlist)) {
 		StartDungeon(global.dungeon + 1)

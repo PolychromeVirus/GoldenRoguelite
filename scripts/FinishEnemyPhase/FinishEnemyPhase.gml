@@ -2,10 +2,7 @@
 /// @desc Post-enemy-phase cleanup: root token tick + party wipe check
 function FinishEnemyPhase() {
 	
-	DeleteButtons()
-	ClearOptions()
-	DestroyAllBut()
-	CreateOptions()
+	
 	
 	// --- Party wipe check ---
 	var _all_dead = true

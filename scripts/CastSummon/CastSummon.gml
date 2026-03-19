@@ -81,9 +81,9 @@ function CastSummon(summonID, playerID){
 			caster.atkmod_fresh = true
 			InjectLog("Party ATK increased by 3!")
 			global.attackQueue = [WeaponAttack(true,false,Megaera1122),WeaponAttack(true,false,Megaera1122)]
-			DestroyAllBut()
-			ClearOptions()
-			DeleteButtons()
+			
+			
+			
 			ProcessAttackQueue()
 			_handled = true
 			ExhaustSummonDjinn(summonID)
@@ -276,7 +276,7 @@ function CastSummon(summonID, playerID){
 				global.firstPlayer = global.turn
 				global.inCombat = false
 				CombatCleanup()
-				ClearOptions()
+				
 				instance_create_depth(0, 0, -10, objPostBattle)
 			} else {
 				instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
@@ -313,7 +313,7 @@ function CastSummon(summonID, playerID){
 	// ── Dispatch (targeting summons) ────────────────────────────────────
 	// Store splash for objMonsterTarget to show on confirm
 	
-	DeleteButtons()
+	
 
 	if (_struct.num > 0) {
 		SelectTargets(_struct)

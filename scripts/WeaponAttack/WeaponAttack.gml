@@ -2,14 +2,10 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function WeaponAttack(unleash = true, attack = true, splash = -1){
 	if attack and instance_number(objMonsterTarget) > 0 {
-		DeleteButtons()
+		
 		exit
 	}
 	var _struct = variable_clone(global.AggressionSchema)
-	if attack{
-		DestroyAllBut()
-		DeleteButtons()
-	}
 	var player      = global.players[global.turn]
 	var weapon_type = global.itemcardlist[player.weapon].type
 	var _atkmod = variable_clone(player.atkmod)

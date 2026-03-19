@@ -18,8 +18,8 @@ function LevelUp(playerIndex = -1) {
 /// Pops the next player from global.draftQueue and opens their draft (or ends if empty).
 function _DraftNext() {
 	if array_length(global.draftQueue) == 0 {
-		DestroyAllBut()
-		ClearOptions()
+		
+		
 		Autosave()
 		if (global.inBossRewards) {
 			_AdvanceBossRewardQueue()
@@ -41,9 +41,9 @@ function _DraftNext() {
 		}
 		return
 	}
-	DeleteButtons()
-	ClearOptions()
-	DestroyAllBut()
+	
+	
+	
 	
 	var _idx = global.draftQueue[0]
 	array_delete(global.draftQueue, 0, 1)

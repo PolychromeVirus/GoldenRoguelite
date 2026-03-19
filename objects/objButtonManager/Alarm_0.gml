@@ -15,3 +15,5 @@ if _top != noone and instance_exists(_top) {
 } else if !global.pause {
     CreateOptions()
 }
+
+

@@ -22,7 +22,7 @@ function CheckVictory(){
 		InjectLog("You died...")
 		global.gameover = true
 		global.gameover_timer = 240
-		DeleteButtons()
+		
 		with (objMonster) { image_speed = 0 }
 		var _bg = layer_background_get_id(layer_get_id("Background"))
 		layer_background_blend(_bg, c_gray)

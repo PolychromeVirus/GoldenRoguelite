@@ -98,7 +98,7 @@ function ApplyDamageToTargets(struct) {
 		global.firstPlayer = global.turn
 		global.inCombat = false
 		CombatCleanup()
-		ClearOptions()
+		
 		instance_create_depth(0, 0, -10, objPostBattle)
 	}
 }

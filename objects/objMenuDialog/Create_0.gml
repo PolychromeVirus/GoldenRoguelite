@@ -21,4 +21,4 @@ _build_buttons = method(id, function() {
 })
 
 clickable = false
-_build_buttons()
+

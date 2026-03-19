@@ -1,5 +1,4 @@
-// Clean up targeter buttons
-DeleteButtons()
+
 
 // Restore menu stack visibility (and panes)
 for (var _i = 0; _i < array_length(global.menu_stack); _i++) {
@@ -12,15 +11,15 @@ for (var _i = 0; _i < array_length(global.menu_stack); _i++) {
     }
 }
 
-// Rebuild buttons for whatever is now on top (or return to base options)
-var _stack_len = array_length(global.menu_stack)
-if _stack_len > 0 {
-    var _top = global.menu_stack[_stack_len - 1]
-    if instance_exists(_top) and variable_instance_exists(_top, "_build_buttons") {
-        _top._build_buttons()
-    }
-} else if (!variable_instance_exists(id, "committed") or !committed)
-       and (!variable_instance_exists(id, "confirmed") or !confirmed) {
-    // Only restore base options on a plain cancel with no active menu and no committed action
-    CreateOptions()
-}
+//// Rebuild buttons for whatever is now on top (or return to base options)
+//var _stack_len = array_length(global.menu_stack)
+//if _stack_len > 0 {
+//    var _top = global.menu_stack[_stack_len - 1]
+//    if instance_exists(_top) and variable_instance_exists(_top, "_build_buttons") {
+//        _top._build_buttons()
+//    }
+//} else if (!variable_instance_exists(id, "committed") or !committed)
+//       and (!variable_instance_exists(id, "confirmed") or !confirmed) {
+//    // Only restore base options on a plain cancel with no active menu and no committed action
+//    CreateOptions()
+//}

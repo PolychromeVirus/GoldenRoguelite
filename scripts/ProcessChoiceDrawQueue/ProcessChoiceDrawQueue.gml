@@ -68,7 +68,7 @@ function ProcessChoiceDrawQueue() {
 				}
 				global.deck = array_shuffle(global.deck)
 				array_delete(global.choiceDrawQueue, 0, 1)
-				DeleteButtons()
+				
 				PopMenu()
 				ProcessChoiceDrawQueue()
 			}),
@@ -78,7 +78,7 @@ function ProcessChoiceDrawQueue() {
 				}
 				global.deck = array_shuffle(global.deck)
 				array_delete(global.choiceDrawQueue, 0, 1)
-				DeleteButtons()
+				
 				PopMenu()
 				ProcessChoiceDrawQueue()
 			}),

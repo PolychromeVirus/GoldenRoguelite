@@ -37,19 +37,19 @@ function HandleVictory() {
 				method({ cc: _cc }, function() {
 					global.catchBonus = cc
 					CombatCleanup()
-					ClearOptions()
+					
 					instance_create_depth(0, 0, -10, objPostBattle)
 				}),
 				function() {
 					CombatCleanup()
-					ClearOptions()
+					
 					instance_create_depth(0, 0, -10, objPostBattle)
 				}
 			)
 		}})
 	} else {
 		CombatCleanup()
-		ClearOptions()
+		
 		instance_create_depth(0, 0, -10, objPostBattle)
 	}
 }

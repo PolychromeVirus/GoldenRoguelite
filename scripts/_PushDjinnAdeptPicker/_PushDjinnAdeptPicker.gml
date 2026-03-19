@@ -117,7 +117,7 @@ function _PushDjinnAdeptPicker(chosen_djinn_id) {
 		on_confirm: method({ _djinn_id: chosen_djinn_id }, function(i, item) {
 			array_push(global.players[i].djinn, _djinn_id)
 			InjectLog(global.players[i].name + " received " + global.djinnlist[_djinn_id].name + "!")
-			DeleteButtons()
+			
 			PopMenu()  // pop adept picker
 			PopMenu()  // pop djinn picker
 			if global.inTown { ProcessTownFinds() } else { ProcessPostBattleQueue() }

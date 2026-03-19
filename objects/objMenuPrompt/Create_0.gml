@@ -29,4 +29,3 @@ _build_buttons = function() {
 		_inst._owner_id = id
 	}
 }
-_build_buttons()

@@ -12,7 +12,7 @@ function UnleashDjinn(djinnID, playerID) {
 		djinn.ready = true
 		djinn.spent = false
 		InjectLog(djinn.name + " was set to ready")
-		ClearOptions()
+		
 		NextTurn()
 		return
 	}
@@ -23,7 +23,7 @@ function UnleashDjinn(djinnID, playerID) {
 	djinn.just_unleashed = true
 
 	// Clear bottom-row action buttons so targeting Confirm/Cancel can appear
-	DeleteButtons()
+	
 
 	// Pre-calculate weapon attack (for weapon-based djinn)
 	var weapon_type   = global.itemcardlist[caster.weapon].type
@@ -151,7 +151,7 @@ function UnleashDjinn(djinnID, playerID) {
 				_p.hp = min(_p.hp + (_p.hpmax / 2), _p.hpmax)
 			}
 			InjectLog(djinn.name + " healed all adepts!")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -198,7 +198,7 @@ function UnleashDjinn(djinnID, playerID) {
 				if _p.hp > 0 { _p.pp = min(_p.pp + _pp, _p.ppmax) }
 			}
 			InjectLog(djinn.name + " restored " + string(_pp) + " PP to all")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -210,7 +210,7 @@ function UnleashDjinn(djinnID, playerID) {
 				if _p.hp > 0 { _p.pp = min(_p.pp + _pp, _p.ppmax) }
 			}
 			InjectLog(djinn.name + " restored " + string(_pp) + " PP to all")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -223,7 +223,7 @@ function UnleashDjinn(djinnID, playerID) {
 			}
 			caster.atkmod_fresh = true
 			InjectLog(djinn.name + " boosted ATK +2 for all")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -234,7 +234,7 @@ function UnleashDjinn(djinnID, playerID) {
 			}
 			caster.defmod_fresh = true
 			InjectLog("The party's defenses are bolstered!")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -246,7 +246,7 @@ function UnleashDjinn(djinnID, playerID) {
 			}
 			caster.defmod_fresh = true
 			InjectLog(djinn.name + " boosted DEF +2 for all")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -281,7 +281,7 @@ function UnleashDjinn(djinnID, playerID) {
 				// Second attack (no unleash)
 				array_push(global.attackQueue, WeaponAttack(true,false), WeaponAttack(false,false))
 				InjectLog("Gust grants a second attack!")
-				ClearOptions()
+				
 				ProcessAttackQueue()
 				exit
 			}else{
@@ -298,14 +298,14 @@ function UnleashDjinn(djinnID, playerID) {
 			InjectLog("Enemies moves restricted!")
 			
 			NextTurn()
-			ClearOptions()
+			
 			exit
 			break
 			
 		case "Vine": // skips all enemy attempt targeting
 			AddPassive("_vine",3,Venus875,"Vine",{},playerID)
 			InjectLog("Enemies got all tangled up!")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -330,7 +330,7 @@ function UnleashDjinn(djinnID, playerID) {
 						array_push(global.attackQueue, _s)
 					}
 					PopMenu()
-					ClearOptions()
+					
 					ProcessAttackQueue()
 				}),
 			})
@@ -339,28 +339,28 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Shade":
 			AddPassive("damage_half",1,Mercury865,"Shade",{},playerID)
 			InjectLog("The party is surrounded by a barrier")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
 		case "Granite":
 			AddPassive("damage_half",1,Venus875,"Granite",{},playerID)
 			InjectLog("The party is surrounded by a barrier")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
 		case "Flash":
 			AddPassive("damage_cap_1",1,Mars863,"Flash",{},playerID)
 			InjectLog("The party is surrounded by a barrier")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
 		case "Ground":
 			AddPassive("skip_enemies", 1, Venus875, "Ground", {}, playerID)
 			InjectLog("The enemies are unable to move!")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -379,7 +379,7 @@ function UnleashDjinn(djinnID, playerID) {
 				curr.regheal = 0
 			}
 			InjectLog("Allies are cleansed!")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -449,7 +449,7 @@ function UnleashDjinn(djinnID, playerID) {
 			break
 		case "Steam":
 			AddPassive("_element", 3, Mercury865,"Steam",{},playerID)
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -476,13 +476,13 @@ function UnleashDjinn(djinnID, playerID) {
 			}
 			array_shuffle(_djinnsel)
 			_djinnsel[0].spent = false
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
 		case "Kindle":
 			AddPassive("_melee", 3, Mars863,"Kindle",{},playerID)
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -505,7 +505,7 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Reflux":
 			caster.reflect = true
 			InjectLog(caster.name + " is ready to strike back!")
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -518,7 +518,7 @@ function UnleashDjinn(djinnID, playerID) {
 			for (var i = 0; i < QueryDice(caster,"all","charge"); ++i) {
 			    array_push(global.attackQueue,variable_clone(_struct))
 			}
-			ClearOptions()
+			
 			NextTurn()
 			exit
 			break
@@ -606,6 +606,6 @@ function UnleashDjinn(djinnID, playerID) {
 		_struct.num = 3
 	}
 
-	ClearOptions()
+	
 	SelectTargets(_struct)
 }

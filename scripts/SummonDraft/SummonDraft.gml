@@ -85,7 +85,7 @@ function SummonDraft() {
 				var _id = _pool[i]
 				array_push(global.knownSummons, _id)
 				InjectLog("Learned summon: " + global.summonlist[_id].name + "!")
-				DeleteButtons()
+				
 				PopMenu()
 				if global.inTown { ProcessTownFinds() } else { ProcessPostBattleQueue() }
 				Autosave()

@@ -9,8 +9,7 @@
 //}
 
 
-// Cancel any pending ButtonManager alarm so a queued _build_buttons() doesn't fire
-with (objButtonManager) { alarm[0] = -1 }
+
 
 // Hide menu stack instances (and their panes) so they don't render behind the targeter
 for (var _i = 0; _i < array_length(global.menu_stack); _i++) {
@@ -22,7 +21,6 @@ for (var _i = 0; _i < array_length(global.menu_stack); _i++) {
         }
     }
 }
-DeleteButtons()
 
 var button1 = 36
 var button2 = 64

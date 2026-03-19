@@ -9,10 +9,6 @@ if (_ch.type == "combat" or _ch.type == "boss") {
 	global.inCombat = true
 	global.onFloor = true
 	global.activeChallengeIndex = challenge_index
-	ClearOptions()
-	DeleteButtons()
-	DestroyAllBut()
-	CreateOptions()
 	StartCombat(_ch.troop)
 }
 

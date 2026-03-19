@@ -15,3 +15,24 @@ if _top != _prev_top{
             alarm[0] = 1
         }
 }
+if global.inCombat != _prev_combat{
+
+	_prev_combat = global.inCombat
+	DeleteButtons()
+	alarm[0] = 1
+
+}
+
+if instance_exists(TurnDelay) and !_delay_exists{
+
+	_delay_exists = true
+	DeleteButtons()
+
+}
+if _delay_exists and !instance_exists(TurnDelay){
+
+	_delay_exists = false
+	DeleteButtons()
+	alarm[0] = 1
+
+}
