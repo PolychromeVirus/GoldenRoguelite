@@ -10,7 +10,7 @@ if _top != _prev_top{
             alarm[0] = 1
         }
     }
-}else if !instance_exists(objAttack) or !instance_exists(objButton2) or !instance_exists(objConfirm){
+}else if !instance_exists(objAttack) and !instance_exists(objButton2) and !instance_exists(objConfirm) and !instance_exists(objChallenge) and !instance_exists(objCancel){
 	 if instance_number(objMonsterTarget) == 0 and instance_number(objCharMenu) == 0 and instance_number(TurnDelay) == 0{
             alarm[0] = 1
         }
