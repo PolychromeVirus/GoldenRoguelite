@@ -7,7 +7,6 @@ function NextTurn(){
 	if global.players[global.turn].extraTurns > 0 {
 		global.players[global.turn].extraTurns--
 		global.players[global.turn].dicepool = RollDice(global.players[global.turn])
-		CreateOptions()
 		exit
 	}
 

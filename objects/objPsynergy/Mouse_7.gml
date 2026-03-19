@@ -14,8 +14,9 @@ for (var i = 0; i < array_length(_spells); i++) {
         var _prev = CalcPreview("spell", _spells[i], _player)
         if _prev.description != "" and _prev.description != "?" { _detail = _prev.description }
     }
-    var _desc = _s.text
-    if string_length(_desc) > 170 { _desc = string_delete(_desc, 170, string_length(_desc) - 169) + "..." }
+    var _desc = global.inCombat
+        ? BuildVerboseDesc("spell", _spells[i], _player)
+        : _s.text
     array_push(_items, {
         name:         _s.name + " - " + string(_s.cost) + " PP",
         element:      _s.element,
@@ -35,39 +36,16 @@ PushMenu(objMenuCarousel, {
     filter: method({ spells: _spells }, function(i) {
         return !isCastable(global.psynergylist[spells[i]], global.players[global.turn])
     }),
-    draw_pane: method({ turn: _turn }, function(sel, item) {
-        var _descx = 820
-        var _descy = 411
+    draw_pane: method(undefined, function(sel, item) {
+        var _descx  = 820
+        var _descy  = 411
         var _offset = 4
-        var _text = item.desc
+        var _text   = item.desc
+        draw_set_font(GoldenSun)
         draw_set_color(c_black)
         draw_text_ext(_descx + _offset, _descy + _offset, _text, 40, 660)
         draw_set_color(c_white)
         draw_text_ext(_descx, _descy, _text, 40, 660)
-        if global.inCombat and array_length(global.players[turn].dicepool) > 0 {
-            var _dp = CalcPreview("spell", item.data.spell_index, global.players[turn])
-            if _dp.description != "" and _dp.description != "?" {
-                var _detail = ""
-                var _dcol   = c_white
-                if _dp.heal > 0 {
-                    _detail = "~" + string(_dp.heal) + " HP"
-                    _dcol   = make_color_rgb(80, 220, 80)
-                } else {
-                    _detail = "~" + string(_dp.dam) + " " + _dp.element + " Damage"
-                    switch _dp.element {
-                        case "Venus":   _dcol = global.c_venus;   break
-                        case "Mars":    _dcol = global.c_mars;    break
-                        case "Jupiter": _dcol = global.c_jupiter; break
-                        case "Mercury": _dcol = global.c_mercury; break
-                    }
-                }
-                var _dy = _descy + string_height_ext(_text, 40, 660) + 8
-                draw_set_color(c_black)
-                draw_text(_descx + _offset, _dy + _offset, _detail)
-                draw_set_color(_dcol)
-                draw_text(_descx, _dy, _detail)
-            }
-        }
     }),
     on_confirm: method({ turn: _turn, spells: _spells }, function(i, item) {
         if !isCastable(global.psynergylist[item.data.spell_index], global.players[turn]) {

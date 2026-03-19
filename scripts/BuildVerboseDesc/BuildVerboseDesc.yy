@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"SpellPrompt",
+  "%Name":"BuildVerboseDesc",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"SpellPrompt",
+  "name":"BuildVerboseDesc",
   "parent":{
     "name":"Scripts",
     "path":"folders/Scripts.yy",

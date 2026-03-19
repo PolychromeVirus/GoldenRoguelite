@@ -21,7 +21,7 @@ for (var i = 0; i < array_length(_djinn); i++) {
         name:    _d.name,
         element: _d.element,
         detail:  _detail,
-        desc:    _d.text,
+        desc:    global.inCombat ? BuildVerboseDesc("djinni", _djinn[i], _player) : _d.text,
         color:   _col,
         data:    { djinn_index: _djinn[i] },
     })

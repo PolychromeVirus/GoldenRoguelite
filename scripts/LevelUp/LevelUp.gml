@@ -37,7 +37,7 @@ function _DraftNext() {
 					return
 				}
 			}
-			CreateOptions()
+			
 		}
 		return
 	}

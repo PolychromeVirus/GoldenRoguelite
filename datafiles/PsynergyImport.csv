@@ -109,6 +109,6 @@ Jupiter,Tempest,Tempest,12,5,Other,3,3,Whirlwind,,,,,Target 5 // Jupiter Damage:
 Mercury,Wish,Wish,4,4,Self,1,3,Wish,both,,,,Party // Healing:\nHighest Mercury Value
 Mercury,Wish Well,Wish_Well,6,4,Self,2,3,Wish,both,,,,Party // Healing:\nHighest Mercury Value + Mercury Power
 Mercury,Pure Wish,Pure_Wish,10,4,Self,3,3,Wish,both,,,,Party // Healing:\n(All Charge x 2) + Mercury Power
-None,Retreat,Retreat,5,0,None,1,1,Retreat,overworld,,,Isaac,"Auto // Puzzle revealed:\nTurn floor card face down on\ntop of the deck. You are no\nlonger on a floor.\n\nWhen revealed, a floor must be started from the beginning, even if it was started previously."
-Venus,Scoop,Scoop,5,0,None,1,1,Scoop,overworld,,,Felix,Self // Draw 1 Treasure
-Mercury,Insight,Bind,5,0,None,1,1,Insight,overworld,,,Amiti,"Auto // Not in battle:\nLook at the next floor card\nin the pile, and then put it\nback."
+None,Retreat,Retreat,5,0,None,1,1,Retreat,overworld,,,Isaac,[Utility] Restart Floor
+Venus,Scoop,Scoop,5,0,None,1,1,Scoop,overworld,,,Felix,[Self] Draw Card
+Mercury,Insight,Bind,5,0,None,1,1,Insight,overworld,,,Amiti,[Utility] Look at next floor's challenges

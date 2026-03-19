@@ -12,7 +12,7 @@ function SpellPrompt(spell_name, caster_index, on_confirm, on_decline) {
 		],
 		buttons: [
 			{
-				label:    "Yes",
+				label:   "Yes",
 				sprite:   yes,
 				on_click: method(
 					{ ci: caster_index, cost: _pp_cost, sn: spell_name, cb: on_confirm },

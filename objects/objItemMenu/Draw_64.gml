@@ -15,7 +15,7 @@ var castcolor = c_white
 
 // Tab indicator
 var _tabx = drawx
-var _taby = 40
+var _taby = 48
 draw_set_color(c_black)
 if mode == 0 {
 	draw_text(_tabx + offset, _taby + offset, "[Inventory]  Equipment  >")
@@ -29,9 +29,9 @@ if mode == 0 {
 
 draw_set_halign(fa_right)
 draw_set_colour(c_black)
-draw_text(camera_get_view_width(view_current)-8+offset,8+offset, string(global.gold) + "gp")
+draw_text(camera_get_view_width(view_current)/2+32+offset,48+offset, string(global.gold) + "gp")
 draw_set_colour(c_white)
-draw_text(camera_get_view_width(view_current)-8,8, string(global.gold) + "gp")
+draw_text(camera_get_view_width(view_current)/2+32,48, string(global.gold) + "gp")
 draw_set_halign(fa_left)
 
 if mode == 0 {

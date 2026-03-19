@@ -105,11 +105,16 @@ function ExecuteMonsterTurn(mon_id) {
 		if _move.special {
 
 			if _move.movename == "Flee" {
-				monsterHealth = 0
-				sprite_index = FLED
-				global.gold = global.goldAtCombatStart
-				global.enemyFled = true
-				CheckVictory()
+				if irandom(2) == 0{
+					monsterHealth = 0
+					sprite_index = FLED
+					global.gold = global.goldAtCombatStart
+					global.enemyFled = true
+					InjectLog("Mimic ran away!")
+					instance_create_depth(0,0,0,TurnDelay,{on_complete: function(){CheckVictory()}})	
+				}else{
+					InjectLog("Mimic couldn't escape!")
+				}
 			}
 
 			if _move.movename == "Mystic Call" {
