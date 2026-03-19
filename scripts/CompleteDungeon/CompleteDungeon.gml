@@ -4,6 +4,7 @@ function CompleteDungeon() {
 	// Stat growth (curves reference current dungeon index)
 	for (var i = 0; i < array_length(global.players); i++) {
 		StatUp(global.players[i])
+		ClearAllTokens(global.players[i])
 	}
 
 	// Reset all player inventories
@@ -214,8 +215,10 @@ function _FinishDungeonTransition() {
 	if (global.dungeon + 1 < array_length(global.dungeonlist)) {
 		StartDungeon(global.dungeon + 1)
 		CreateOptions()
+		Autosave()
 	} else {
 		InjectLog("All dungeons cleared!")
 		StartDungeon(0)
+		Autosave()
 	}
 }

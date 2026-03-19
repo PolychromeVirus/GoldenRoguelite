@@ -23,6 +23,22 @@ function CheckVictory(){
 		global.gameover = true
 		global.gameover_timer = 240
 		
+		for (var i = 0; i < array_length(global.players); ++i) {
+				var _curr = global.players[i]
+	
+				for (var j = 0; j < array_length(_curr.djinn); ++j) {
+				var _dj = global.djinnlist[_curr.djinn[j]]
+	
+				_dj.spent = false
+				_dj.ready = true
+	
+	
+				}
+	
+			}
+
+CreateDicePool()
+		
 		with (objMonster) { image_speed = 0 }
 		var _bg = layer_background_get_id(layer_get_id("Background"))
 		layer_background_blend(_bg, c_gray)

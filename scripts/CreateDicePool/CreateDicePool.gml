@@ -217,11 +217,14 @@ function CreateDicePool(){
 				array_push(currplayer.onAttack, _equip_onAttack)
 			}
 			}
+			
+			if currplayer.hp > currplayer.hpmax { currplayer.hp = currplayer.hpmax }
+			if currplayer.pp > currplayer.ppmax { currplayer.pp = currplayer.ppmax }
+			
 		}
 
 		// Clamp current HP/PP to new max (in case equipment changed max)
-		if currplayer.hp > currplayer.hpmax { currplayer.hp = currplayer.hpmax }
-		if currplayer.pp > currplayer.ppmax { currplayer.pp = currplayer.ppmax }
+		
 		
 
 }

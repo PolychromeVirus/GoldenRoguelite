@@ -52,6 +52,7 @@ function NextFloor() {
 	// If no reward UI was spawned, refresh buttons now
 	if (!_has_reward) {
 		CreateOptions()
+		Autosave()
 	}
-	Autosave()
+	
 }

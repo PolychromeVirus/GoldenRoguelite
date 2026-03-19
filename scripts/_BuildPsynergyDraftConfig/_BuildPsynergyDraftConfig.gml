@@ -125,7 +125,6 @@ function _BuildPsynergyDraftConfig() {
 			LearnPsy(_selspell.base, _playerIdx)
 			PopMenu()
 			_DraftNext()
-			Autosave()
 		}),
 	}
 }

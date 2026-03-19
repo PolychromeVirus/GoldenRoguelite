@@ -52,7 +52,7 @@ function PuzzlePrompt(puzzle_index, challenge_index) {
 			sprite:   yes,
 			on_click: method(
 				{
-					pi:       puzzle_index,
+					pidx:       puzzle_index,
 					ci:       challenge_index,
 					puz:      _puzzle,
 					is_ov:    _is_overload,
@@ -73,8 +73,9 @@ function PuzzlePrompt(puzzle_index, challenge_index) {
 					_ch.completed = true
 					if puz.trap {
 						for (var _i = array_length(global.floorEffects) - 1; _i >= 0; _i--) {
-							if global.floorEffects[_i].puzzle_index == pi {
+							if global.floorEffects[_i].puzzle_index == pidx {
 								array_delete(global.floorEffects, _i, 1)
+								array_delete(global.dungeonFloors[global.dungeonFloor- 1].effects, _i, 1)
 							}
 						}
 						InjectLog("Trap disarmed!")

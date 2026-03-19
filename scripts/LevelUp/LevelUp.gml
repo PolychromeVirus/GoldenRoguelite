@@ -20,7 +20,7 @@ function _DraftNext() {
 	if array_length(global.draftQueue) == 0 {
 		
 		
-		Autosave()
+		
 		if (global.inBossRewards) {
 			_AdvanceBossRewardQueue()
 		} else if (global.inTown) {

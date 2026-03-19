@@ -68,3 +68,5 @@ Release/GoldenRoguelite.zip
 /Release
 *.zip
 
+/cache
+/output

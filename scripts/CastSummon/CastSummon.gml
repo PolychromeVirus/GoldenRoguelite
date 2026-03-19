@@ -267,20 +267,8 @@ function CastSummon(summonID, playerID){
 				}
 			}
 			// Check victory
-			var _any_alive = false
-			for (var _m = 0; _m < _mon_count; _m++) {
-				if (instance_find(objMonster, _m).monsterHealth != 0) { _any_alive = true; break }
-			}
-			if (!_any_alive and _mon_count > 0) {
-				InjectLog("Combat Victory!")
-				global.firstPlayer = global.turn
-				global.inCombat = false
-				CombatCleanup()
-				
-				instance_create_depth(0, 0, -10, objPostBattle)
-			} else {
-				instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
-			}
+			CheckVictory()
+			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
 			_handled = true
 			break
 
@@ -318,7 +306,7 @@ function CastSummon(summonID, playerID){
 	if (_struct.num > 0) {
 		SelectTargets(_struct)
 	} else {
-		instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+		instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: function(){NextTurn()}})
 	}
 }
 

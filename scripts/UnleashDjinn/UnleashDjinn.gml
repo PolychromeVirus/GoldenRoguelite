@@ -469,13 +469,21 @@ function UnleashDjinn(djinnID, playerID) {
 			var _djinnsel=[]
 			for (var i = 0; i < array_length(global.players); ++i) {
 			    for (var j = 0; j < array_length(global.players[i].djinn); ++j) {
-				    if global.djinnlist[global.players[i].djinn[j]].spent == true and global.djinnlist[global.players[i].djinn[j]].ready == true{
+				    if global.djinnlist[global.players[i].djinn[j]].spent == false and global.djinnlist[global.players[i].djinn[j]].ready == false{
 						array_push(_djinnsel,global.players[i].djinn[j])
 					}
 				}
 			}
 			array_shuffle(_djinnsel)
-			_djinnsel[0].spent = false
+			if array_length(_djinnsel) > 0 {
+				global.djinnlist[_djinnsel[0]].spent = true
+				global.djinnlist[_djinnsel[0]].ready = false
+				InjectLog(global.djinnlist[_djinnsel[0]].name + " recovers!")
+			}else{
+			
+				InjectLog("Nothing happened...")
+			
+			}
 			
 			NextTurn()
 			exit

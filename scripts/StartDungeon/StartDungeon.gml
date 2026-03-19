@@ -27,6 +27,7 @@ function StartDungeon(_dungeon_index) {
 		_curr.pp = 3 * (_dungeon_index + 1)
 		CreateDicePool()
 		_curr.dicepool = RollDice(_curr)
+		ClearAllTokens(_curr,true)
 	}
 	
 	

@@ -40,7 +40,7 @@ function ProcessTownFinds() {
 				)
 				return
 			}
-		}
+		}else{Autosave()}
 		
 	}
 }
