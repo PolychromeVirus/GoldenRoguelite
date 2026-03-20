@@ -102,20 +102,16 @@ function logic(){
 	if _any_alive{
 		global.inCombat = true
 		if repeater > 1 {
-			_repeat_struct = _struct
-			repeater--
-			DeleteButtons()
-			alarm[1] = 3
+			var _total = repeater
+			MakeTurnDelay(15, method({s: _struct, r: repeater - 1, t: _total}, function() {
+				_FireRepeats(s, r, 15, t)
+			}))
 		} else {
 			// Check for onAttack follow-ups (ring effects)
 			if (source == "attack") { QueueOnAttack() }
-			instance_destroy()
-			// If attack queue has more entries, process next instead of NextTurn
 			if array_length(global.attackQueue) > 0 {
 				ProcessAttackQueue()
-			}
-			else
-			{
+			} else {
 				instance_create_depth(0, 0, 0, TurnDelay, { wait: 60, on_complete: NextTurn })
 			}
 		}

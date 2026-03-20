@@ -85,3 +85,7 @@ if InputPressed(INPUT_DOWN) {
     if targetSlot >= _maxSlot { targetSlot = 0 }
     else { targetSlot += 1 }
 }
+
+if InputPressed(INPUT_CONFIRM) and clickable {
+    _confirm()
+}

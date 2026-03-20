@@ -14,3 +14,4 @@ if InputPressed(INPUT_DOWN) {
     if selected == _len - 1 { selected = 0 }
     else { selected += 1 }
 }
+if InputPressed(INPUT_CONFIRM) and clickable and psy_pending < 0 { _do_buy() }

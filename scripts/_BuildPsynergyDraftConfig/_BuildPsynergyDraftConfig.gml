@@ -86,30 +86,7 @@ function _BuildPsynergyDraftConfig() {
 		draw_set_color(c_white)
 		draw_text_ext(_descx, _descy + 120, _desctext, 40, 660)
 
-		// Damage/heal preview
 		if global.inCombat and array_length(_player.dicepool) > 0 {
-			var _dp = CalcPreview("spell", _pool[sel], _player)
-			if _dp.description != "" and _dp.description != "?" {
-				var _detail = ""
-				var _dcol   = c_white
-				if _dp.heal > 0 {
-					_detail = "~" + string(_dp.heal) + " HP heal"
-					_dcol   = make_color_rgb(80, 220, 80)
-				} else {
-					_detail = "~" + string(_dp.dam) + " " + _dp.element + " damage"
-					switch _dp.element {
-						case "Venus":   _dcol = global.c_venus;   break
-						case "Mars":    _dcol = global.c_mars;    break
-						case "Jupiter": _dcol = global.c_jupiter; break
-						case "Mercury": _dcol = global.c_mercury; break
-					}
-				}
-				var _prevy = _descy + 120 + string_height_ext(_desctext, 40, 660) + 8
-				draw_set_color(c_black)
-				draw_text(_descx + _offset, _prevy + _offset, _detail)
-				draw_set_color(_dcol)
-				draw_text(_descx, _prevy, _detail)
-			}
 		}
 	})
 

@@ -139,6 +139,7 @@ if global.charselect == false and !_targeting and !_stat_open {
         if _p.cloak       { draw_sprite_stretched(Cloak,        0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
         if _p.psyseal       { draw_sprite_stretched(Psy_Seal,   0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
         if array_length(_p.rerolls) > 0 { draw_sprite_stretched(Lucky_Medal1503, 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if variable_struct_exists(_p, "extraTurns") and _p.extraTurns > 0 { draw_sprite_stretched(jupiter1491, 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
         if variable_struct_exists(_p.delaydata, "revive") and _p.delaydata.revive { draw_sprite_stretched(Revive, 0, _tokenX, _tokenY, _ssize, _ssize) }
 
     } else {
@@ -217,7 +218,7 @@ if global.charselect == false and !_targeting and !_stat_open {
             if _p.atkmod > 0 { draw_sprite_stretched(attack_up,    0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
             if _p.defmod > 0 { draw_sprite_stretched(defense_up,   0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
             if _p.poison      { draw_sprite_stretched(Poison,       0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
-            if _p.venom       { draw_sprite_stretched(Poison,       0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if _p.venom       { draw_sprite_stretched(Poison_Flow,  0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
             if _p.stun > 0    { draw_sprite_stretched(Bolt,         0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
             if _p.sleep       { draw_sprite_stretched(Sleep,        0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
             if _p.rootTokens > 0 { draw_sprite_stretched(Growth,   0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
@@ -225,6 +226,7 @@ if global.charselect == false and !_targeting and !_stat_open {
             if _p.cloak       { draw_sprite_stretched(Cloak,        0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
             if _p.psyseal     { draw_sprite_stretched(Psy_Seal,     0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
             if array_length(_p.rerolls) > 0 { draw_sprite_stretched(Lucky_Medal1503, 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+            if variable_struct_exists(_p, "extraTurns") and _p.extraTurns > 0 { draw_sprite_stretched(jupiter1491, 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
             if variable_struct_exists(_p.delaydata, "revive") and _p.delaydata.revive { draw_sprite_stretched(Revive, 0, _tokenX, _tokenY, _ssize, _ssize) }
             draw_sprite(topframe, 0, 0, 0)
         }
@@ -412,3 +414,4 @@ draw_set_halign(fa_left)
 
 draw_set_color(c_white)
 draw_text(0, 0, string(global.errormessage))
+

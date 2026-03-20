@@ -109,7 +109,8 @@ function _GetKeyword(text){
 		case "highest elemental": case "lowest elemental": case "elemental value": case "assign elemental":
 		case "elemental dice": case "elemental die":
 			return global.c_elemental
-		case "poison": case "venom": case "stun": case "sleep": case "delude": case "haunt": 
+		case "poison": case "venom": case "stun": case "sleep": case "delude": case "haunt":
+		case "psy seal":
 			return global.c_status
 	
 

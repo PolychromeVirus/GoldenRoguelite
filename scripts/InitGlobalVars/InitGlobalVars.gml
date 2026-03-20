@@ -152,6 +152,8 @@ function InitGlobalVars(){
 
 	global.lastselected = -1
 	global.passiveEffects = []
+	global.kbd_tooltip     = ""
+	global.using_kbd       = false
 	global.daedalusCascade = false
 	global.postBattleQueue = []
 	global.choiceDrawQueue = []

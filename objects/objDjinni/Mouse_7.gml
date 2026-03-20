@@ -9,21 +9,27 @@ var _items   = []
 for (var i = 0; i < array_length(_djinn); i++) {
     var _d      = global.djinnlist[_djinn[i]]
     var _detail = ""
+    var _detail_color = c_white
     if global.inCombat and array_length(_player.dicepool) > 0 {
         var _prev = CalcPreview("djinni", _djinn[i], _player)
-        if _prev.description != "" and _prev.description != "?" { _detail = _prev.description }
+        if _prev.description != "" and _prev.description != "?" {
+            _detail = _prev.description
+            if _prev.heal > 0 { _detail_color = make_color_rgb(80, 220, 80) }
+            else { _detail_color = ElementColor(_prev.element) }
+        }
     }
     var _col = c_white
     if !_d.ready {
         _col = _d.spent ? c_red : c_grey
     }
     array_push(_items, {
-        name:    _d.name,
-        element: _d.element,
-        detail:  _detail,
-        desc:    global.inCombat ? BuildVerboseDesc("djinni", _djinn[i], _player) : _d.text,
-        color:   _col,
-        data:    { djinn_index: _djinn[i] },
+        name:         _d.name,
+        element:      _d.element,
+        detail:       _detail,
+        detail_color: _detail_color,
+        desc:         BuildVerboseDesc("djinni", _djinn[i], _player),
+        color:        _col,
+        data:         { djinn_index: _djinn[i] },
     })
 }
 

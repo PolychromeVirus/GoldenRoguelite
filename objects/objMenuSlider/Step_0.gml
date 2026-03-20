@@ -9,3 +9,6 @@ if InputPressed(INPUT_DOWN) {
     value++
     if value > maxim { value = minim }
 }
+if InputPressed(INPUT_CONFIRM) and clickable {
+    on_confirm(value)
+}

@@ -20,5 +20,6 @@ _build_buttons = method(id, function() {
     clickable = true
 })
 
+keyboard_sel = 0
 clickable = false
 

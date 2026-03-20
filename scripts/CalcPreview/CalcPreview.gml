@@ -101,11 +101,17 @@ function CalcPreview(action_type, action_id, player) {
 					break
 				case "Ragnarok":
 					result.dam = QueryDice(player, "venus", "values")
-					if spell.stage == 2 { result.dam *= 2 }
+					if spell.stage == 2 {
+						result.description = string(result.dam) + "x2"
+						return result
+					}
 					break
 				case "Slash":
 					result.dam = weapon_atk
-					if spell.stage == 3 { result.dam *= 2 }
+					if spell.stage == 3 {
+						result.description = string(result.dam) + "x2"
+						return result
+					}
 					break
 				case "Spire":
 					if spell.stage == 1 { result.dam = QueryDice(player, "all", "charge") }
@@ -424,7 +430,7 @@ function CalcPreview(action_type, action_id, player) {
 
 				// Weapon-based djinn
 				case "Gel":
-					result.dam = WeaponAttack(true,false).dam + WeaponAttack(true,false).unleash.dam_bonus
+					result.dam = WeaponAttack(true,false).dam + WeaponAttack(true,false).unleash.dam_bonus * 2
 					break
 				case "Serac": case "Whorl":
 					result.dam = WeaponAttack(false,false).dam
@@ -531,8 +537,8 @@ function CalcPreview(action_type, action_id, player) {
 					result.description = "OHKO?"
 					return result
 				case "Fugue":
-					result.dam = QueryDice(player, "all", "charge")
-					break
+					result.description = "1x" + string(QueryDice(player, "all", "charge"))
+					return result
 
 				default:
 					result.description = "?"
@@ -551,6 +557,81 @@ function CalcPreview(action_type, action_id, player) {
 
 		default:
 			result.description = "?"
+			break
+
+		// ── SUMMON ──────────────────────────────────────────────────────
+		case "summon":
+			var _summon = global.summonlist[action_id]
+			result.element = _summon.element
+
+			var weapon_atk = WeaponAttack(false,false).dam
+
+			switch _summon.name {
+				case "Zagan":
+					result.dam = weapon_atk
+					break
+				case "Megaera":
+					result.dam = WeaponAttack(true,false).dam
+					break
+				case "Flora":
+					for (var _p = 0; _p < array_length(global.players); _p++) {
+						if (global.players[_p].hp > 0) { result.dam += global.players[_p].jupiter }
+					}
+					break
+				case "Catastrophe":
+					result.dam = WeaponAttack(true,false).dam
+					break
+				case "Azul":
+					result.dam = QueryDice(player, "elemental", "affinity")
+					break
+				case "Haures":
+					result.description = "Poison"
+					result.targets = "All Enemies"
+					return result
+				case "Coatlicue":
+					result.heal = 9999
+					result.targets = "All Allies"
+					result.description = "Full HP"
+					return result
+				case "Ulysses":
+					result.description = "Skip"
+					result.targets = "All Enemies"
+					return result
+				case "Iris":
+					result.heal = 9999
+					result.targets = "All Allies"
+					result.description = "Full HP"
+					return result
+				case "Charon":
+					result.description = "OHKO"
+					return result
+				case "Judgment": case "Meteor": case "Thor": case "Boreas":
+					result.description = "Max Spell"
+					return result
+				case "Moloch":
+					result.description = "Nullify"
+					return result
+				case "Eclipse":
+					result.description = "50% HP"
+					result.targets = "All Enemies"
+					return result
+				case "Daedalus":
+					result.dam = QueryDice(player, "all", "values")
+					break
+				default:
+					result.description = "?"
+					return result
+			}
+
+			if result.description == "" {
+				if result.heal > 0 {
+					result.description = string(result.heal) + " HP"
+				} else if result.dam > 0 {
+					result.description = string(result.dam)
+				} else {
+					result.description = "?"
+				}
+			}
 			break
 	}
 

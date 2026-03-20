@@ -1,4 +1,4 @@
-var _hovered = point_in_rectangle(mouse_x, mouse_y, x, y, x + 23, y + 23)
+var _hovered = (!global.using_kbd and point_in_rectangle(mouse_x, mouse_y, x, y, x + 23, y + 23))
 
 if _hovered && mouse_check_button_pressed(mb_left) && clickable {
     is_pressed  = true

@@ -10,9 +10,14 @@ var _items   = []
 for (var i = 0; i < array_length(_spells); i++) {
     var _s      = global.psynergylist[_spells[i]]
     var _detail = ""
+    var _detail_color = c_white
     if global.inCombat and array_length(_player.dicepool) > 0 {
         var _prev = CalcPreview("spell", _spells[i], _player)
-        if _prev.description != "" and _prev.description != "?" { _detail = _prev.description }
+        if _prev.description != "" and _prev.description != "?" {
+            _detail = _prev.description
+            if _prev.heal > 0 { _detail_color = make_color_rgb(80, 220, 80) }
+            else { _detail_color = ElementColor(_prev.element) }
+        }
     }
     var _desc = BuildVerboseDesc("spell", _spells[i], _player)
     array_push(_items, {
@@ -21,6 +26,7 @@ for (var i = 0; i < array_length(_spells); i++) {
         sprite:       asset_get_index(_s.alias),
         right_sprite: asset_get_index("range_" + _s.range),
         detail:       _detail,
+        detail_color: _detail_color,
         desc:         _desc,
         data:         { spell_index: _spells[i] },
     })

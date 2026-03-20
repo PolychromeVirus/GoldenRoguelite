@@ -22,15 +22,15 @@ Known exceptions (kept outside stack intentionally): `objMonsterTarget`, `objMul
 
 ## Near-Term Mechanics
 
-### Boss Status Resistance
-- `status_resist` field (column 6 in `MonsterImport.csv`) caps how many turns a status lasts on a boss
-- `0` = no cap (regular enemies / unresistant bosses)
-- Tick logic needs to go in `NextTurn` where status durations decrement
-- One boss is fully immune — implement as a separate `status_immune` boolean (column 8, same guard pattern)
-
 ---
 
 ## Milestone Features
+
+### Logging/Output
+
+Currently all text feedback is managed by an object that draws one line at a time, replacing the last line that was drawn. it combines hovertext tooltips and log entries. when log entries are pushed they clear after 1 second, but only show the most recent log entry.
+
+An alternative should be formulated that allows for easier access to the log and clearer outcomes from effects and abilities.
 
 ### Win Condition & Screen
 - Define what constitutes a run completion (clear all dungeons? final boss?)
@@ -65,6 +65,7 @@ Known exceptions (kept outside stack intentionally): `objMonsterTarget`, `objMul
 - ✅ Puzzle system
 - ✅ Town system
 - ✅ Reroll system (Coal/Zephyr/Lucky Cap)
+- ✅ Boss status resistance (status_resist cap + status_immune flag)
 - ✅ Full djinn roster
 - ✅ Armor breaking
 - ✅ Difficulty/curse stack system

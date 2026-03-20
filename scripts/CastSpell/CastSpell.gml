@@ -216,7 +216,7 @@ function CastSpell(spellID, playerID) {
 			// Stage 3: Wind Slash × 2
 			struct.dam = weapon_atk
 			if spell.stage == 1 { struct.dmgtype = "normal" }
-			if spell.stage == 3 { struct.dam *= 2 }
+			if spell.stage == 3 { struct.repeater = 2 }
 			if spell.stage >= 2 and QueryDice(caster,"mercury","charge") >= 2{struct.slash= true;struct.pierce= true }
 			else{struct.pierce= true}
 			break

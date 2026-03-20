@@ -77,6 +77,56 @@ function SelectTargets(struct){
 	}
 }
 
+/// @function _FireRepeats(struct, remaining, delay, total)
+/// @desc Fire one repeat hit then schedule the next via TurnDelay (survives outside the menu stack).
+function _FireRepeats(_struct, _remaining, _delay, _total) {
+    // Refresh troop list to current live monsters
+    var _mcount = instance_number(objMonster)
+    _struct.troop = []
+    for (var _m = 0; _m < _mcount; _m++) { array_push(_struct.troop, instance_find(objMonster, _m)) }
+
+    // Scatter: re-pick target for this hit
+    if variable_struct_exists(_struct, "unleash") and variable_struct_exists(_struct.unleash, "scatter") and _struct.unleash.scatter {
+        if _mcount > 0 {
+            if variable_struct_exists(_struct.unleash, "scatter_any") and _struct.unleash.scatter_any {
+                _struct.targets = [_struct.troop[irandom(_mcount - 1)]]
+            } else {
+                var _orig = _struct.targets[0]
+                var _idx = 0
+                for (var _mi = 0; _mi < _mcount; _mi++) { if _struct.troop[_mi] == _orig { _idx = _mi; break } }
+                var _cands = []
+                if _idx > 0 { array_push(_cands, _idx - 1) }
+                array_push(_cands, _idx)
+                if _idx < _mcount - 1 { array_push(_cands, _idx + 1) }
+                _struct.targets = [_struct.troop[_cands[irandom(array_length(_cands) - 1)]]]
+            }
+        }
+    }
+
+    DoDamage(_struct)
+
+    // Check if anyone survives
+    var _alive = false
+    for (var _j = 0; _j < _mcount; _j++) {
+        if _struct.troop[_j].monsterHealth != 0 { _alive = true; break }
+    }
+    if !_alive { HandleVictory(); return }
+
+    if _remaining > 1 {
+        MakeTurnDelay(_delay, method({s: _struct, r: _remaining - 1, d: _delay, t: _total}, function() {
+            _FireRepeats(s, r, d, t)
+        }))
+    } else {
+        InjectLog("Hit " + string(_total) + " times!")
+        if _struct.source == "attack" { QueueOnAttack() }
+        if array_length(global.attackQueue) > 0 {
+            ProcessAttackQueue()
+        } else {
+            MakeTurnDelay(120, NextTurn)
+        }
+    }
+}
+
 /// @function ApplyDamageToTargets(struct)
 /// @desc Apply damage + statuses to an array of monster instances, then check victory or NextTurn.
 function ApplyDamageToTargets(struct) {

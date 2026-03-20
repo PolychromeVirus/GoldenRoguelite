@@ -6,7 +6,9 @@ draw_set_font(GoldenSunItalic)
 draw_set_valign(fa_bottom)
 var target = instance_position(mouse_x, mouse_y, all)
 var _text  = ""
-if global.textdisplay == "" {
+if global.kbd_tooltip != "" and global.textdisplay == "" {
+    _text = global.kbd_tooltip
+} else if global.textdisplay == "" {
     if variable_instance_exists(target, "hovertext") and target.hovertext != "" {
         _text = target.hovertext
     }

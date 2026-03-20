@@ -531,18 +531,13 @@ function UnleashDjinn(djinnID, playerID) {
 			MakeTurnDelay(60,NextTurn)
 			exit
 			break
-		case "Fugue"://TODO: rework into repeater attack with spread
-			_struct.dam = 1
-			_struct.num = 12
-			_struct.dmgtype = "mars"
-			_struct.statuses = {inflict_psyseal: true}
-			InjectLog("Assign "+ QueryDice(caster,"all","charge") +" damage")
-			for (var i = 0; i < QueryDice(caster,"all","charge"); ++i) {
-			    array_push(global.attackQueue,variable_clone(_struct))
-			}
-			
-			MakeTurnDelay(60,NextTurn)
-			exit
+		case "Fugue": // Mars: 1 damage x All Charge hits, random target each, inflict Psy Seal
+			_struct.dam      = 1
+			_struct.repeater = QueryDice(caster, "all", "charge")
+			_struct.num      = 1
+			_struct.unleash  = { scatter: true, scatter_any: true }
+			_struct.statuses = { inflict_psyseal: true }
+			break
 			break
 		case "Coal":
 			// Grant partial reroll to ALL players, expires after 1 round

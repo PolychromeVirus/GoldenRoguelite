@@ -56,6 +56,18 @@ function StartCombat(_troop_override) {
 		drawx += split
 	}
 
+	// Set Ground to Set state at combat start (condition: starts combat face down)
+	for (var _gp = 0; _gp < array_length(global.players); _gp++) {
+		var _gdj = global.players[_gp].djinn
+		for (var _gd = 0; _gd < array_length(_gdj); _gd++) {
+			var _gdjinn = global.djinnlist[_gdj[_gd]]
+			if (_gdjinn.name == "Ground" && _gdjinn.ready) {
+				_gdjinn.ready = false
+				_gdjinn.spent = true
+			}
+		}
+	}
+
 	// Clear passives at combat start
 	global.passiveEffects = []
 

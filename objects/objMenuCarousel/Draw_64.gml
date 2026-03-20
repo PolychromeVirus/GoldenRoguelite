@@ -79,10 +79,11 @@ for (var i = 0; i < _len; i++) {
         _right_x -= _rw + 8
     }
     if variable_struct_exists(_item, "detail") and _item.detail != "" {
+        var _dcol = (variable_struct_exists(_item, "detail_color")) ? _item.detail_color : _col
         draw_set_halign(fa_right)
         draw_set_color(c_black)
         draw_text(_right_x + _offset, _dy + 8 + _offset, _item.detail)
-        draw_set_color(_col)
+        draw_set_color(_dcol)
         draw_text(_right_x, _dy + 8, _item.detail)
         draw_set_halign(fa_left)
     }

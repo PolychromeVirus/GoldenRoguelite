@@ -31,3 +31,14 @@ if subtext != "" {
 draw_set_halign(fa_left)
 draw_set_valign(fa_top)
 draw_set_color(c_white)
+
+// Keyboard selection highlight
+if clickable and array_length(_btn_instances) > 0 {
+    var _sel = clamp(keyboard_sel, 0, array_length(_btn_instances) - 1)
+    var _bi  = _btn_instances[_sel]
+    if instance_exists(_bi) {
+        var _bx = _bi.x - 2
+        var _by = _bi.y - 2
+        draw_rectangle_color(_bx, _by, _bx + 27, _by + 27, c_yellow, c_yellow, c_yellow, c_yellow, true)
+    }
+}
