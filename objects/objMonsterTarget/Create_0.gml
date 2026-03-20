@@ -12,15 +12,15 @@
 
 
 // Hide menu stack instances (and their panes) so they don't render behind the targeter
-for (var _i = 0; _i < array_length(global.menu_stack); _i++) {
-    var _inst = global.menu_stack[_i]
-    if instance_exists(_inst) {
-        _inst.visible = false
-        if variable_instance_exists(_inst, "pane") and instance_exists(_inst.pane) {
-            _inst.pane.visible = false
-        }
-    }
-}
+//for (var _i = 0; _i < array_length(global.menu_stack); _i++) {
+//    var _inst = global.menu_stack[_i]
+//    if instance_exists(_inst) {
+//        _inst.visible = false
+//        if variable_instance_exists(_inst, "pane") and instance_exists(_inst.pane) {
+//            _inst.pane.visible = false
+//        }
+//    }
+//}
 
 var button1 = 36
 var button2 = 64
@@ -35,14 +35,18 @@ for (var i = 0; i < count; i++) {
 	array_push(monsters, inst)
 }
 
-instance_create_depth(button1,124,0,objConfirm)
-instance_create_depth(button2,124,0,objCancel)
-
 alarm_set(0,1)
 
+_build_buttons = method(id, function() {
+    var sprite = {image: Fight, text: "Select"}
+    instance_create_depth(BUTTON1, BOTTOMROW, 0, objConfirm, sprite)
+    instance_create_depth(BUTTON2, BOTTOMROW, 0, objCancel)
+})
+
 function logic(){
+	PopAll()
 	confirmed = true   // tell Destroy_0 not to call CreateOptions
-	while array_length(global.menu_stack) > 0 { PopMenu() }
+	//while array_length(global.menu_stack) > 0 { PopMenu() }
 
 	var _struct = variable_clone(global.AggressionSchema)
 	global.lastselected = selected
@@ -112,7 +116,7 @@ function logic(){
 			}
 			else
 			{
-				instance_create_depth(0, 0, 0, TurnDelay, { wait: 30, on_complete: NextTurn })
+				instance_create_depth(0, 0, 0, TurnDelay, { wait: 60, on_complete: NextTurn })
 			}
 		}
 		exit

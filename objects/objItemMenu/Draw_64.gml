@@ -93,12 +93,14 @@ if mode == 0 {
 
 		var desctext = global.itemcardlist[global.players[global.turn].inventory[selected]].text
 
-		if string_length(desctext) > 170{desctext = string_delete(desctext,170,string_length(desctext)-169) + "..."}
+		//if string_length(desctext) > 170{desctext = string_delete(desctext,170,string_length(desctext)-169) + "..."}
 
-		draw_set_color(c_black)
-		draw_text_ext(descx+offset,descy+offset,desctext,40,660)
-		draw_set_color(c_white)
-		draw_text_ext(descx,descy,desctext,40,660)
+		//draw_set_color(c_black)
+		//draw_text_ext(descx+offset,descy+offset,desctext,40,660)
+		//draw_set_color(c_white)
+		//draw_text_ext(descx,descy,desctext,40,660)
+		
+		draw_rich_text(descx,descy,desctext,660,offset,GoldenSun,40,6)
 
 		// Detail preview below description
 		if global.inCombat and array_length(global.players[global.turn].dicepool) > 0 {
@@ -119,10 +121,13 @@ if mode == 0 {
 				}
 				else { _detail = _dp.description }
 				var _dy = descy + string_height_ext(desctext, 40, 660) + 8
-				draw_set_color(c_black)
-				draw_text(descx + offset, _dy + offset, _detail)
-				draw_set_color(_dcol)
-				draw_text(descx, _dy, _detail)
+			//	draw_set_color(c_black)
+			//	draw_text(descx + offset, _dy + offset, _detail)
+			//	draw_set_color(_dcol)
+			//	draw_text(descx, _dy, _detail)
+			
+				draw_rich_text(descx, _dy, _detail, 660,4,GoldenSun,40,6)
+			
 			}
 		}
 	}
@@ -185,11 +190,14 @@ if mode == 0 {
 		var descy = 411
 
 		var desctext = global.itemcardlist[_equiplist[selected]].text
-		if string_length(desctext) > 170 { desctext = string_delete(desctext, 170, string_length(desctext) - 169) + "..." }
+		//if string_length(desctext) > 170 { desctext = string_delete(desctext, 170, string_length(desctext) - 169) + "..." }
 
-		draw_set_color(c_black)
-		draw_text_ext(descx + offset, descy + offset, desctext, 40, 660)
-		draw_set_color(c_white)
-		draw_text_ext(descx, descy, desctext, 40, 660)
+		//draw_set_color(c_black)
+		//draw_text_ext(descx + offset, descy + offset, desctext, 40, 660)
+		//draw_set_color(c_white)
+		//draw_text_ext(descx, descy, desctext, 40, 660)
+		
+		draw_rich_text(descx,descy,desctext,660,offset,GoldenSun,40,6)
+		
 	}
 }

@@ -1,7 +1,7 @@
 // Apply config defaults for any fields not provided
 if !variable_instance_exists(id, "items")         { items         = [] }
 if !variable_instance_exists(id, "on_confirm")    { on_confirm    = function(i, item) {} }
-if !variable_instance_exists(id, "on_cancel")     { on_cancel     = function() { PopMenu() } }
+if !variable_instance_exists(id, "on_cancel")     { on_cancel     = function() {} }
 if !variable_instance_exists(id, "description")   { description   = "none" }
 if !variable_instance_exists(id, "title")         { title         = "" }
 if !variable_instance_exists(id, "filter")        { filter        = undefined }
@@ -32,12 +32,12 @@ if description == "half" {
 
 _build_buttons = method(id, function() {
     if !read_only {
-        var _confirm_spr = { image: confirm_sprite, text: confirm_label }
+        var _confirm_spr = { image: confirm_sprite, hovertext: confirm_label }
         instance_create_depth(BUTTON1, BOTTOMROW, 0, objConfirm, _confirm_spr)
     }
     if !no_cancel { instance_create_depth(BUTTON2, BOTTOMROW, 0, objCancel) }
     if !is_undefined(on_info) {
-        var _info_spr = { image: Save_Game, text: info_label }
+        var _info_spr = { image: Save_Game, hovertext: info_label }
         instance_create_depth(BUTTONRIGHT2, BOTTOMROW, 0, objButton2, _info_spr)
     }
     clickable = true

@@ -1,4 +1,5 @@
 if !array_contains(global.menu_stack, id) { exit }
+if !visible {exit}
 draw_sprite_ext(ThreeQuarterMenu, 0, spr_x, spr_y, 6, 6, 0, c_white, 1)
 
 draw_set_font(GoldenSun)

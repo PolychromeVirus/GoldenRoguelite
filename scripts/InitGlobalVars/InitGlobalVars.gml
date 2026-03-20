@@ -67,7 +67,7 @@ function InitGlobalVars(){
 	#macro BTN_PRESS_SCALE  0.82
 	#macro BTN_EASE_OUT     0.2
 	#macro FLASH_DURATION   10
-	#macro DAMAGE_DURATION  25
+	#macro DAMAGE_DURATION  45
 
 	#macro STATUS_BEHAVIOR_OX  0   // x offset (centers 32px sprite on monster)
 	#macro STATUS_BEHAVIOR_OY  0    // y offset from bbox top — negative = above visible area
@@ -146,6 +146,9 @@ function InitGlobalVars(){
 	global.c_psynergy = #e7abff
 	global.c_summon = #e7abff
 	global.c_menu = #006080
+	global.c_status = #ffa449
+	global.c_elemental = #ffffd0
+	global.c_melee = #bdbdbd	
 
 	global.lastselected = -1
 	global.passiveEffects = []

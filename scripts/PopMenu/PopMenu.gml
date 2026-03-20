@@ -12,3 +12,12 @@ function PopMenu(){
 		return false
 	}
 }
+
+function PopAll(){
+	var _length = array_length(global.menu_stack)
+	for (var i = 0; i < _length; ++i) {
+	    instance_destroy(global.menu_stack[0])
+		array_delete(global.menu_stack,0,1)
+	}
+	
+}

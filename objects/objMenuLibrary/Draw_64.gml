@@ -1,4 +1,5 @@
 if !array_contains(global.menu_stack, id) { exit }
+if !visible {exit}
 
 var _len = array_length(entries)
 if _len == 0 { exit }

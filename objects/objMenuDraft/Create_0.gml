@@ -1,6 +1,6 @@
 if !variable_instance_exists(id, "items")      { items      = [] }
 if !variable_instance_exists(id, "on_confirm") { on_confirm = function(i, item) {} }
-if !variable_instance_exists(id, "on_cancel")  { on_cancel  = function() { PopMenu() } }
+if !variable_instance_exists(id, "on_cancel")  { on_cancel  = function() {  } }
 if !variable_instance_exists(id, "title")      { title      = "" }
 if !variable_instance_exists(id, "filter")     { filter     = undefined }
 if !variable_instance_exists(id, "draw_item")  { draw_item  = undefined }

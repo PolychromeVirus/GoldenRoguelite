@@ -13,7 +13,7 @@ if !dying {
     } else if global.gameover{
 		image_speed = 0
 	}else{
-        image_speed = 1
+        //image_speed = 1
         sprite_index = alias
     }
 } else {

@@ -187,10 +187,10 @@ function _BuildCharTargetConfig(packet) {
             }
         }),
         on_cancel: method({p: packet}, function() {
-            while array_length(global.menu_stack) > 0 { PopMenu() }
             if variable_struct_exists(p, "committed") and p.committed {
                 if array_length(global.attackQueue) > 0 {
-                    ProcessAttackQueue()
+                    PopAll()
+					ProcessAttackQueue()
                 } else {
                     instance_create_depth(0, 0, 0, TurnDelay, { wait: 30, on_complete: NextTurn })
                 }

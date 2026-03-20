@@ -3,7 +3,7 @@ if !variable_instance_exists(id, "max_select")    { max_select    = 1 }
 if !variable_instance_exists(id, "confirm_label") { confirm_label = "Select" }
 if !variable_instance_exists(id, "title")         { title         = "" }
 if !variable_instance_exists(id, "on_confirm")    { on_confirm    = function(s) {} }
-if !variable_instance_exists(id, "on_cancel")     { on_cancel     = function() { PopMenu() } }
+if !variable_instance_exists(id, "on_cancel")     { on_cancel     = function() {  } }
 
 // Mark each die as not selected
 for (var _i = 0; _i < array_length(dice); _i++) {

@@ -1,6 +1,6 @@
 if !variable_instance_exists(id, "entries")     { entries     = [] }
 if !variable_instance_exists(id, "start_index") { start_index = 0 }
-if !variable_instance_exists(id, "on_cancel")   { on_cancel   = function() { PopMenu() } }
+if !variable_instance_exists(id, "on_cancel")   { on_cancel   = function() {  } }
 if !variable_instance_exists(id, "draw_entry")  { draw_entry  = function(entry, i) {
     draw_set_color(c_white)
     draw_text_ext(50, 120, variable_struct_exists(entry, "text") ? entry.text : "", 50, 1400)

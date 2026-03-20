@@ -124,7 +124,7 @@ function DoDamage(struct){
 			if variable_struct_exists(stats, "inflict_sleep") { mon.sleep = stats.inflict_sleep; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Sleep }) }
 			if variable_struct_exists(stats, "inflict_delude") { mon.delude = stats.inflict_delude; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Delude }) }
 			if variable_struct_exists(stats, "inflict_psyseal") { mon.psyseal = stats.inflict_psyseal; attempted = true; _status_inflicted = true; instance_create_depth(0,0,-200,objDamageNumber, { amount: 0, world_x: _icon_x, world_y: _icon_y, icon: Psy_Seal }) }
-			if variable_struct_exists(stats, "inflict_lose_turn") and stats.inflict_lose_turn > 0 { mon.lose_turn = true; stats.inflict_lose_turn--; attempted = true; _status_inflicted = true }
+			if variable_struct_exists(stats, "inflict_lose_turn") and stats.inflict_lose_turn > 0 { mon.lose_turn = true; struct.statuses.inflict_lose_turn--; attempted = true; _status_inflicted = true }
 
 
 		}else if attempted and !attempt{InjectLog(mon.name + " resisted status!")}

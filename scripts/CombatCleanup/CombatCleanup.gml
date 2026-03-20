@@ -9,7 +9,7 @@ function HandleVictory() {
 	global.attackQueue = []
 	InjectLog("Combat Victory!")
 	global.firstPlayer = global.turn
-	global.inCombat = false
+	//global.inCombat = false
 	global.catchBonus = -1
 	VictoryMusic()
 

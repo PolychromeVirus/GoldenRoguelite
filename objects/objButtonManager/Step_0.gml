@@ -6,7 +6,7 @@ if _top != _prev_top{
     _prev_top = _top
     DeleteButtons()
     if global.turnPhase == "player" or MenuExists() {
-        if instance_number(objMonsterTarget) == 0 and instance_number(objCharMenu) == 0 and instance_number(TurnDelay) == 0{
+        if instance_number(TurnDelay) == 0{
             alarm[0] = 1
         }
     }

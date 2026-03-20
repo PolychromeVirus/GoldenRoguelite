@@ -9,7 +9,7 @@ function CheckVictory(){
 		}
 	}
 	if (_mon_count > 0 and !_any_monster_alive) {
-		HandleVictory()
+		MakeTurnDelay(120,HandleVictory)
 		exit
 	}
 

@@ -36,28 +36,28 @@ function _BVD_Spell(action_id, player, prev) {
 	if _res != undefined and _res.data.mode == "Damage" { _dam   += _res.data.amount }
 
 	var _tgt  = _BVD_TargetStr(_spell.targetType, prev.targets, _range)
-	var _pre  = "[Range " + string(_range) + "] "
+	var _pre  = "[" + _tgt + "]\n"
 	var _suff = _range > 1 ? "ies" : "y"
 
 	switch _spell.base {
 
 		case "Astral Blast":
-			var _a = _ic ? string(WeaponAttack(false,false).dam)        : "Weapon Attack Damage"
-			var _b = _ic ? string(QueryDice(player,"jupiter","charge")) : "Jupiter Charge"
-			return string_ext("{0}Normal + Jupiter Damage // {1} + {2}", [_pre, _a, _b])
+			var _a = _ic ? " (" + string(WeaponAttack(false,false).dam)+ ")"      : ""
+			var _b = _ic ? " (" + string(QueryDice(player,"jupiter","charge")) + ")" : ""
+			return string_ext("{0}Jupiter Damage: Weapon Attack Damage{1} + Jupiter Charge{2}", [_pre, _a, _b])
 
 		case "Backstab":
-			var _a = _ic ? string(WeaponAttack(false,false).dam) : "Weapon Attack Damage"
-			return string_ext("{0}Normal + Jupiter Damage // {1} + 2. 10% chance to down.", [_pre, _a])
+			var _a = _ic ? " (" + string(WeaponAttack(false,false).dam) + ")" : ""
+			return string_ext("{0}Jupiter Damage: Weapon Attack{1} + 2\n10% chance to down.", [_pre, _a])
 
 		case "Beam":
 			if _spell.stage == 1 {
-				var _a = _ic ? string(QueryDice(player,"mars","uncharge"))   : "Uncharged Mars"
-				var _b = _ic ? string(QueryDice(player,"mars","charge") * 2) : "2x Mars Charge"
-				return string_ext("{0}Mars Damage // {1} + {2}", [_pre, _a, _b])
+				var _a = _ic ? " (" + string(QueryDice(player,"mars","uncharge")) + ")"   : ""
+				var _b = _ic ? " (" + string(QueryDice(player,"mars","charge") * 2) + ")" : ""
+				return string_ext("{0}Mars Damage: Uncharged Mars{1} + 2x Mars Charge{2}", [_pre, _a, _b])
 			}
-			var _a = _ic ? string(QueryDice(player,"mars","charge") * 3) : "3x Mars Charge"
-			return string_ext("{0}Mars Damage // {1}", [_pre, _a])
+			var _a = _ic ? " (" + string(QueryDice(player,"mars","charge") * 3) + ")" : ""
+			return string_ext("{0}Mars Damage: 3x Mars Charge{1}", [_pre, _a])
 
 		case "Blast":
 			var _bnum = 0
@@ -66,76 +66,79 @@ function _BVD_Spell(action_id, player, prev) {
 			if player.jupiter > 0 { _bnum++ }
 			if player.mercury > 0 { _bnum++ }
 			var _bpre  = _ic ? "[Range " + string(_bnum) + "] " : "[Range X] "
-			var _xsuff = _ic ? "" : " (X = # of unique elements)"
+			var _xsuff = _ic ? "" : "\n(X = # of unique elements)"
 			if _spell.stage == 1 {
-				var _a = _ic ? string(QueryDice(player,"all","charge")) : "All Charge"
-				return string_ext("{0}Mars Damage // {1}{2}", [_bpre, _a, _xsuff])
+				var _a = _ic ? " (" + string(QueryDice(player,"all","charge")) + ")": ""
+				return string_ext("{0}Mars Damage: All Charge{1}{2}", [_bpre, _a, _xsuff])
 			}
 			if _spell.stage == 2 {
-				var _a = _ic ? string(QueryDice(player,"all","charge")) : "All Charge"
-				var _b = _ic ? string(_bnum * 2)                        : "2x X"
-				return string_ext("{0}Mars Damage // {1} + {2}{3}", [_bpre, _a, _b, _xsuff])
+				var _a = _ic ? " (" + string(QueryDice(player,"all","charge")) + ")" : ""
+				var _b = _ic ? " (" + string(_bnum * 2) + ")"               : ""
+				return string_ext("{0}Mars Damage: All Charge{1} + 2x X{2}{3}", [_bpre, _a, _b, _xsuff])
 			}
-			var _a = _ic ? string(QueryDice(player,"venus","highest"))   : "Highest Venus"
-			var _b = _ic ? string(QueryDice(player,"mars","highest"))    : "Highest Mars"
-			var _c = _ic ? string(QueryDice(player,"jupiter","highest")) : "Highest Jupiter"
-			var _d = _ic ? string(QueryDice(player,"mercury","highest")) : "Highest Mercury"
-			return string_ext("[Range 3] Mars Damage // {0} + {1} + {2} + {3}", [_a, _b, _c, _d])
+			var _a = _ic ? " (" + string(QueryDice(player,"venus","highest")) + ")"   : ""
+			var _b = _ic ? " (" + string(QueryDice(player,"mars","highest")) + ")"    : ""
+			var _c = _ic ? " (" + string(QueryDice(player,"jupiter","highest")) + ")" : ""
+			var _d = _ic ? " (" + string(QueryDice(player,"mercury","highest")) + ")" : ""
+			return string_ext("[Range 3]\nMars Damage:Highest Venus{0} + Highest Mars{1} + Highest Jupiter{2} + Highest Mercury{3}", [_a, _b, _c, _d])
 
 		case "Bolt":
 			var _a = string(real(_spell.damage) + (_ic ? _dam : 0))
-			return string_ext("{0}Jupiter Damage // {1}. Inflict Stun.", [_pre, _a])
+			return string_ext("{0}{1} Jupiter Damage\nInflict Stun", [_pre, _a])
 
 		case "Break":
 			return string_ext("{0}Reset ATK and DEF", [_pre])
 
 		case "Burn Off":
-			return string_ext("[Range {0} All{1}] Reset ATK and DEF", [string(_range), _suff])
+			return string_ext("{0}Reset ATK and DEF", [string(_range), _suff])
 
 		case "Cloak":
-			return string_ext("[Range {0} All{1}] Immune to damage or effects for 1 round", [string(_range), _suff])
+			return string_ext("{0}Immune to damage and effects (1 round)", [string(_range), _suff])
 
 		case "Cool":
 		var _a = _ic ? string(_spell.damage) : "2"
 			if _spell.stage == 1 {
-				return string_ext("{0}Mercury Damage // {1}", [_pre, _a])
+				return string_ext("{0}{1} Mercury Damage", [_pre, _a])
 			}
 			if _spell.stage == 2 {
-				var _a = _ic ? string(QueryDice(player,"mercury","charge")) : "Mercury Charge"
-				return string_ext("{0}Mercury Damage // {1}", [_pre, _a])
+				var _a = _ic ? " (" + string(QueryDice(player,"mercury","charge")) + ")" : ""
+				return string_ext("{0}Mercury Damage: {1}", [_pre, _a])
 			}
-			var _a = _ic ? string(QueryDice(player,"all","charge")) : "All Charge"
-			return string_ext("{0}Mercury Damage // {1}", [_pre, _a])
+			var _a = _ic ? " (" + string(QueryDice(player,"all","charge")) + ")" : ""
+			return string_ext("{0}{1} Mercury Damage", [_pre, _a])
 
 		case "Cure":
 			if _spell.stage == 1 {
-				var _a = _ic ? string(QueryDice(player,"venus","highest")) : "Highest Venus"
-				return string_ext("{0}Recover {1} HP. Caster recovers the same amount.", [_pre, _a])
+				var _a = _ic ? " (" + string(QueryDice(player,"venus","highest")) + ")" : ""
+				var _b = player.name
+				return string_ext("{0}Recover HP: Highest Venus{1}, {2} recovers the same amount.", [_pre, _a,_b])
 			}
 			if _spell.stage == 2 {
-				var _a = _ic ? string(QueryDice(player,"venus","top2")) : "Top 2 Venus"
-				return string_ext("{0}Recover {1} HP. Caster recovers the same amount.", [_pre, _a])
+				var _a = _ic ? " (" + string(QueryDice(player,"venus","top2")) + ")" : ""
+				var _b = player.name
+				return string_ext("{0}Recover HP: 2 Highest Venus{1}, {2} recovers the same amount.", [_pre, _a,_b])
 			}
-			var _a = _ic ? string(QueryDice(player,"venus","top2") * 2) : "2x Top 2 Venus"
-			return string_ext("{0}Recover {1} HP. Caster recovers the same amount.", [_pre, _a])
+				var _a = _ic ? " (" + string(QueryDice(player,"venus","top2")*2) + ")" : ""
+				var _b = player.name
+				return string_ext("{0}Recover HP: 2x 2 Highest Venus{1}, {2} recovers the same amount.", [_pre, _a,_b])
 
 		case "Delude":
 			return string_ext("{0}Inflict Delusion", [_pre])
 
 		case "Diamond Dust":
 			if _spell.stage == 2 {
-				var _a = _ic ? string(WeaponAttack(false,false).dam * 2) : "2x Weapon Attack Damage"
-				return string_ext("{0}Mercury Damage // {1}", [_pre, _a])
+				var _a = _ic ? " (" + string(WeaponAttack(false,false).dam * 2) + ")" : ""
+				return string_ext("{0}Mercury Damage: Weapon Attack Damage{1}", [_pre, _a])
 			}
-			var _a = _ic ? string(WeaponAttack(false,false).dam) : "Weapon Attack Damage"
-			return string_ext("{0}Mercury Damage // {1}. Neighbours take 50% splash.", [_pre, _a])
+			var _a = _ic ? " (" + string(WeaponAttack(false,false).dam) + ")" : ""
+			return string_ext("{0}Mercury Damage: 2x Weapon Attack Damage{1}\nNeighbours take 50% of amount done", [_pre, _a])
 
 		case "Djinn Echo":
-			if _spell.stage >= 2 { return "[Passive] Djinn abilities with Range 1 become Range 3 (1 Round). Unleash an ally's Djinni." }
-			return "[Passive] Djinn abilities with Range 1 become Range 3 (1 Round)"
+			if _spell.stage >= 2 { return "[Passive]\nDjinn abilities with Range 1 become Range 3 (1 Round). Unleash an ally's Djinni." }
+			return "[Passive]\nDjinn abilities with Range 1 become Range 3 (1 Round)"
 
 		case "Douse": case "Flare": case "Ray":
-			return string_ext("{0}" + _elem + " Damage // {1}", [_pre, string(real(_spell.damage))])
+			return string_ext("{0}{1} " + _elem + " Damage", [_pre, string(real(_spell.damage))])
 
 		case "Dull":
 			return string_ext("{0}Reduce ATK by 3", [_pre])
@@ -249,14 +252,17 @@ function _BVD_Spell(action_id, player, prev) {
 			return string_ext("{0}Venus Damage // {1}", [_pre, _a])
 
 		case "Resonate":
-			return string_ext("{0}Gain Resonate: Expand next multi-target Spell or Summon", [_pre])
+		
+			var _a = _ic ? ( _spell.stage == 2 ? " (" + string(QueryDice(player,"venus","charge")) + ") " : " (" + string(floor(QueryDice(player,"venus","charge") / 2)) + ") ") : ""
+		
+			return string_ext("[Passive]\nIncrease Range or Defense of multi-target spells (1 round){1}", [_pre,_a])
 
 		case "Restore":
 			return string_ext("{0}Cure Status", [_pre])
 
 		case "Revive":
-			var _a = _ic ? string(prev.heal) : "2x Venus Count"
-			return string_ext("{0}Revive ({1} HP)", [_pre, _a])
+			var _a = _ic ?" (" + string(QueryDice(player,"venus","affinity")) * 2 + " HP)" : ""
+			return string_ext("{0}Revive{1}", [_pre, _a])
 
 		case "Root":
 			var _rt = (_spell.stage == 1) ? "3" : "6"
@@ -543,10 +549,11 @@ function _BVD_Item(action_id, player, prev) {
 function _BVD_TargetStr(tgt_type, tgt_category, range) {
 	switch tgt_category {
 		case "All Allies":  return "All Allies"
-		case "All Enemies": return "All Enemies"
+		case "All Enemies": return "All Opponents"
 		case "Self":        return "Self"
 	}
 	if tgt_type == "Self"  { return "Self" }
 	if tgt_type == "Ally"  { return (range == 1) ? "1 Ally"     : string(range) + " Allies" }
-	return (range == 1) ? "1 Opponent" : string(range) + " Opponents"
+	if range == 12{return "All Opposing"}
+	return (range == 1) ? "Range 1" : "Range " + string(range)
 }

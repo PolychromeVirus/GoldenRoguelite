@@ -1,5 +1,5 @@
 if !variable_instance_exists(id, "on_confirm")  { on_confirm  = function(i) {} }
-if !variable_instance_exists(id, "on_cancel")   { on_cancel   = function() { PopMenu() } }
+if !variable_instance_exists(id, "on_cancel")   { on_cancel   = function() {  } }
 if !variable_instance_exists(id, "filter")      { filter      = undefined }
 if !variable_instance_exists(id, "draw_header") { draw_header = undefined }
 if !variable_instance_exists(id, "read_only")   { read_only   = false }

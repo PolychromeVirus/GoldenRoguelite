@@ -12,15 +12,17 @@ var _title  = "Party Status"
 
 var _titw = string_width(_title) / 2
 
-draw_set_halign(fa_center)
 
 var c = global.c_menu
 
 draw_rectangle_colour(_cen-_titw, 0,_cen + _titw, string_height(_title)+9,c,c,c,c,false)
-draw_set_colour(c_black)
-draw_text(_guiW / 2, 0, _title)
-draw_set_colour(c_white)
-draw_text(_guiW / 2, 0, _title)
+
+draw_rich_text((_guiW / 2) - (string_width(_title) / 2), 0, _title,1000)
+
+//draw_set_colour(c_black)
+//draw_text(_guiW / 2, 0, _title)
+//draw_set_colour(c_white)
+//draw_text(_guiW / 2, 0, _title)
 draw_set_halign(fa_left)
 
 var _pad    = 47

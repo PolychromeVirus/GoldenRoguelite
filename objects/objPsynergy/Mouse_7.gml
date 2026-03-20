@@ -14,9 +14,7 @@ for (var i = 0; i < array_length(_spells); i++) {
         var _prev = CalcPreview("spell", _spells[i], _player)
         if _prev.description != "" and _prev.description != "?" { _detail = _prev.description }
     }
-    var _desc = global.inCombat
-        ? BuildVerboseDesc("spell", _spells[i], _player)
-        : _s.text
+    var _desc = BuildVerboseDesc("spell", _spells[i], _player)
     array_push(_items, {
         name:         _s.name + " - " + string(_s.cost) + " PP",
         element:      _s.element,
@@ -42,10 +40,11 @@ PushMenu(objMenuCarousel, {
         var _offset = 4
         var _text   = item.desc
         draw_set_font(GoldenSun)
-        draw_set_color(c_black)
-        draw_text_ext(_descx + _offset, _descy + _offset, _text, 40, 660)
-        draw_set_color(c_white)
-        draw_text_ext(_descx, _descy, _text, 40, 660)
+        //draw_set_color(c_black)
+        //draw_text_ext(_descx + _offset, _descy + _offset, _text, 40, 660)
+        //draw_set_color(c_white)
+        //draw_text_ext(_descx, _descy, _text, 40, 660)
+		draw_rich_text(_descx,_descy,_text,660,_offset,GoldenSun,40,6)
     }),
     on_confirm: method({ turn: _turn, spells: _spells }, function(i, item) {
         if !isCastable(global.psynergylist[item.data.spell_index], global.players[turn]) {

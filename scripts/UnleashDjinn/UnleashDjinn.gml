@@ -6,6 +6,8 @@ function UnleashDjinn(djinnID, playerID) {
 	var caster  = global.players[playerID]
 	_struct.source  = "djinni"
 	_struct.dmgtype = djinn.element
+	_struct.djinn_id = djinnID
+	_struct.num = 1
 
 	// If spent, set to ready instead of unleashing
 	if (djinn.spent) {
@@ -13,7 +15,7 @@ function UnleashDjinn(djinnID, playerID) {
 		djinn.spent = false
 		InjectLog(djinn.name + " was set to ready")
 		
-		NextTurn()
+		MakeTurnDelay(60,NextTurn)
 		return
 	}
 
@@ -151,8 +153,9 @@ function UnleashDjinn(djinnID, playerID) {
 				_p.hp = min(_p.hp + (_p.hpmax / 2), _p.hpmax)
 			}
 			InjectLog(djinn.name + " healed all adepts!")
+			PushMenu(objMenuGrid,{read_only: true, corner: "topright"})
 			
-			NextTurn()
+			MakeTurnDelay(120,NextTurn)
 			exit
 			break
 		case "Tonic":  // Mercury: clear all tokens
@@ -176,12 +179,13 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Spring":  // Mercury: heal for all charge
 			_struct.healing = QueryDice(caster, "all", "charge")
 			_struct.target = "ally"
-			_struct.num = 4
+			_struct.num = 1
 			break
 
 		case "Breath":  // Mercury: heal one for charged all
 			_struct.healing = QueryDice(caster, "all", "charge")
 			_struct.target = "ally"
+			_struct.num = 1
 			break
 
 		case "Fizz":    // Mercury: heal one for half max HP
@@ -197,9 +201,10 @@ function UnleashDjinn(djinnID, playerID) {
 				var _p = global.players[_i]
 				if _p.hp > 0 { _p.pp = min(_p.pp + _pp, _p.ppmax) }
 			}
-			InjectLog(djinn.name + " restored " + string(_pp) + " PP to all")
+			InjectLog("All adepts restored " + string(_pp) + " PP")
+			PushMenu(objMenuGrid,{read_only: true, corner: "topright"})
 			
-			NextTurn()
+			MakeTurnDelay(120,NextTurn)
 			exit
 			break
 
@@ -209,9 +214,10 @@ function UnleashDjinn(djinnID, playerID) {
 				var _p = global.players[_i]
 				if _p.hp > 0 { _p.pp = min(_p.pp + _pp, _p.ppmax) }
 			}
-			InjectLog(djinn.name + " restored " + string(_pp) + " PP to all")
+			InjectLog("All adepts restored " + string(_pp) + " PP")
+			PushMenu(objMenuGrid,{read_only: true, corner: "topright"})
 			
-			NextTurn()
+			MakeTurnDelay(120,NextTurn)
 			exit
 			break
 
@@ -223,8 +229,8 @@ function UnleashDjinn(djinnID, playerID) {
 			}
 			caster.atkmod_fresh = true
 			InjectLog(djinn.name + " boosted ATK +2 for all")
-			
-			NextTurn()
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 
@@ -234,8 +240,8 @@ function UnleashDjinn(djinnID, playerID) {
 			}
 			caster.defmod_fresh = true
 			InjectLog("The party's defenses are bolstered!")
-			
-			NextTurn()
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 
@@ -247,7 +253,8 @@ function UnleashDjinn(djinnID, playerID) {
 			caster.defmod_fresh = true
 			InjectLog(djinn.name + " boosted DEF +2 for all")
 			
-			NextTurn()
+			PushMenu(objMenuGrid,{read_only: true, corner: "topright"})
+			MakeTurnDelay(120,NextTurn)
 			exit
 			break
 
@@ -297,7 +304,8 @@ function UnleashDjinn(djinnID, playerID) {
 			AddPassive("_mud",3,Venus875,"Mud",{},playerID)
 			InjectLog("Enemies moves restricted!")
 			
-			NextTurn()
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			
 			exit
 			break
@@ -305,8 +313,8 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Vine": // skips all enemy attempt targeting
 			AddPassive("_vine",3,Venus875,"Vine",{},playerID)
 			InjectLog("Enemies got all tangled up!")
-			
-			NextTurn()
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 		case "Mold":
@@ -340,28 +348,30 @@ function UnleashDjinn(djinnID, playerID) {
 			AddPassive("damage_half",1,Mercury865,"Shade",{},playerID)
 			InjectLog("The party is surrounded by a barrier")
 			
-			NextTurn()
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 		case "Granite":
 			AddPassive("damage_half",1,Venus875,"Granite",{},playerID)
 			InjectLog("The party is surrounded by a barrier")
 			
-			NextTurn()
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 		case "Flash":
 			AddPassive("damage_cap_1",1,Mars863,"Flash",{},playerID)
 			InjectLog("The party is surrounded by a barrier")
-			
-			NextTurn()
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 		case "Ground":
 			AddPassive("skip_enemies", 1, Venus875, "Ground", {}, playerID)
 			InjectLog("The enemies are unable to move!")
-			
-			NextTurn()
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 		case "Salt":
@@ -379,8 +389,9 @@ function UnleashDjinn(djinnID, playerID) {
 				curr.regheal = 0
 			}
 			InjectLog("Allies are cleansed!")
+			PushMenu(objMenuGrid,{read_only: true, corner: "topright"})
 			
-			NextTurn()
+			MakeTurnDelay(120,NextTurn)
 			exit
 			break
 		case "Quartz":
@@ -436,8 +447,8 @@ function UnleashDjinn(djinnID, playerID) {
 				on_confirm: method({ pid: playerID }, function(v) {
 					AddPassive("reroll_move", 3, Venus875, "Petra", { number: v }, pid)
 					InjectLog("Petra restricts the enemies options!")
-					PopMenu()
-					NextTurn()
+					PopAll()
+					MakeTurnDelay(60,NextTurn)
 				}),
 			})
 			exit
@@ -449,8 +460,9 @@ function UnleashDjinn(djinnID, playerID) {
 			break
 		case "Steam":
 			AddPassive("_element", 3, Mercury865,"Steam",{},playerID)
-			
-			NextTurn()
+			InjectLog("The party gains additional dice")
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 		case "Gel":
@@ -479,19 +491,21 @@ function UnleashDjinn(djinnID, playerID) {
 				global.djinnlist[_djinnsel[0]].spent = true
 				global.djinnlist[_djinnsel[0]].ready = false
 				InjectLog(global.djinnlist[_djinnsel[0]].name + " recovers!")
+			
 			}else{
 			
 				InjectLog("Nothing happened...")
 			
 			}
-			
-			NextTurn()
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 		case "Kindle":
 			AddPassive("_melee", 3, Mars863,"Kindle",{},playerID)
-			
-			NextTurn()
+			InjectLog("The party gains additional dice")
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 		case "Spark":
@@ -513,11 +527,11 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Reflux":
 			caster.reflect = true
 			InjectLog(caster.name + " is ready to strike back!")
-			
-			NextTurn()
+			PopAll()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
-		case "Fugue":
+		case "Fugue"://TODO: rework into repeater attack with spread
 			_struct.dam = 1
 			_struct.num = 12
 			_struct.dmgtype = "mars"
@@ -527,7 +541,7 @@ function UnleashDjinn(djinnID, playerID) {
 			    array_push(global.attackQueue,variable_clone(_struct))
 			}
 			
-			NextTurn()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 		case "Coal":
@@ -538,7 +552,8 @@ function UnleashDjinn(djinnID, playerID) {
 				}
 			}
 			InjectLog("Everyone can reroll their dice!")
-			NextTurn()
+			PushMenu(objMenuGrid,{read_only: true, corner: "topright"})
+			MakeTurnDelay(120,NextTurn)
 			exit
 		case "Tinder":
 			_struct.target = "ally"
@@ -567,8 +582,8 @@ function UnleashDjinn(djinnID, playerID) {
 				}
 			}
 			InjectLog("Everyone can reroll their dice!")
-
-			NextTurn()
+			PushMenu(objMenuGrid,{read_only: true, corner: "topright"})
+			MakeTurnDelay(120,NextTurn)
 			exit
 		case "Ether":
 			_struct.ppheal = QueryDice(caster,"all","charge")
@@ -593,7 +608,7 @@ function UnleashDjinn(djinnID, playerID) {
 			global.playersActed = 0
 			global.turn = (global.firstPlayer + 3) mod 4
 			InjectLog(caster.name + " calls for a ceasefire!")
-			NextTurn()
+			MakeTurnDelay(60,NextTurn)
 			exit
 			break
 		case "Gale":
@@ -605,7 +620,7 @@ function UnleashDjinn(djinnID, playerID) {
 		default:
 			show_debug_message("UnleashDjinn: '" + djinn.name + "' has no implementation yet")
 			InjectLog(djinn.name + " has no effect yet")
-			NextTurn()
+			MakeTurnDelay(60,NextTurn)
 			break
 			
 	}

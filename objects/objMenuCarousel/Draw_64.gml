@@ -1,4 +1,5 @@
 if !array_contains(global.menu_stack, id) { exit }
+if !visible {exit}
 draw_sprite_ext(HalfMenuMiddleSelector, 0, (side == "right") ? 768 : 0, 0, 6, 6, 0, c_white, 1)
 if description == "quarter" {
     var _hw = sprite_get_width(HalfMenu) * 6
@@ -95,10 +96,11 @@ if description != "none" and _len > 0 {
         var _sel = items[selected]
         if variable_struct_exists(_sel, "desc") and _sel.desc != "" {
             var _text = _sel.desc
-            draw_set_color(c_black)
-            draw_text_ext(_desc_x + _offset, _desc_y + _offset, _text, 40, 660)
-            draw_set_color(c_white)
-            draw_text_ext(_desc_x, _desc_y, _text, 40, 660)
+            //draw_set_color(c_black)
+            //draw_text_ext(_desc_x + _offset, _desc_y + _offset, _text, 40, 660)
+            //draw_set_color(c_white)
+            //draw_text_ext(_desc_x, _desc_y, _text, 40, 660)
+			draw_rich_text(_desc_x,_desc_y,_text,660,4,GoldenSun,40)
         }
     }
 }

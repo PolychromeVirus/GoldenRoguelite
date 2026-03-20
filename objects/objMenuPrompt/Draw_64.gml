@@ -1,3 +1,6 @@
+
+if !visible {exit}
+
 draw_sprite_ext(QuarterMenu, 0, spr_x, spr_y, 6, 6, 0, c_white, 1)
 
 draw_set_font(GoldenSun)

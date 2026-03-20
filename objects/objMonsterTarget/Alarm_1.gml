@@ -24,8 +24,8 @@ for (var j = 0; j < array_length(monsters); j++) {
 }
 
 if !_any_alive {
-	HandleVictory()
-	instance_destroy()
+	MakeTurnDelay(120,HandleVictory)
+	PopMenu()
 	exit
 }
 
@@ -35,10 +35,10 @@ if repeater > 1 {
 } else {
 	// Done repeating — check for onAttack follow-ups
 	if (source == "attack") { QueueOnAttack() }
-	instance_destroy()
+	PopMenu()
 	if array_length(global.attackQueue) > 0 {
 		ProcessAttackQueue()
 	} else {
-		instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
+		MakeTurnDelay(30, NextTurn)
 	}
 }

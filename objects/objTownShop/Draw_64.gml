@@ -156,8 +156,11 @@ if (selected >= 0 && selected < array_length(shoplist)) {
 	//	_desctext = string_delete(_desctext, 170, string_length(_desctext) - 169) + "..."
 	//}
 
-	draw_set_color(c_black)
-	draw_text_ext(descx + offset, descy + offset, _desctext, 40, 660)
-	draw_set_color(c_white)
-	draw_text_ext(descx, descy, _desctext, 40, 660)
+	//draw_set_color(c_black)
+	//draw_text_ext(descx + offset, descy + offset, _desctext, 40, 660)
+	//draw_set_color(c_white)
+	//draw_text_ext(descx, descy, _desctext, 40, 660)
+	
+	draw_rich_text(descx, descy, _desctext,660,offset,GoldenSun,40)
+	
 }

@@ -33,9 +33,7 @@ function SelectTargets(struct){
 			global.players[global.pendingPPCaster].pp -= global.pendingPPCost
 			global.pendingPPCost = 0
 		}
-		
-		
-		
+
 		ApplyDamageToTargets(struct)
 		return
 	}
@@ -48,13 +46,20 @@ function SelectTargets(struct){
 			if (global.players[j].halfheal and _party_heal > 0) { _party_heal = floor(_party_heal / 2) }
 			if _party_heal > 0 and (global.players[j].hp > 0 or struct.dmgtype == "mercury"){global.players[j].hp = min(global.players[j].hp + _party_heal, global.players[j].hpmax)}
 		}
-		instance_create_depth(0,0,0,TurnDelay,{wait: 30, on_complete: function(){NextTurn()}})
+		PushMenu(objMenuGrid,{read_only: true, corner: "topright"})
+		MakeTurnDelay(60,NextTurn)
 		return
 	}
 	if global.lastselected != -1{struct.selected = global.lastselected}
 
 	if struct.target == "enemy" {
-		instance_create_depth(0,0,0,objMonsterTarget, struct)
+		if struct.source == "djinni"{ 
+			struct.on_cancel = method({djinn_id: struct.djinn_id},function(){ 
+				global.djinnlist[djinn_id].spent = false;  
+				global.djinnlist[djinn_id].ready = true; 
+				global.djinnlist[djinn_id].just_unleashed = false})
+		}
+		PushMenu(objMonsterTarget, struct)
 	} else {
 		var _cfg = _BuildCharTargetConfig(struct)
 		// Skip prompt if no valid targets exist (all filtered out)
@@ -80,27 +85,11 @@ function ApplyDamageToTargets(struct) {
 	
 	DoDamage(struct)
 	
-	// Check victory
-	var _any_alive = false
-	var _count = instance_number(objMonster)
-	for (var j = 0; j < _count; j++) {
-		if instance_find(objMonster, j).monsterHealth != 0 {
-			_any_alive = true
-			break
-		}
-	}
-
-	if _any_alive {
-		global.inCombat = true
-		NextTurn()
-	} else {
-		InjectLog("Combat Victory!")
-		global.firstPlayer = global.turn
-		global.inCombat = false
-		CombatCleanup()
-		
-		instance_create_depth(0, 0, -10, objPostBattle)
-	}
+	CheckVictory()
+	
+	PopAll()
+	MakeTurnDelay(60,NextTurn)
+	
 }
 
 
