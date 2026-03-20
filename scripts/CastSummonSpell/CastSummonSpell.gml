@@ -42,5 +42,5 @@ function CastSummonSpell(spellID, playerID) {
 	maxSpell.cost = savedCost
 	caster.dicepool = savedPool
 
-	instance_destroy(objSummonSpellPicker)
+	// stack cleared by NextTurn via CastSpell
 }

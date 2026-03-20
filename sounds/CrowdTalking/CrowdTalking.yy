@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"CrowdTalking",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":5.761043,
+  "exportDir":"",
+  "name":"CrowdTalking",
+  "parent":{
+    "name":"SFX",
+    "path":"folders/Sounds/SFX.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"CrowdTalking.wav",
+  "volume":1.0,
+}

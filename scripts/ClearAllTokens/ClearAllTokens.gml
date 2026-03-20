@@ -1,20 +1,37 @@
+/// @func ClearCombatState(character)
+/// @desc Full end-of-combat reset — clears everything ClearAllTokens does plus
+///       tracking pointers (cloaking, cloak_fresh) and combat-only state
+///       (extraTurns, planetary) that have no meaning outside combat.
+function ClearCombatState(character) {
+	ClearAllTokens(character)
+	character.cloaking    = 5
+	character.cloak_fresh = false
+	character.extraTurns  = 0
+	character.planetary   = { active: false, dam: 0, element: "venus" }
+}
+
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function ClearAllTokens(character,poi = false){
-	if poi{
+function ClearAllTokens(character, poi = false){
+	if poi {
 		character.poison = false
 		character.venom = false
 	}
-	character.stun = 0
-	character.sleep = false
-	character.psyseal = false
-	character.delude = false
-	character.atkmod = 0
-	character.defmod = 0
+	character.stun        = 0
+	character.sleep       = false
+	character.psyseal     = false
+	character.delude      = false
+	character.halfheal    = false
+	character.atkmod      = 0
+	character.defmod      = 0
 	character.atkmod_fresh = false
 	character.defmod_fresh = false
-	character.rootTokens = 0
-	character.regen = 0
-	character.delayed = false
-	character.delaydata = {}
+	character.rootTokens  = 0
+	character.regen       = 0
+	character.regheal     = 0
+	character.cloak       = false
+	character.aegiscurse  = false
+	character.reflect     = false
+	character.delayed     = false
+	character.delaydata   = {}
 }

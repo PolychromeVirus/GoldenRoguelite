@@ -4,6 +4,7 @@ function CompleteDungeon() {
 	// Stat growth (curves reference current dungeon index)
 	for (var i = 0; i < array_length(global.players); i++) {
 		StatUp(global.players[i])
+		ClearAllTokens(global.players[i])
 	}
 
 	// Reset all player inventories
@@ -28,7 +29,6 @@ function CompleteDungeon() {
 	}
 
 	global.inBossRewards = true
-	global.pause = true
 	_ShowNextBossReward()
 }
 
@@ -38,10 +38,57 @@ function _ShowNextBossReward() {
 		_FinishDungeonTransition()
 		return
 	}
-	DeleteButtons()
-	ClearOptions()
-	DestroyAllBut()
-	instance_create_depth(0, 0, 0, objBossRewardPicker)
+	
+	
+	
+
+	var _item_id = global.bossRewardQueue[0]
+	var _item    = global.itemcardlist[_item_id]
+	var _num     = 4 - array_length(global.bossRewardQueue) + 1
+
+	PushMenu(objMenuGrid, {
+		corner: "bottomleft",
+		draw_header: method({item: _item, num: _num}, function() {
+			// Full-screen backdrop covers the ThreeQuarterMenu underneath
+			draw_sprite_ext(TestMenu, 0, 0, 0, 6, 6, 0, c_white, 1)
+			var _grid = instance_find(objMenuGrid, 0)
+			var _cx  = _grid.spr_x + 50
+			var _cy  = 20
+			var _off = 4
+			draw_set_font(GoldenSun)
+			var _title = "Boss Reward! (" + string(num) + " / 4)"
+			draw_set_color(c_black)
+			draw_text(_cx + _off, _cy + _off, _title)
+			draw_set_color(c_yellow)
+			draw_text(_cx, _cy, _title)
+			_cy += 40
+			var _alias = item.alias
+			if asset_get_index(_alias) != -1 {
+				draw_sprite_stretched(asset_get_index(_alias), 0, _cx, _cy, 64, 64)
+			}
+			draw_set_color(c_black)
+			draw_text(_cx + 68 + _off, _cy + 16 + _off, item.name)
+			draw_set_color(c_white)
+			draw_text(_cx + 68, _cy + 16, item.name)
+			_cy += 80
+			var _desc = item.text
+			draw_set_color(c_black)
+			draw_text_ext(_cx + _off, _cy + _off, _desc, 40, 600)
+			draw_set_color(c_white)
+			draw_text_ext(_cx, _cy, _desc, 40, 600)
+			_cy = _grid.gridY - 36
+			draw_set_color(c_black)
+			draw_text(_cx + _off, _cy + _off, "Choose a character:")
+			draw_set_color(global.c_important)
+			draw_text(_cx, _cy, "Choose a character:")
+		}),
+		on_confirm: method({item_id: _item_id}, function(player_index) {
+			PopMenu()
+			// _ApplyBossItem handles queue advance via _AdvanceBossRewardQueue()
+			// (or exits early for special items like Shiny Gem / Mystic Draught)
+			_ApplyBossItem(item_id, player_index)
+		}),
+	})
 }
 
 /// Applies a boss item to the chosen player
@@ -155,22 +202,23 @@ function _StartMysticDraught(_player_index) {
 	global.draftPool = _bases
 	global.draftPlayerIndex = _player_index
 	global.draftQueue = []  // Empty so _DraftNext finishes after one pick
-	instance_create_depth(0, 0, 100, objPsynergyDraft)
+	PushMenu(objMenuCarousel, _BuildPsynergyDraftConfig())
 }
 
 /// Advances to the next dungeon after all boss rewards are assigned
 function _FinishDungeonTransition() {
 	global.inBossRewards = false
-	global.pause = false
-	DeleteButtons()
-	DestroyAllBut()
-	ClearOptions()
+	
+	
+	
 
 	if (global.dungeon + 1 < array_length(global.dungeonlist)) {
 		StartDungeon(global.dungeon + 1)
 		CreateOptions()
+		Autosave()
 	} else {
 		InjectLog("All dungeons cleared!")
 		StartDungeon(0)
+		Autosave()
 	}
 }

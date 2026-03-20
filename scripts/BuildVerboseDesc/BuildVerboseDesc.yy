@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BuildVerboseDesc",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BuildVerboseDesc",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

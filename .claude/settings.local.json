@@ -15,8 +15,26 @@
       "Bash(find /c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects -name \"obj*\" -type d | xargs -I {} bash -c 'ls {} | grep -q Draw && echo {}')",
       "Bash(find:*)",
       "WebFetch(domain:manual.gamemaker.io)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(ls:*)",
+      "Bash(git:*)",
+      "Bash(for obj:*)",
+      "Bash(do echo:*)",
+      "Bash(/dev/null grep:*)",
+      "Read(//c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects/objItemMenu/UserspolycGameMakerProjectsGoldenRogueliteobjects$obj/**)",
+      "Bash(/dev/null done:*)",
+      "Bash(echo:*)",
+      "WebSearch",
+      "Bash(powershell -Command \"\\(Get-Content 'C:\\\\Users\\\\polyc\\\\GameMakerProjects\\\\GoldenRoguelite\\\\scripts\\\\CalcPreview\\\\CalcPreview.gml' -Raw\\) -replace 'result\\\\.heal = QueryDice\\\\\\(player, \\\\\"venus\\\\\", \\\\\"affinity\\\\\"\\\\\\)\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult\\\\.targets = \\\\\"Ally\\\\\"\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult\\\\.description = \\\\\"Revive\\\\\"', 'result.heal = QueryDice\\(player, \\\\\"venus\\\\\", \\\\\"affinity\\\\\"\\) * 2\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult.targets = \\\\\"Ally\\\\\"\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult.description = \\\\\"Revive\\\\\"' | Set-Content 'C:\\\\Users\\\\polyc\\\\GameMakerProjects\\\\GoldenRoguelite\\\\scripts\\\\CalcPreview\\\\CalcPreview.gml' -NoNewline\")",
+      "Bash(powershell -Command \"\n$file = 'C:\\\\Users\\\\polyc\\\\GameMakerProjects\\\\GoldenRoguelite\\\\scripts\\\\CalcPreview\\\\CalcPreview.gml'\n$content = Get-Content $file -Raw\n$bad = 'result.heal = QueryDice\\(player, \\\\\"venus\\\\\", \\\\\"affinity\\\\\"\\) * 2\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult.targets = \\\\\"Ally\\\\\"\\\\r\\\\n\\\\t\\\\t\\\\t\\\\t\\\\tresult.description = \\\\\"Revive\\\\\"'\n$good = \\\\\"result.heal = QueryDice\\(player, \\\\`\\\\\"venus\\\\`\\\\\", \\\\`\\\\\"affinity\\\\`\\\\\"\\) * 2\\\\`r\\\\`n\\\\`t\\\\`t\\\\`t\\\\`t\\\\`tresult.targets = \\\\`\\\\\"Ally\\\\`\\\\\"\\\\`r\\\\`n\\\\`t\\\\`t\\\\`t\\\\`t\\\\`tresult.description = \\\\`\\\\\"Revive\\\\`\\\\\"\\\\\"\n\\\\$content = \\\\$content.Replace\\(\\\\$bad, \\\\$good\\)\nSet-Content -Path \\\\$file -Value \\\\$content -NoNewline\n\")",
+      "Bash(wc -l \"/c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects/objStatDisplay\"/*.gml)",
+      "Bash(do)",
+      "Read(//c/Users/polyc/GameMakerProjects/GoldenRoguelite/objects/**)",
+      "Bash(done)"
     ]
   },
-  "outputStyle": "default"
+  "outputStyle": "default",
+  "remote": {
+    "defaultEnvironmentId": "env_01AcGtqE42bxrbv2q9nNYBTH"
+  }
 }

@@ -50,7 +50,8 @@ function CheckUnleash(player) {
 		splash_element: "normal",
 		double_atk: false,
 		convert_element: "",
-		instant_kill: false
+		instant_kill: false,
+		scatter: false
 	}
 
 	var weapon = global.itemcardlist[player.weapon]
@@ -275,9 +276,10 @@ function CheckUnleash(player) {
 		case "Bandit's Sword":
 			if sixes_all == 1 {
 				result.active = true
-				result.name = "Bandit's Sword"
+				result.name = "Rapid Smash"
 				result.convert_element = "jupiter"
-				result.num = 12
+				result.scatter = true
+				// num and dam are set in WeaponAttack: num = dam, dam = 1
 			}
 			break
 

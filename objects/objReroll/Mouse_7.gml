@@ -13,11 +13,18 @@ if entry.mode == "full" {
 	CreateOptions()
 } else {
 	// Partial or single — open the picker
-	DeleteButtons()
-	instance_create_depth(0, 0, 0, objRerollPicker, {
-		mode: entry.mode,
-		uses: entry.uses,
-		source: entry.source,
-		expires: entry.expires
+	var _player = global.players[global.turn]
+	PushMenu(objDicePicker, {
+		dice:          BuildDiceArray(_player, "all"),
+		max_select:    (entry.mode == "single") ? 1 : 999,
+		confirm_label: "Reroll",
+		title:         "Click dice to reroll",
+		on_confirm:    method({ pl: _player }, function(sel) {
+			if array_length(sel) > 0 {
+				RerollDice(pl, sel)
+				InjectLog(pl.name + " rerolled " + string(array_length(sel)) + " dice!")
+			}
+			PopMenu()
+		}),
 	})
 }

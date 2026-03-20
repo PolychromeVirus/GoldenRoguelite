@@ -47,6 +47,7 @@
     {"$GMObjectProperty":"v2","%Name":"drawstats","filters":[],"listItems":[],"multiselect":false,"name":"drawstats","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"","varType":6,},
     {"$GMObjectProperty":"v2","%Name":"dmgtype","filters":[],"listItems":[],"multiselect":false,"name":"dmgtype","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"damage","varType":2,},
     {"$GMObjectProperty":"v2","%Name":"targetlist","filters":[],"listItems":[],"multiselect":false,"name":"targetlist","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"","varType":6,},
+    {"$GMObjectProperty":"v2","%Name":"exclusive","filters":[],"listItems":[],"multiselect":false,"name":"exclusive","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"true","varType":3,},
   ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",

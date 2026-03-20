@@ -1,8 +1,8 @@
 Name,alias,type,Cursed,Melee,ele,jup,mar,ven,mer,dicepool,unleash
-Battle Axe,Battle_Axe,Axe,,3,0,0,0,0,0,3 Melee dice,"None"
-Long Sword,Long_Sword,Long Sword,,3,0,0,0,0,0,3 Melee dice,"None"
-Mace,Mace,Mace,,4,0,0,0,0,0,4 Melee dice,"None"
-Short Sword,Short_Sword,Short Sword,,2,0,0,0,0,0,2 Melee dice,"None"
+Battle Axe,Battle_Axe,Axe,,3,0,0,0,0,0,3 Melee dice,None
+Long Sword,Long_Sword,Long Sword,,3,0,0,0,0,0,3 Melee dice,None
+Mace,Mace,Mace,,4,0,0,0,0,0,4 Melee dice,None
+Short Sword,Short_Sword,Short Sword,,2,0,0,0,0,0,2 Melee dice,None
 Pirate's Sword,Pirates_Sword,Short Sword,,3,0,0,0,0,0,3 Melee dice,"Dual 6s - Dreamtide:
 
 Attack inflicts Sleep. Do X Mercury Damage to target's neighbors.
@@ -10,23 +10,21 @@ Attack inflicts Sleep. Do X Mercury Damage to target's neighbors.
 Vulcan Axe,Vulcan_Axe,Axe,,4,0,0,0,0,0,4 Melee dice,"Dual 6s - Barrage:
 
 Attack does +2 Mars Damage and 2 Mars Damage to target's neighbors"
-Great Axe,Great_Axe,Axe,,6,0,0,0,0,0,6 Melee dice,"None"
+Great Axe,Great_Axe,Axe,,6,0,0,0,0,0,6 Melee dice,None
 Arctic Blade,Arctic_Blade,Long Sword,,4,0,0,0,0,0,4 Melee dice,"Auto - Blizzard:
 
 Attack does +X Mercury Damage
 (X = number of 6s in pool)"
-Broad Sword,Broad_Sword,Long Sword,,5,0,0,0,0,0,5 Melee dice,"None"
+Broad Sword,Broad_Sword,Long Sword,,5,0,0,0,0,0,5 Melee dice,None
 Grievous Mace,Grievous_Mace,Mace,,4,0,0,0,0,0,4 Melee dice,"Dual 6s - Terra Strike:
 
 Attack does +2 Venus Damage"
-Bandit's Sword,Bandits_Sword,Short Sword,,3,0,0,0,0,0,3 Melee dice,"Solo 6 - Rapid Smash:
-
-Attack does Jupiter Damage. Assign each point of damage individually (to any target)"
+Bandit's Sword,Bandits_Sword,Short Sword,,3,0,0,0,0,0,3 Melee dice,Solo 6 - Rapid Smash:\nAttack does 1 Jupiter damage X Times to target and its neighbours randomly. X = Weapon Damage
 Elven Rapier,Elven_Rapier,Short Sword,,3,0,0,0,0,0,3 Melee dice,"Auto - Vorpal Slash:
 
 Attack does +X Jupiter Damage
 (X = number of 6s in pool)"
-Wooden Stick,Wooden_Stick,Staff,,2,1,0,0,0,0,"2 Melee, 1 Elemental","None"
+Wooden Stick,Wooden_Stick,Staff,,2,1,0,0,0,0,"2 Melee, 1 Elemental",None
 Witch's Wand,Witchs_Wand,Staff,,3,0,1,0,0,0,"3 Melee, 1 Jupiter","Solo 6 - Stun Voltage:
 
 Attack does Jupiter Damage. Inflict Stun on Target"
@@ -51,7 +49,7 @@ Muramasa,Muramasa,Long Sword,TRUE,9,0,0,0,0,0,9 Melee dice,"Cannot be unequipped
 Auto // Start of Turn:
 Roll a d6 - 
 1-2: Your turn ends"
-War Mace,War_Mace,Mace,,5,0,0,0,0,0,5 Melee dice,"None"
+War Mace,War_Mace,Mace,,5,0,0,0,0,0,5 Melee dice,None
 Blessed Mace,Blessed_Mace,Mace,,6,0,0,0,0,0,6 Melee dice,"Triple 6s - Ply Well:
 
 Recover X HP
@@ -61,7 +59,7 @@ Wicked Mace,Wicked_Mace,Mace,TRUE,8,0,0,0,0,0,8 Melee dice,"Cannot be unequipped
 Auto // Start of Turn:
 Roll a d6 - 
 1-2: Your turn ends"
-Hunter's Sword,Hunters_Sword,Short Sword,,4,0,0,0,0,0,4 Melee dice,"None"
+Hunter's Sword,Hunters_Sword,Short Sword,,4,0,0,0,0,0,4 Melee dice,None
 Assassin Blade,Assassin_Blade,Short Sword,,6,0,0,0,0,0,6 Melee dice,"Triple Melee 6s - 
 Mortal Danger:
 
@@ -71,11 +69,8 @@ Kusanagi,Kunasagi,Short Sword,TRUE,8,0,0,0,0,0,8 Melee dice,"Cannot be unequippe
 Auto // Start of Turn:
 Roll a d6 - 
 1-2: Your turn ends"
-Angelic Ankh,Angelic_Ankh,Staff,,5,0,0,0,0,0,5 Melee dice,Auto - "Life Leech:
-
-Target Adept recovers X HP
-(X = number of 6s in pool)"
-Magic Rod,Magic_Rod,Staff,,3,3,0,0,0,0,"3 Melee, 3 Elemental","None"
+Angelic Ankh,Angelic_Ankh,Staff,,5,0,0,0,0,0,5 Melee dice,"Auto - ""Life Leech:\nTarget Adept recovers X HP\n(X = number of 6s in pool)"""
+Magic Rod,Magic_Rod,Staff,,3,3,0,0,0,0,"3 Melee, 3 Elemental",None
 Staff of Anubis,Staff_of_Anubis,Staff,,5,0,0,0,0,0,5 Melee dice,"Auto - Sarcophagus:
 
 +X Venus Damage
@@ -130,7 +125,7 @@ Dracomace,Dracomace,Staff,,5,0,0,0,0,0,5 Melee dice,"Auto - Aging Gas:
 
 Recover X HP
 (X = number of 5s and 6s in pool)"
-Captain's Axe,Captains_Axe,Axe,,7,0,0,0,0,0,7 Melee dice,"None"
+Captain's Axe,Captains_Axe,Axe,,7,0,0,0,0,0,7 Melee dice,None
 Hagbone Mace,Hagbone_Mace,Mace,,6,0,0,0,0,0,6 Melee dice,"X Melee Charge - Wyrd Curse:
 (X = 1/2 of Max Melee Charge)
 

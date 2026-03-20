@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"_2_20_Battle___Saturos_and_Menardi_",
+  "audioGroupId":{
+    "name":"BossThemes",
+    "path":"audiogroups/BossThemes",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":182.91045,
+  "exportDir":"",
+  "name":"_2_20_Battle___Saturos_and_Menardi_",
+  "parent":{
+    "name":"BGM",
+    "path":"folders/Sounds/BGM.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"_2_20_Battle___Saturos_and_Menardi_.mp3",
+  "volume":1.0,
+}

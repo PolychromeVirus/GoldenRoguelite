@@ -12,30 +12,38 @@ function LevelUp(playerIndex = -1) {
 		array_push(global.draftQueue, playerIndex)
 	}
 
-	global.pause = true
 	_DraftNext()
 }
 
 /// Pops the next player from global.draftQueue and opens their draft (or ends if empty).
 function _DraftNext() {
 	if array_length(global.draftQueue) == 0 {
-		global.pause = false
-		DestroyAllBut()
-		ClearOptions()
-		Autosave()
+		
+		
+		
 		if (global.inBossRewards) {
-			global.pause = true
 			_AdvanceBossRewardQueue()
 		} else if (global.inTown) {
 			ProcessTownFinds()
 		} else {
-			CreateOptions()
+			// Reveal: 10% chance of bonus level up when all drafts are done
+			if !irandom(9) {
+				var _cast = FindSpellCaster("Reveal")
+				if _cast != -1 {
+					SpellPrompt("Reveal", _cast,
+						function() { LevelUp() },
+						function() {}
+					)
+					return
+				}
+			}
+			
 		}
 		return
 	}
-	DeleteButtons()
-	ClearOptions()
-	DestroyAllBut()
+	
+	
+	
 	
 	var _idx = global.draftQueue[0]
 	array_delete(global.draftQueue, 0, 1)
@@ -96,7 +104,7 @@ function _DraftNext() {
 		}
 
 		global.draftPlayerIndex = _idx
-		instance_create_depth(0, 0, 100, objPsynergyDraft)
+		PushMenu(objMenuCarousel, _BuildPsynergyDraftConfig())
 	} else {
 		// Non-psynergy character — placeholder for gimmick characters
 		switch player.name {

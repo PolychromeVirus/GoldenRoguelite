@@ -17,7 +17,7 @@ Venus,Meld,Target // Weapon Attack:\n   Attack with another Adept's weapon,3,1,1
 Venus,Petra,Countdown // 3 Rounds:\n   All enemies reroll if they select move X\n   (Select X when this activates),3,1,1
 Venus,Geode,Target // Weapon Attack:\n   +X Venus Damage\n   (X = Weapon Attack Damage),3,1,1
 Venus,Crystal,Party // Healing:\n   Elemental Charge + DEF,3,1,1
-Mercury,Dew,Target Downed Adept // Recover all HP\n\nCondition:\n   This Djinni does not recover on its own,1,1,1
+Mercury,Dew,Target Downed Adept // Recover all HP\n\nCondition:\n   This Djinni does not recover on its own,1,1,0
 Mercury,Hail,Target // Mercury Damage:\n   All Charge + Inflict -2 DEF,1,1,1
 Mercury,Spritz,Party // Healing:\n   Elemental Charge,1,1,1
 Mercury,Tonic,Target Adept // Healing:\n   You may remove any tokens on target,1,1,1
@@ -33,8 +33,8 @@ Mercury,Gel,"Target // Weapon Attack\n   If unleash is triggered, trigger it aga
 Mercury,Serac,Target // Weapon Attack\n   Roll d6:\n   6: Non-boss target is downed,2,1,1
 Mercury,Shade,Countdown // 1 Round:\n   All incoming damage is halved (rounded up),3,1,1
 Mercury,Rime,Target // Seal Psynergy,3,1,1
-Mercury,Eddy,Party // Unleash 1 face-down Djinni\n\nCondition:\n   This Djinni does not recover on its own,3,1,1
-Mercury,Balm,Party // Healing:\n   Downed Adepts are healed for 1/2 Max HP\n\nCondition:\n   This Djinni does not recover on its own,3,1,1
+Mercury,Eddy,Party // Unleash 1 face-down Djinni\n\nCondition:\n   This Djinni does not recover on its own,3,1,0
+Mercury,Balm,Party // Healing:\n   Downed Adepts are healed for 1/2 Max HP\n\nCondition:\n   This Djinni does not recover on its own,3,1,0
 Mars,Ember,Party // Recover X PP\n   (X = Mars Charge),1,1,1
 Mars,Fever,Target // Mars Damage + Inflict Delusion:\n   All Charge,1,1,1
 Mars,Forge,Party // +2 ATK,1,1,1
@@ -60,7 +60,7 @@ Jupiter,Zephyr,"Party // Gain Reroll Token\n\nReroll Token:\n   Reroll entire di
 Jupiter,Luff,Target // Seal Psynergy,1,1,1
 Jupiter,Ether,Target Adept // Recover X PP\n   (X = All Charge),1,1,1
 Jupiter,Wheeze,Target // Jupiter Damage + Poison:\n      All Charge,1,1,1
-Jupiter,Haze,Countdown // 1 Round:\n   Target Adept // Immune to Damage and\n   Attack Effects\n\nCondition:\n   This Djinni does not recover on its own,2,1,1
+Jupiter,Haze,Countdown // 1 Round:\n   Target Adept // Immune to Damage and\n   Attack Effects\n\nCondition:\n   This Djinni does not recover on its own,2,1,0
 Jupiter,Breeze,Party // +2 DEF,2,1,1
 Jupiter,Smog,Target // Jupiter Damage + Inflict Delusion:\n   All Charge,2,1,1
 Jupiter,Breath,Target Adept // Healing:\n   All Charge,2,1,1

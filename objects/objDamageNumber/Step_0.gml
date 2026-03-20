@@ -1,1 +1,1 @@
-if global.gameover{instance_destroy()}
+if global.gameover { instance_destroy() }

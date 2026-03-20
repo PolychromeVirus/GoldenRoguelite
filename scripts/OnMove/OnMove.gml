@@ -14,8 +14,13 @@ function OnMove(){
 	if _pidx == -1 {InjectLog("But nothing happened...")
 		return _pidx}
 	
-	var _cand = variable_clone(global.puzzlelist)
-	array_delete(_cand,_pidx,1)
+	var _cand = []
+	
+	for (i=0;i<array_length(global.puzzlelist);i++){
+	
+	if i != _pidx{array_push(_cand,i)}
+	
+	}
 	
 	var _puzz = _BuildRandomPuzzleChallenge(_cand)
 	var _ch = _puzz.challenge

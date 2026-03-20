@@ -1,3 +1,9 @@
+// Background — drawn in GUI space so it sits in front of the HUD
+draw_sprite_ext(HalfMenuMiddleSelector, 0, 0, 0, 6, 6, 0, c_white, 1)
+var _hw = sprite_get_width(HalfMenu) * 6
+var _hh = sprite_get_height(HalfMenu) * 6
+draw_sprite_ext(QuarterMenu, 0, _hw, _hh / 2, 6, 6, 0, c_white, 1)
+
 var drawx = 50
 var drawy = 300
 var offset = 4
@@ -9,7 +15,7 @@ var castcolor = c_white
 
 // Tab indicator
 var _tabx = drawx
-var _taby = 40
+var _taby = 48
 draw_set_color(c_black)
 if mode == 0 {
 	draw_text(_tabx + offset, _taby + offset, "[Inventory]  Equipment  >")
@@ -23,9 +29,9 @@ if mode == 0 {
 
 draw_set_halign(fa_right)
 draw_set_colour(c_black)
-draw_text(camera_get_view_width(view_current)-8+offset,8+offset, string(global.gold) + "gp")
+draw_text(camera_get_view_width(view_current)/2+32+offset,48+offset, string(global.gold) + "gp")
 draw_set_colour(c_white)
-draw_text(camera_get_view_width(view_current)-8,8, string(global.gold) + "gp")
+draw_text(camera_get_view_width(view_current)/2+32,48, string(global.gold) + "gp")
 draw_set_halign(fa_left)
 
 if mode == 0 {
@@ -62,16 +68,7 @@ if mode == 0 {
 			if global.inCombat and array_length(global.players[global.turn].dicepool) > 0 {
 				var _prev = CalcPreview("item", global.players[global.turn].inventory[i], global.players[global.turn])
 				if _prev.description != "" {
-					var _pcol = c_white
-					if _prev.heal > 0 { _pcol = make_color_rgb(80, 220, 80) }
-					else {
-						switch _prev.element {
-							case "Venus": _pcol = global.c_venus; break
-							case "Mars": _pcol = global.c_mars; break
-							case "Jupiter": _pcol = global.c_jupiter; break
-							case "Mercury": _pcol = global.c_mercury; break
-						}
-					}
+					var _pcol = (_prev.heal > 0) ? make_color_rgb(80, 220, 80) : ElementColor(_prev.element)
 					draw_set_halign(fa_right)
 					draw_set_color(c_black)
 					draw_text(drawx + 618 + offset, drawy + 8 + offset, _prev.description)
@@ -85,40 +82,18 @@ if mode == 0 {
 		var descx = 820
 		var descy = 411
 
-		var desctext = global.itemcardlist[global.players[global.turn].inventory[selected]].text
+		var desctext = BuildVerboseDesc("item", global.players[global.turn].inventory[selected], global.players[global.turn])
 
-		if string_length(desctext) > 170{desctext = string_delete(desctext,170,string_length(desctext)-169) + "..."}
+		//if string_length(desctext) > 170{desctext = string_delete(desctext,170,string_length(desctext)-169) + "..."}
 
-		draw_set_color(c_black)
-		draw_text_ext(descx+offset,descy+offset,desctext,40,660)
-		draw_set_color(c_white)
-		draw_text_ext(descx,descy,desctext,40,660)
+		//draw_set_color(c_black)
+		//draw_text_ext(descx+offset,descy+offset,desctext,40,660)
+		//draw_set_color(c_white)
+		//draw_text_ext(descx,descy,desctext,40,660)
+		
+		draw_rich_text(descx,descy,desctext,660,offset,GoldenSun,40,6)
 
 		// Detail preview below description
-		if global.inCombat and array_length(global.players[global.turn].dicepool) > 0 {
-			var _selitem = global.players[global.turn].inventory[selected]
-			var _dp = CalcPreview("item", _selitem, global.players[global.turn])
-			if _dp.description != "" {
-				var _detail = ""
-				var _dcol = c_white
-				if _dp.heal > 0 { _detail = "~" + string(_dp.heal) + " HP heal"; _dcol = make_color_rgb(80, 220, 80) }
-				else if _dp.dam > 0 {
-					_detail = "~" + string(_dp.dam) + " " + _dp.element + " damage"
-					switch _dp.element {
-						case "Venus": _dcol = global.c_venus; break
-						case "Mars": _dcol = global.c_mars; break
-						case "Jupiter": _dcol = global.c_jupiter; break
-						case "Mercury": _dcol = global.c_mercury; break
-					}
-				}
-				else { _detail = _dp.description }
-				var _dy = descy + string_height_ext(desctext, 40, 660) + 8
-				draw_set_color(c_black)
-				draw_text(descx + offset, _dy + offset, _detail)
-				draw_set_color(_dcol)
-				draw_text(descx, _dy, _detail)
-			}
-		}
 	}
 } else {
 	// === EQUIPMENT MODE ===
@@ -179,11 +154,14 @@ if mode == 0 {
 		var descy = 411
 
 		var desctext = global.itemcardlist[_equiplist[selected]].text
-		if string_length(desctext) > 170 { desctext = string_delete(desctext, 170, string_length(desctext) - 169) + "..." }
+		//if string_length(desctext) > 170 { desctext = string_delete(desctext, 170, string_length(desctext) - 169) + "..." }
 
-		draw_set_color(c_black)
-		draw_text_ext(descx + offset, descy + offset, desctext, 40, 660)
-		draw_set_color(c_white)
-		draw_text_ext(descx, descy, desctext, 40, 660)
+		//draw_set_color(c_black)
+		//draw_text_ext(descx + offset, descy + offset, desctext, 40, 660)
+		//draw_set_color(c_white)
+		//draw_text_ext(descx, descy, desctext, 40, 660)
+		
+		draw_rich_text(descx,descy,desctext,660,offset,GoldenSun,40,6)
+		
 	}
 }

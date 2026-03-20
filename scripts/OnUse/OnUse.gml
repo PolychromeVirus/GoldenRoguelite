@@ -36,44 +36,42 @@ function OnUse(item,slot,player = -1){
 	switch global.itemcardlist[item].name{
 		case "Herb":
 			_struct.healing = 3
-			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
+			PushMenu(objMenuGrid, _BuildCharTargetConfig(_struct))
 			break
 		case "Nut":
 			_struct.healing = 6
-			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
+			PushMenu(objMenuGrid, _BuildCharTargetConfig(_struct))
 			break
 		case "Antidote":
 			_struct.removepoison = true
-			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
+			PushMenu(objMenuGrid, _BuildCharTargetConfig(_struct))
 			break
 		case "Psy Crystal":
 			_struct.ppheal = 3
-			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
+			PushMenu(objMenuGrid, _BuildCharTargetConfig(_struct))
 			break
 		case "Mist Potion":
-			for (var i = 0;i<array_length(global.players);i++){
+			for (var i = 0; i < array_length(global.players); i++) {
 				global.players[i].hp = global.players[i].hpmax
 			}
-			array_push(global.discard,global.players[global.turn].inventory[slot])
-			array_delete(global.players[global.turn].inventory,slot,1)
-			global.pause = false
-			
-			NextTurn()
-			CreateOptions()
+			array_push(global.discard, global.players[global.turn].inventory[slot])
+			array_delete(global.players[global.turn].inventory, slot, 1)
+			PushMenu(objMenuGrid, { read_only: true, corner: "bottomright" })
+			instance_create_depth(0, 0, 0, TurnDelay, { wait: 60, on_complete: NextTurn })
 			exit
 			break
 		case "Potion":
 			_struct.healing = 20
-			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
+			PushMenu(objMenuGrid, _BuildCharTargetConfig(_struct))
 			break
 		case "Vial":
 			_struct.healing = 10
-			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
+			PushMenu(objMenuGrid, _BuildCharTargetConfig(_struct))
 			break
 		case "Water of Life":
 			_struct.revive = true
 			_struct.healing = 9999
-			instance_create_depth(0,TARGETHEIGHT,0,objCharTarget,_struct)
+			PushMenu(objMenuGrid, _BuildCharTargetConfig(_struct))
 			break
 		case "Oil Drop":
 			array_push(global.discard, global.players[global.turn].inventory[slot])
@@ -122,10 +120,13 @@ function OnUse(item,slot,player = -1){
 			SelectTargets(_struct)
 			break
 		case "Lucky Medal":
-			for (var i = 0;i<array_length(global.players);i++){
+			for (var i = 0; i < array_length(global.players); i++) {
 				global.players[i].extraTurns += 1
 			}
-			NextTurn()
+			array_push(global.discard, global.players[global.turn].inventory[slot])
+			array_delete(global.players[global.turn].inventory, slot, 1)
+			PushMenu(objMenuGrid, { read_only: true, corner: "bottomright" })
+			instance_create_depth(0, 0, 0, TurnDelay, { wait: 60, on_complete: NextTurn })
 			break
 	}
 }

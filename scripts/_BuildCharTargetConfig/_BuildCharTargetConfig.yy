@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"_BuildCharTargetConfig",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"_BuildCharTargetConfig",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

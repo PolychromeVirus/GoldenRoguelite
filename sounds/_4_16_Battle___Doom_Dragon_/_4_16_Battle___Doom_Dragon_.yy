@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"_4_16_Battle___Doom_Dragon_",
+  "audioGroupId":{
+    "name":"BossThemes",
+    "path":"audiogroups/BossThemes",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":171.18147,
+  "exportDir":"",
+  "name":"_4_16_Battle___Doom_Dragon_",
+  "parent":{
+    "name":"BGM",
+    "path":"folders/Sounds/BGM.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"_4_16_Battle___Doom_Dragon_.mp3",
+  "volume":1.0,
+}

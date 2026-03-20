@@ -105,11 +105,16 @@ function ExecuteMonsterTurn(mon_id) {
 		if _move.special {
 
 			if _move.movename == "Flee" {
-				monsterHealth = 0
-				sprite_index = FLED
-				global.gold = global.goldAtCombatStart
-				global.enemyFled = true
-				CheckVictory()
+				if irandom(2) == 0{
+					monsterHealth = 0
+					sprite_index = FLED
+					global.gold = global.goldAtCombatStart
+					global.enemyFled = true
+					InjectLog("Mimic ran away!")
+					instance_create_depth(0,0,0,TurnDelay,{on_complete: function(){CheckVictory()}})	
+				}else{
+					InjectLog("Mimic couldn't escape!")
+				}
 			}
 
 			if _move.movename == "Mystic Call" {
@@ -180,7 +185,7 @@ function ExecuteMonsterTurn(mon_id) {
 		if _move.dam < 0 {
 			monsterHealth -= abs(_move.dam)
 			if monsterHealth <= 0 { monsterHealth = 0 }
-			flash_timer = 12; flash_color = ElementColor(_move_element)
+			flash_timer = FLASH_DURATION; damage_timer = DAMAGE_DURATION; flash_color = ElementColor(_move_element)
 			InjectLog(name + " takes " + string(abs(_move.dam)) + " self-damage!")
 		}
 
@@ -211,7 +216,7 @@ function ExecuteMonsterTurn(mon_id) {
 			if _neighbor != noone {
 				var _confuse_dam = max(0, _base_dam)
 				_neighbor.monsterHealth -= _confuse_dam
-				_neighbor.flash_timer = 12; _neighbor.flash_color = ElementColor(_move_element)
+				_neighbor.flash_timer = FLASH_DURATION; _neighbor.damage_timer = DAMAGE_DURATION; _neighbor.flash_color = ElementColor(_move_element)
 				if _neighbor.monsterHealth <= 0 { _neighbor.monsterHealth = 0 }
 				InjectLog("  Hits " + _neighbor.name + " for " + string(_confuse_dam) + "!")
 			} else {
@@ -300,7 +305,7 @@ function ExecuteMonsterTurn(mon_id) {
 
 					if _final > 0 {
 						_p.hp -= _final
-						_p.flash_timer = 12
+						_p.flash_timer = FLASH_DURATION
 						_total_damage_dealt += _final
 						if _p.hp <= 0 {
 							// Soul Ring: revive to full HP and discard the ring

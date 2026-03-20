@@ -5,3 +5,9 @@ file_text_close(_f)
 _save = json_parse(_info)
 
 hovertext = global.dungeonlist[_save.dungeon].name + " Floor "+ string( _save.floor mod 9)
+
+breath_t   = 0
+btn_scale  = 1.0
+is_pressed = false
+clickable  = false
+alarm_set(0, 1)

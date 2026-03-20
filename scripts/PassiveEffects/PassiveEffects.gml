@@ -10,6 +10,13 @@
 
 
 function AddPassive(effect, countdown, sprite, source, data, casterID = global.turn) {
+	for (var _i = 0; _i < array_length(global.passiveEffects); _i++) {
+		if global.passiveEffects[_i].effect == effect {
+			if countdown != -1 { global.passiveEffects[_i].countdown += countdown }
+			show_debug_message("AddPassive: stacked " + effect + " (countdown=" + string(global.passiveEffects[_i].countdown) + ")")
+			return
+		}
+	}
 	var passive = {
 		effect: effect,
 		countdown: countdown,

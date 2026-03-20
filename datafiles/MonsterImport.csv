@@ -1,41 +1,41 @@
-element,name,portrait,HP,Weakness,BOSS,
-Venus,Ooze,Ooze,5,Mars,,
-Mercury,Cuttle,Cuttle,8,Mars,,
-Venus,Ghoul,Ghoul,10,Mars,,
-Mars,Gnome,Gnome,5,Mercury,,
-Jupiter,Harpy,Harpy,6,Jupiter,,
-Mercury,Lizard Man,Lizard_Man,12,Mars,,
-Jupiter,Mauler,Mauler,8,Mars,,
-Mercury,Siren,Siren,10,Mars,,
-Mercury,Mercury Djinni,Mercury_Djinni,30,Mars,TRUE,5
-Jupiter,Mimic,Mimic,20,Mars,TRUE,10
-Mars,Saturos,Saturos_Front,50,Mercury,TRUE,3
-Mars,Boulder Beast,Boulder_Beast,8,Mercury,,
-Mars,Chimera Mage,Chimera_Mage,8,Mercury,,
-Mercury,Fenrir,Fenrir,15,Mars,,
-Venus,Grand Golem,Grand_Golem,12,Jupiter,,
-Jupiter,Ice Gargoyle,Ice_Gargoyle,8,Venus,,
-Mars,Manticore King,Manticore_King,8,Mercury,,
-Venus,Recluse,Recluse,6,Mars,,
-Mercury,Skull Warrior,Skull_Warrior,15,Venus,,
-Jupiter,Thunder Lizard,Thunder_Lizard,12,Venus,,
-Venus,Wild Gryphon,Wild_Gryphon,12,Jupiter,,
-Mercury,Willowisp,Willowisp,10,Venus,,
-Mars,Fusion Dragon,Fusion_Dragon,150,Mercury,TRUE,2
-Jupiter,Tempest Lizard,Tempest_Lizard,50,Venus,TRUE,4
-Venus,Venus Djinni,Venus_Djinni,60,Jupiter,TRUE,5
-Mercury,Blue Dragon,Blue_Dragon,30,Mars,,
-Jupiter,Devil Scorpion,Devil_Scorpion,23,Mars,,
-Mercury,Foul Mummy,Foul_Mummy,23,Mars,,
-Mercury,Ghost Army,Ghost_Army,20,Jupiter,,
-Mars,Macetail,Macetail,20,Mercury,,
-Venus,Wyvern,Wyvern,25,Jupiter,,
-Jupiter,Jupiter Djinni,Jupiter_Djinni,60,Venus,TRUE,5
-Mercury,Star Magician,Star_Magician,90,Mars,TRUE,4
-Mercury,Sentinel,Sentinel,190,Venus,TRUE,0
-Mars,Agatio,Agatio,140,Mercury,TRUE,3
-Mars,Karst,Karst,140,Mercury,TRUE,3
-Mars,Anger Ball,Anger_Ball,20,Mercury,TRUE,10
-Venus,Guardian Ball,Guardian_Ball,20,Jupiter,TRUE,10
-Mercury,Refresh Ball,Refresh_Ball,20,Mars,TRUE,10
-Jupiter,Thunder Ball,Thunder_Ball,20,Venus,TRUE,10
+element,name,portrait,HP,Weakness,BOSS,statres,DROP
+Venus,Ooze,Ooze,5,Mars,,,
+Mercury,Cuttle,Cuttle,8,Mars,,,
+Venus,Ghoul,Ghoul,10,Mars,,,
+Mars,Gnome,Gnome,5,Mercury,,,
+Jupiter,Harpy,Harpy,6,Jupiter,,,
+Mercury,Lizard Man,Lizard_Man,12,Mars,,,
+Jupiter,Mauler,Mauler,8,Mars,,,
+Mercury,Siren,Siren,10,Mars,,,
+Mercury,Mercury Djinni,Mercury_Djinni,30,Mars,TRUE,5,djinn_draft
+Jupiter,Mimic,Mimic,20,Mars,TRUE,10,choice_draw
+Mars,Saturos,Saturos_Front,50,Mercury,TRUE,3,
+Mars,Boulder Beast,Boulder_Beast,8,Mercury,,,
+Mars,Chimera Mage,Chimera_Mage,8,Mercury,,,
+Mercury,Fenrir,Fenrir,15,Mars,,,
+Venus,Grand Golem,Grand_Golem,12,Jupiter,,,
+Jupiter,Ice Gargoyle,Ice_Gargoyle,8,Venus,,,
+Mars,Manticore King,Manticore_King,8,Mercury,,,
+Venus,Recluse,Recluse,6,Mars,,,
+Mercury,Skull Warrior,Skull_Warrior,15,Venus,,,
+Jupiter,Thunder Lizard,Thunder_Lizard,12,Venus,,,
+Venus,Wild Gryphon,Wild_Gryphon,12,Jupiter,,,
+Mercury,Willowisp,Willowisp,10,Venus,,,
+Mars,Fusion Dragon,Fusion_Dragon,150,Mercury,TRUE,2,
+Jupiter,Tempest Lizard,Tempest_Lizard,50,Venus,TRUE,4,
+Venus,Venus Djinni,Venus_Djinni,60,Jupiter,TRUE,5,djinn_draft
+Mercury,Blue Dragon,Blue_Dragon,30,Mars,,,
+Jupiter,Devil Scorpion,Devil_Scorpion,23,Mars,,,
+Mercury,Foul Mummy,Foul_Mummy,23,Mars,,,
+Mercury,Ghost Army,Ghost_Army,20,Jupiter,,,
+Mars,Macetail,Macetail,20,Mercury,,,
+Venus,Wyvern,Wyvern,25,Jupiter,,,
+Jupiter,Jupiter Djinni,Jupiter_Djinni,60,Venus,TRUE,5,djinn_draft
+Mercury,Star Magician,Star_Magician,90,Mars,TRUE,4,
+Mercury,Sentinel,Sentinel,190,Venus,TRUE,0,
+Mars,Agatio,Agatio,140,Mercury,TRUE,3,
+Mars,Karst,Karst,140,Mercury,TRUE,3,
+Mars,Anger Ball,Anger_Ball,20,Mercury,TRUE,10,
+Venus,Guardian Ball,Guardian_Ball,20,Jupiter,TRUE,10,
+Mercury,Refresh Ball,Refresh_Ball,20,Mars,TRUE,10,
+Jupiter,Thunder Ball,Thunder_Ball,20,Venus,TRUE,10,

@@ -81,9 +81,9 @@ function CastSummon(summonID, playerID){
 			caster.atkmod_fresh = true
 			InjectLog("Party ATK increased by 3!")
 			global.attackQueue = [WeaponAttack(true,false,Megaera1122),WeaponAttack(true,false,Megaera1122)]
-			DestroyAllBut()
-			ClearOptions()
-			DeleteButtons()
+			
+			
+			
 			ProcessAttackQueue()
 			_handled = true
 			ExhaustSummonDjinn(summonID)
@@ -130,18 +130,16 @@ function CastSummon(summonID, playerID){
 		case "Coatlicue":
 			_struct.splash = Coatlicue1111
 			for (var _p = 0; _p < array_length(global.players); _p++) {
-				if (global.players[_p].hp > 0) {
+				
 					var _coat_heal = global.players[_p].hpmax - global.players[_p].hp
 					if (global.players[_p].halfheal and _coat_heal > 0) { _coat_heal = floor(_coat_heal / 2) }
 					global.players[_p].hp = min(global.players[_p].hp + _coat_heal, global.players[_p].hpmax)
-				}
+				
 			}
 			InjectLog("All allies recovered HP!")
 			var _coat_data = { amount: 5 }
 			AddPassive("regen", 5, asset_get_index(summon.alias), "Coatlicue", _coat_data, playerID)
-			instance_destroy(objSummonMenu)
-			global.pause = false
-			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
 			_handled = true
 			break
 
@@ -161,9 +159,7 @@ function CastSummon(summonID, playerID){
 				AddPassive("skip_enemies", 2, asset_get_index(summon.alias), "Ulysses", _uly_data, playerID)
 				InjectLog("Enemies can't move!")
 			}
-			instance_destroy(objSummonMenu)
-			global.pause = false
-			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
 			_handled = true
 			break
 
@@ -171,26 +167,22 @@ function CastSummon(summonID, playerID){
 		case "Iris":
 			_struct.splash = Iris1117
 			for (var _p = 0; _p < array_length(global.players); _p++) {
-				if (global.players[_p].hp > 0) {
+				
 					var _coat_heal = global.players[_p].hpmax - global.players[_p].hp
 					if (global.players[_p].halfheal and _coat_heal > 0) { _coat_heal = floor(_coat_heal / 2) }
 					global.players[_p].hp = min(global.players[_p].hp + _coat_heal, global.players[_p].hpmax)
 				}
-			}
+			
 			InjectLog("All allies healed to full!")
 			AddPassive("damage_cap_1", 1, asset_get_index(summon.alias), "Iris", {}, playerID)
 			AddPassive("damage_half", 2, asset_get_index(summon.alias), "Iris", {}, playerID)
 			InjectLog("Party shielded from damage!")
-			instance_destroy(objSummonMenu)
-			global.pause = false
-			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
 			_handled = true
 			break
 
 		// ── Charon: pair-cost instant-kill ──────────────────────────────
 		case "Charon":
-			instance_destroy(objSummonMenu)
-			global.pause = true
 			instance_create_depth(0, 0, 0, objCharonPicker, _struct)
 			ExhaustSummonDjinn(summonID)
 			exit
@@ -201,9 +193,7 @@ function CastSummon(summonID, playerID){
 			_struct.splash = Judgment1118
 			_defer_djinn = true
 			global.summonSpellPick = { name: summon.name, element: summon.element, playerID: playerID, summonID: summonID, splash: _struct.splash }
-			instance_destroy(objSummonMenu)
-			global.pause = true
-			instance_create_depth(0, 0, 0, objSummonSpellPicker, global.summonSpellPick)
+			_PushSummonSpellMenu(global.summonSpellPick)
 			_handled = true
 			exit
 			break
@@ -211,9 +201,7 @@ function CastSummon(summonID, playerID){
 			_struct.splash = Meteor1123
 			_defer_djinn = true
 			global.summonSpellPick = { name: summon.name, element: summon.element, playerID: playerID, summonID: summonID, splash: _struct.splash }
-			instance_destroy(objSummonMenu)
-			global.pause = true
-			instance_create_depth(0, 0, 0, objSummonSpellPicker, global.summonSpellPick)
+			_PushSummonSpellMenu(global.summonSpellPick)
 			_handled = true
 			exit
 			break
@@ -221,9 +209,7 @@ function CastSummon(summonID, playerID){
 			_struct.splash = Thor1130
 			_defer_djinn = true
 			global.summonSpellPick = { name: summon.name, element: summon.element, playerID: playerID, summonID: summonID, splash: _struct.splash }
-			instance_destroy(objSummonMenu)
-			global.pause = true
-			instance_create_depth(0, 0, 0, objSummonSpellPicker, global.summonSpellPick)
+			_PushSummonSpellMenu(global.summonSpellPick)
 			_handled = true
 			exit
 			break
@@ -231,9 +217,7 @@ function CastSummon(summonID, playerID){
 			_struct.splash = Boreas1105
 			_defer_djinn = true
 			global.summonSpellPick = { name: summon.name, element: summon.element, playerID: playerID, summonID: summonID, splash: _struct.splash }
-			instance_destroy(objSummonMenu)
-			global.pause = true
-			instance_create_depth(0, 0, 0, objSummonSpellPicker, global.summonSpellPick)
+			_PushSummonSpellMenu(global.summonSpellPick)
 			_handled = true
 			exit
 			break
@@ -241,11 +225,19 @@ function CastSummon(summonID, playerID){
 		// ── Moloch: pick a number to nullify on enemy move lists ───────
 		case "Moloch":
 			_struct.splash = Moloch1124
-			instance_destroy(objSummonMenu)
-			global.pause = true
-			instance_create_depth(0, 0, 0, objMolochPicker, {source: "summon", caster_id: playerID})
-			_handled = true
+				_handled = true
 			ExhaustSummonDjinn(summonID)
+			PushMenu(objMenuSlider, {
+				minim: 1, maxim: 20, value: 1,
+				confirm_label: "Nullify",
+				label: function(v) { return "Nullify enemy move #" + string(v) },
+				on_confirm: method({ pid: playerID }, function(v) {
+					AddPassive("nullify_move", -1, asset_get_index("Moloch"), "Moloch", { number: v }, pid)
+					InjectLog("Moloch nullifies enemy move #" + string(v) + "!")
+					PopMenu()
+					NextTurn()
+				}),
+			})
 			exit
 			break
 
@@ -263,7 +255,7 @@ function CastSummon(summonID, playerID){
 					_eclipse_dam = max(1, ceil(_mon.maxhp * 0.5))
 				}
 				_mon.monsterHealth -= _eclipse_dam
-				_mon.flash_timer = 12; _mon.flash_color = ElementColor("jupiter")
+				_mon.flash_timer = FLASH_DURATION; _mon.damage_timer = DAMAGE_DURATION; _mon.flash_color = ElementColor("jupiter")
 				if (_mon.monsterHealth <= 0) {
 					_mon.monsterHealth = 0
 					global.gold += 1
@@ -275,23 +267,8 @@ function CastSummon(summonID, playerID){
 				}
 			}
 			// Check victory
-			var _any_alive = false
-			for (var _m = 0; _m < _mon_count; _m++) {
-				if (instance_find(objMonster, _m).monsterHealth != 0) { _any_alive = true; break }
-			}
-			instance_destroy(objSummonMenu)
-			if (!_any_alive and _mon_count > 0) {
-				InjectLog("Combat Victory!")
-				global.firstPlayer = global.turn
-				global.inCombat = false
-				global.pause = false
-				CombatCleanup()
-				ClearOptions()
-				instance_create_depth(0, 0, -10, objPostBattle)
-			} else {
-				global.pause = false
-				instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
-			}
+			CheckVictory()
+			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
 			_handled = true
 			break
 
@@ -305,8 +282,6 @@ function CastSummon(summonID, playerID){
 
 		default:
 			show_debug_message("CastSummon: '" + summon.name + "' has no implementation yet")
-			instance_destroy(objSummonMenu)
-			global.pause = false
 			_handled = true
 			break
 	}
@@ -326,14 +301,12 @@ function CastSummon(summonID, playerID){
 	// ── Dispatch (targeting summons) ────────────────────────────────────
 	// Store splash for objMonsterTarget to show on confirm
 	
-	instance_destroy(objSummonMenu)
-	DeleteButtons()
-	global.pause = false
+	
 
 	if (_struct.num > 0) {
 		SelectTargets(_struct)
 	} else {
-		instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})
+		instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: function(){NextTurn()}})
 	}
 }
 

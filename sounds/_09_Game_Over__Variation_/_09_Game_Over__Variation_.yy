@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"_09_Game_Over__Variation_",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":70.035355,
+  "exportDir":"",
+  "name":"_09_Game_Over__Variation_",
+  "parent":{
+    "name":"BGM",
+    "path":"folders/Sounds/BGM.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"_09_Game_Over__Variation_.mp3",
+  "volume":1.0,
+}

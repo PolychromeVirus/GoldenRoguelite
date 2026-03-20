@@ -9,6 +9,7 @@ function GetStatus(char){
 		if char.psyseal {array_push(statarray,Psy_Seal)}
 		if char.venom {array_push(statarray,Poison_Flow)}
 		if variable_struct_exists(char, "delude") and char.delude {array_push(statarray,Delude)}
+		if variable_struct_exists(char, "extraTurns") and char.extraTurns > 0 {array_push(statarray,jupiter1491)}
 		
 	return statarray
 }

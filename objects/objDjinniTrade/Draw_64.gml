@@ -1,3 +1,5 @@
+draw_sprite_ext(TestMenu, 0, 0, 0, 6, 6, 0, c_white, 1)
+
 var offset = 4
 draw_set_font(GoldenSun)
 

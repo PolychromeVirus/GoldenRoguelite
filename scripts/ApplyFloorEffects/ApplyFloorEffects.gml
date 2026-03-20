@@ -57,7 +57,7 @@ function ApplyFloorEffects() {
 			if (array_length(_alive) > 0) {
 				var _target = _alive[irandom(array_length(_alive) - 1)]
 				global.players[_target].poison = true
-				InjectLog(global.players[_target].name + " is poisoned by a spike!")
+				InjectLog(global.players[_target].name + " steps on a poisoned spike!")
 			}
 		}
 		else if (string_pos("Overload", _name) > 0) {
@@ -76,19 +76,19 @@ function ApplyFloorEffects() {
 				global.players[_p].hp = max(1, global.players[_p].hp - _affinity)
 			}
 			
-			InjectLog(_elem + " overload deals affinity damage!")
+			InjectLog("The light of the " + _elem + " Star reacts to your power!")
 		}
 		else if (_name == "Magic Powder") {
 			for (var _p = 0; _p < 4; _p++) {
-				if (global.players[_p].hp > 0) global.players[_p].stun = true
+				if (global.players[_p].hp > 0) global.players[_p].stun = 3
 			}
-			InjectLog("Magic powder stuns all adepts!")
+			InjectLog("Magic powder falls from the sky!")
 		}
 		else if (_name == "Sleeping Gas") {
 			for (var _p = 0; _p < 4; _p++) {
 				if (global.players[_p].hp > 0) global.players[_p].sleep = true
 			}
-			InjectLog("Sleeping gas puts all adepts to sleep!")
+			InjectLog("You suddenly feel very sleepy...")
 		}
 		else if (_name == "Psy Seal") {
 			for (var _p = 0; _p < 4; _p++) {
@@ -125,15 +125,15 @@ function ApplyPuzzleReward(_puzzle) {
 
 	if (_name == "Catch") {
 		instance_create_depth(0,0,0,objInsightDisplay)
-		InjectLog("You glimpse the challenges ahead!")
+		InjectLog("You found a map of the dungeon...")
 	}
 	else if (_name == "Cloak") {
 		array_push(global.floorEffects, { name: "cloak_round1", puzzle_index: -1 })
-		InjectLog("Cloak grants protection for round 1 of next combat!")
+		InjectLog("Your party is invisible!")
 	}
 	else if (_name == "Douse") {
 		array_push(global.floorEffects, { name: "enemy_def_down", puzzle_index: -1 })
-		InjectLog("Douse weakens enemy defenses! (-1 DEF)")
+		InjectLog("The enemies' defenses are doused!")
 	}
 	else if (_name == "Force") {
 		for (var _p = 0; _p < 4; _p++) {
@@ -167,11 +167,11 @@ function ApplyPuzzleReward(_puzzle) {
 			array_push(global.choiceDrawQueue, _p)
 		}
 		ProcessChoiceDrawQueue()
-		InjectLog("Found some hidden items! Choice draw for all!")
+		InjectLog("Some hidden chests!")
 	}
 	else if (_name == "Whirlwind") {
 		global.gold += 10
-		InjectLog("You pick up some coins in the wind!")
+		InjectLog("The whirlwind picked up some coins!")
 	}
 	else if (_name == "Frost") {
 		// Roll d4, on 1 a djinni joins
@@ -179,6 +179,7 @@ function ApplyPuzzleReward(_puzzle) {
 			InjectLog("There was a djinni on the other side!")
 			DjinnDraft()
 		} else {
+			InjectLog("There was nothing on the other side...")
 		}
 	}
 }
