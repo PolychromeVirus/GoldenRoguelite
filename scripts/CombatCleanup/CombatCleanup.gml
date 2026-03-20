@@ -1,11 +1,31 @@
 /// @function HandleVictory()
 /// @desc Called from all victory paths. Checks for Catch prompt, then runs CombatCleanup + objPostBattle.
+function VictoryMusic() {
+	audio_stop_all()
+	audio_play_sound(Victory, 1, false)
+}
+
 function HandleVictory() {
 	global.attackQueue = []
 	InjectLog("Combat Victory!")
 	global.firstPlayer = global.turn
-	global.inCombat = false
+	//global.inCombat = false
 	global.catchBonus = -1
+	VictoryMusic()
+
+	// Collect mini-boss set drops before monsters are cleared
+	global.miniBossDrops = []
+	var _mon_count = instance_number(objMonster)
+	for (var _m = 0; _m < _mon_count; _m++) {
+		var _mon = instance_find(objMonster, _m)
+		if variable_struct_exists(_mon, "drop") and _mon.drop != "" {
+			if _mon.drop == "djinn_draft" {
+				array_push(global.miniBossDrops, "djinn_draft")
+			} else if _mon.drop == "choice_draw" and !global.enemyFled {
+				array_push(global.miniBossDrops, "choice_draw")
+			}
+		}
+	}
 
 	var _catch_caster = FindSpellCaster("Catch")
 	if (_catch_caster >= 0) {
@@ -13,28 +33,23 @@ function HandleVictory() {
 		global._pendingCatchCaster = _catch_caster
 		instance_create_depth(0, 0, 0, TurnDelay, { wait: 1, on_complete: function() {
 			var _cc = global._pendingCatchCaster
-			instance_create_depth(0, 0, -100, objSpellPrompt, {
-				spell_name: "Catch",
-				caster_index: _cc,
-				on_confirm: method({ cc: _cc }, function() {
+			SpellPrompt("Catch", _cc,
+				method({ cc: _cc }, function() {
 					global.catchBonus = cc
-					global.pause = false
 					CombatCleanup()
-					ClearOptions()
+					
 					instance_create_depth(0, 0, -10, objPostBattle)
 				}),
-				on_decline: function() {
-					global.pause = false
+				function() {
 					CombatCleanup()
-					ClearOptions()
+					
 					instance_create_depth(0, 0, -10, objPostBattle)
 				}
-			})
+			)
 		}})
 	} else {
-		global.pause = false
 		CombatCleanup()
-		ClearOptions()
+		
 		instance_create_depth(0, 0, -10, objPostBattle)
 	}
 }
@@ -64,7 +79,8 @@ function CombatCleanup(){
 			if curr.pp > curr.ppmax{curr.pp = curr.ppmax}
 		}
 
-		ClearAllTokens(curr)
+		ClearCombatState(curr)
+		curr.rerolls = []
 		
 		// Recover spent djinn (spent → ready), in-recovery djinn stay
 		for (var _d = 0; _d < array_length(curr.djinn); _d++) {
@@ -79,7 +95,7 @@ function CombatCleanup(){
 			_dj.just_unleashed = false
 		}
 
-		if (!global.enemyFled) {
+		if (!global.enemyFled) and array_length(global.deck) {
 			var _itemIndex = global.deck[0]
 			var _cardData = DrawCard(curr)
 			var _cardName = _cardData[0]
@@ -92,12 +108,14 @@ function CombatCleanup(){
 
 		// Catch bonus: extra card draw for the caster
 		if (global.catchBonus >= 0) {
-			var _cc = global.catchBonus
-			var _extraIndex = global.deck[0]
-			var _extraData = DrawCard(global.players[_cc])
-			var _extraName = _extraData[0]
-			var _extraDisc = _extraData[1]
-			array_push(global.postBattleDraws, {player_index: _cc, card_name: _extraName, item_index: _extraIndex, discarded: _extraDisc})
+			if array_length(global.deck) > 0 {
+				var _cc = global.catchBonus
+				var _extraIndex = global.deck[0]
+				var _extraData = DrawCard(global.players[_cc])
+				var _extraName = _extraData[0]
+				var _extraDisc = _extraData[1]
+				array_push(global.postBattleDraws, {player_index: _cc, card_name: _extraName, item_index: _extraIndex, discarded: _extraDisc})
+			}
 			global.catchBonus = -1
 		}
 	}

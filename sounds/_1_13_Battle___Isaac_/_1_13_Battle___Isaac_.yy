@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"_1_13_Battle___Isaac_",
+  "audioGroupId":{
+    "name":"BattleThemes",
+    "path":"audiogroups/BattleThemes",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":147.0182,
+  "exportDir":"",
+  "name":"_1_13_Battle___Isaac_",
+  "parent":{
+    "name":"BGM",
+    "path":"folders/Sounds/BGM.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"_1_13_Battle___Isaac_.mp3",
+  "volume":1.0,
+}

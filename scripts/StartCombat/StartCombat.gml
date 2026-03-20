@@ -56,6 +56,18 @@ function StartCombat(_troop_override) {
 		drawx += split
 	}
 
+	// Set Ground to Set state at combat start (condition: starts combat face down)
+	for (var _gp = 0; _gp < array_length(global.players); _gp++) {
+		var _gdj = global.players[_gp].djinn
+		for (var _gd = 0; _gd < array_length(_gdj); _gd++) {
+			var _gdjinn = global.djinnlist[_gdj[_gd]]
+			if (_gdjinn.name == "Ground" && _gdjinn.ready) {
+				_gdjinn.ready = false
+				_gdjinn.spent = true
+			}
+		}
+	}
+
 	// Clear passives at combat start
 	global.passiveEffects = []
 
@@ -89,27 +101,27 @@ function StartCombat(_troop_override) {
 	}
 
 	var _halt_caster = _has_boss ? FindSpellCaster("Halt") : -1
-
+	
+	BattleMusic(_has_boss)
+	
 	if (_halt_caster >= 0) {
-		instance_create_depth(0, 0, -100, objSpellPrompt, {
-			spell_name: "Halt",
-			caster_index: _halt_caster,
-			on_confirm: function() {
+		SpellPrompt("Halt", _halt_caster,
+			function() {
 				// Skip boss pre-turn phase; boss acts after player 1 via NextTurn
 				global.turnPhase = "player"
 				global.players[global.turn].dicepool = RollDice(global.players[global.turn])
 				global.players[global.turn].pp += global.players[global.turn].ppinc
 				if global.players[global.turn].pp > global.players[global.turn].ppmax { global.players[global.turn].pp = global.players[global.turn].ppmax }
-				CreateOptions()
+				
 			},
-			on_decline: function() {
+			function() {
 				RunEnemyPhase(true)
 				global.turnPhase = "player"
 				global.players[global.turn].dicepool = RollDice(global.players[global.turn])
 				global.players[global.turn].pp += global.players[global.turn].ppinc
 				if global.players[global.turn].pp > global.players[global.turn].ppmax { global.players[global.turn].pp = global.players[global.turn].ppmax }
 			}
-		})
+		)
 	} else {
 		RunEnemyPhase(true)
 

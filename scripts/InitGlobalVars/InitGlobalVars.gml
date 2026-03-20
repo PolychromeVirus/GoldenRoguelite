@@ -1,16 +1,24 @@
 function InitGlobalVars(){
 	global.darken = false
 	global.textdisplay = ""
-	global.pause = false
 	global.option_buttons = []
 	global.challenge_buttons = []
+	global.menu_stack = []
 	global.turn = 0
 	global.errormessage = ""
 	global.genbackground = Sol_Sanctum
-	
+	global.genBGM = BGM_Mercury_Lighthouse
+	global.pause = false
 	global.hpcurse = 0
 	global.rescurse = 0
 	global.atkcurse = 0
+	audio_group_load(BossThemes)
+	audio_group_load(BattleThemes)
+	audio_group_load(BGM)
+	var _gain = 0.2
+	audio_group_set_gain(BossThemes,   _gain, 0)
+	audio_group_set_gain(BattleThemes, _gain, 0)
+	audio_group_set_gain(BGM,          _gain, 0)
 	
 	#macro INPUT_CONFIRM  0
 	#macro INPUT_CANCEL   1
@@ -52,12 +60,31 @@ function InitGlobalVars(){
 	#macro CREDIT3 76
 	#macro CREDIT4 112
 	
-	#macro CONFIRMSOUND audio_play_sound(MenuPositive,0,0)
-	#macro CANCELSOUND audio_play_sound(MenuNegative,0,0)
-	#macro MENUMOVE audio_play_sound(MenuMove,0,0)
-	#macro HITSOUND audio_play_sound(Damage,0,0)
 	
 	
+	#macro BTN_BREATH_SPEED  0.04
+	#macro BTN_BREATH_AMP   0.10
+	#macro BTN_PRESS_SCALE  0.82
+	#macro BTN_EASE_OUT     0.2
+	#macro FLASH_DURATION   10
+	#macro DAMAGE_DURATION  45
+
+	#macro STATUS_BEHAVIOR_OX  0   // x offset (centers 32px sprite on monster)
+	#macro STATUS_BEHAVIOR_OY  0    // y offset from bbox top — negative = above visible area
+	#macro STATUS_DOT_OX        0    // x offset for venom/poison
+	#macro STATUS_DOT_OY        0    // y offset from bbox top — 0 = flush with visible top
+	#macro STATUS_PSYSEAL_OX    0    // x offset — right side of sprite
+	#macro STATUS_PSYSEAL_OY   -2    // y offset from bbox top
+
+	#macro CONFIRMSOUND audio_stop_sound(MenuPositive);audio_play_sound(MenuPositive,0,0)
+	#macro CANCELSOUND audio_stop_sound(MenuNegative);audio_play_sound(MenuNegative,0,0)
+	#macro MENUMOVE audio_stop_sound(MenuMove);audio_play_sound(MenuMove,0,0)
+	#macro HITSOUND audio_play_sound(DamageSound,0,0)
+	#macro BIGHIT audio_play_sound(TargetedBigHit,0,0)
+	#macro BIGHITMULT audio_play_sound(BigHit,0,0)
+	#macro SUMMONHIT audio_play_sound(VeryBigHit,0,0)
+	#macro INFLICT audio_play_sound(InflictStatus,0,0)
+
 	global.floor = 1
 	global.dungeon = 0
 	global.dungeonFloor = 1
@@ -76,6 +103,7 @@ function InitGlobalVars(){
 	global.townVisited = []
 	global.townFindQueue = []
 	global.artifactlist = []
+	
 
 	global.players = [variable_clone(global.characterlist[0]),
 					variable_clone(global.characterlist[1]),
@@ -117,15 +145,22 @@ function InitGlobalVars(){
 	global.c_armor = #ffe45f
 	global.c_psynergy = #e7abff
 	global.c_summon = #e7abff
+	global.c_menu = #006080
+	global.c_status = #ffa449
+	global.c_elemental = #ffffd0
+	global.c_melee = #bdbdbd	
 
 	global.lastselected = -1
 	global.passiveEffects = []
+	global.kbd_tooltip     = ""
+	global.using_kbd       = false
 	global.daedalusCascade = false
 	global.postBattleQueue = []
 	global.choiceDrawQueue = []
 	global.knownSummons = []
 	global.postBattleDraws = []
 	global.enemyFled = false
+	global.miniBossDrops = []
 	global.goldAtCombatStart = 0
 
 	global.AggressionSchema = {target: "enemy", num: 1, dam: 0, repeater: 0, dmgtype: "normal", unleash: {}, onConfirm: {}, splash: -1, 

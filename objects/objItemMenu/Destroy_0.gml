@@ -1,1 +1,1 @@
-instance_destroy(objQuarterMenu)
+// Background drawn directly in Draw_64, no pane instance to clean up

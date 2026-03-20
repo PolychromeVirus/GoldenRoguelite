@@ -1,8 +1,14 @@
 if array_length(monsters) == 0 { instance_destroy(); exit }
-if instance_position(mouse_x, mouse_y, objMonster){ 
-		selected = instance_position(mouse_x, mouse_y, objMonster).slotID
-	
-	}
+
+var _mx = device_mouse_x_to_gui(0)
+var _my = device_mouse_y_to_gui(0)
+if _mx != _prev_mx or _my != _prev_my { using_kbd = false }
+_prev_mx = _mx
+_prev_my = _my
+
+if !using_kbd and instance_position(mouse_x, mouse_y, objMonster) {
+    selected = instance_position(mouse_x, mouse_y, objMonster).slotID
+}
 if selected >= array_length(monsters) { selected = array_length(monsters) - 1 }
 if selected < 0 { selected = 0 }
 var mon = monsters[selected]
@@ -23,9 +29,11 @@ if _status_text != "" { global.textdisplay += _status_text }
 
 if InputPressed(INPUT_LEFT) {
     selected = (selected == 0) ? array_length(monsters) - 1 : selected - 1
+    using_kbd = true
 }
 if InputPressed(INPUT_RIGHT) {
     selected = (selected == array_length(monsters) - 1) ? 0 : selected + 1
+    using_kbd = true
 }
 if InputPressed(INPUT_CONFIRM) and clickable {
     logic()

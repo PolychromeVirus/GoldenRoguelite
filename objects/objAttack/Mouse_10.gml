@@ -1,3 +1,5 @@
+if instance_exists(objMonsterTarget) or instance_exists(objMenuGrid) { exit }
+
 var player      = global.players[global.turn]
 
 var dam         = WeaponAttack(true,false).dam

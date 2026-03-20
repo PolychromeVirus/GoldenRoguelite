@@ -1,7 +1,6 @@
 function EnterTown(town_index) {
 	global.currentTown = town_index
 	global.inTown = true
-	global.pause = true
 	var _town = global.townlist[town_index]
 
 	// Set town background

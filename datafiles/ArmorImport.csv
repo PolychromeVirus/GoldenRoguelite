@@ -14,7 +14,7 @@ Earth Shield,Earth_Shield,Shield,,Passive // Permanent:\n+2 Venus/Jupiter Resist
 Lucky Cap,Lucky_Cap,Headwear,,Self // Reroll 1 die\n(Can be used once per turn)\n\n12% chance to break after combat.
 Lure Cap,Lure_Cap,Headwear,,Passive // Enemy attacks have a higher chance of hitting you
 Orb of Force,Orb_of_Force,Psynergy,,Self // Learn Force\n\nPassive // Permanent:\nYou are able to cast Force
-Cleric's ring,Clerics_Ring,Ring,,Passive // Permanent:\nCurses cannot cause you to skip your turn\n\nCursed items still cannot be unequipped outside of town
+Cleric's Ring,Clerics_Ring,Ring,,Passive // Permanent:\nCurses cannot cause you to skip your turn\n\nCursed items still cannot be unequipped outside of town
 Fairy Ring,Fairy_Ring,Ring,,Passive // Permanent:\nAll dice in pool have -1  (min 1)
 Guardian Ring,Guardian_Ring,Ring,,Passive // Permanent:\nAll dice in pool have +1  (max 6)
 Herbed Shirt,Herbed_Shirt,Body,,Auto // Poison/Venom Damage:\nSelf // Cure Poison or Venom

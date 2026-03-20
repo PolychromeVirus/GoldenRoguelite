@@ -74,9 +74,10 @@ function LoadGame(){
 		}
 		
 		global.genbackground = global.dungeonlist[global.dungeon].background
-		
+
 		array_shuffle(global.deck)
 		room_goto_next()
+		audio_play_sound(global.genBGM,1,1)
 		
 	}
 }

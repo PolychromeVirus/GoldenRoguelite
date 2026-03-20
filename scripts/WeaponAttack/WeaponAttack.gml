@@ -1,19 +1,11 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function WeaponAttack(unleash = true, attack = true, splash = -1){
-	if instance_exists(objStatDisplay) { objStatDisplay.viewPlayer = global.turn }
-
-	if instance_number(objMonsterTarget) > 0 {
-		DeleteButtons()
-		global.pause = false
+	if attack and instance_number(objMonsterTarget) > 0 {
+		
 		exit
 	}
 	var _struct = variable_clone(global.AggressionSchema)
-	if attack{
-		DestroyAllBut()
-		DeleteButtons()
-	}
-	global.pause = false
 	var player      = global.players[global.turn]
 	var weapon_type = global.itemcardlist[player.weapon].type
 	var _atkmod = variable_clone(player.atkmod)
@@ -28,7 +20,6 @@ function WeaponAttack(unleash = true, attack = true, splash = -1){
 	if weapon_type != "Staff"{dam+=QueryDice(player, "elemental", "charge")}
 	if weapon_type == "Mace"{dam+=QueryDice(player, "all","charge")}
 	
-	global.pendingPPCost = 0
 	var _type = _struct.dmgtype
 	var _num = _struct.num
 	
@@ -52,6 +43,7 @@ function WeaponAttack(unleash = true, attack = true, splash = -1){
 		dam += _unleash.dam_bonus
 		if _unleash.double_atk { dam += player.atk + player.atkmod }
 		if _unleash.name == "Swift Blade" { dam *= 3 }
+		if _unleash.name == "Rapid Smash" { _struct.repeater = dam; _num = 1; dam = 1 }
 		if _unleash.convert_element != "" { _type = _unleash.convert_element }
 		if _unleash.num > 1 { _num = _unleash.num }
 		_statuses = _unleash.statuses

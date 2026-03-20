@@ -1,4 +1,8 @@
 # Windows
+
+GoldenSunOST
+GoldenSunSFXs
+GSSounds
  
 # Windows thumbnail cache files
 Thumbs.db
@@ -21,10 +25,13 @@ $RECYCLE.BIN/
 *.msix
 *.msm
 *.msp
+*/*.zip
+Release
  
 # Windows shortcuts
 *.lnk
- 
+*.md
+*.json
 # Mac
  
 ## General
@@ -57,3 +64,9 @@ Temporary Items
 # GameMaker temporary files
 *.resource_order
 *.old
+Release/GoldenRoguelite.zip
+/Release
+*.zip
+
+/cache
+/output

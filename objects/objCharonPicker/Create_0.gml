@@ -28,7 +28,6 @@ maxPairs = min(floor(total_ready / 2), _eligible)
 // If no valid targets at all, cancel immediately
 if maxPairs <= 0 {
 	InjectLog("No monsters for Charon to target!")
-	global.pause = false
 	DeleteButtons()
 	instance_destroy()
 	instance_create_depth(0, 0, 0, TurnDelay, {wait: 30})

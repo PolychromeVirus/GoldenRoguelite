@@ -1,0 +1,2 @@
+clickable = true
+visible   = true

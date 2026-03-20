@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"MoveSpellSound",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":1.964331,
+  "exportDir":"",
+  "name":"MoveSpellSound",
+  "parent":{
+    "name":"SFX",
+    "path":"folders/Sounds/SFX.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"MoveSpellSound.wav",
+  "volume":1.0,
+}

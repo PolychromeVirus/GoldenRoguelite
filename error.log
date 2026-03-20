@@ -1,0 +1,9 @@
+
+___________________________________________
+############################################################################################
+ERROR in action number 1
+of Draw Event for object objItemMenu:
+Push :: Execution Error - Variable Index [1] out of range [1] - -9.inventory(100022,1)
+ at gml_Object_objItemMenu_Draw_64 (line 85) -               var desctext = BuildVerboseDesc("item", global.players[global.turn].inventory[selected], global.players[global.turn])
+############################################################################################
+gml_Object_objItemMenu_Draw_64 (line 85)

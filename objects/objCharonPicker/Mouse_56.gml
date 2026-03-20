@@ -22,9 +22,18 @@ if instance_position(mouse_x, mouse_y, objConfirm) {
 
 	InjectLog("Charon consumes " + string(spent) + " djinn!")
 
-	// Multi-select instant kill via objMultiKillTarget
+	// Queue one instant-kill targeter per pair
+	for (var _k = 0; _k < pairs; _k++) {
+		var _s = variable_clone(global.AggressionSchema)
+		_s.dam     = 9999
+		_s.target  = "enemy"
+		_s.num     = 1
+		_s.source  = "summon"
+		_s.dmgtype = "none"
+		_s.splash  = (_k == 0) ? Charon1110 : -1
+		array_push(global.attackQueue, _s)
+	}
 	DeleteButtons()
-	global.pause = false
-	instance_create_depth(0, 0, 0, objMultiKillTarget, { kills_remaining: pairs, splash_spr: Charon1110 })
+	ProcessAttackQueue()
 	instance_destroy()
 }

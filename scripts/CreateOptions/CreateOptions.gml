@@ -15,7 +15,6 @@ function CreateOptions(){
 		if instance_number(objOptionCursor) < 1 {
 			instance_create_depth(0, 0, -1, objOptionCursor)
 		}
-		global.pause = false
 		return
 	}
 	if global.inCombat{
@@ -64,7 +63,7 @@ function CreateOptions(){
 		}
 
 		// Town button only available before any challenge is completed
-		if (_completed_count == 0 && array_length(global.dungeonlist) > global.dungeon) {
+		if !global.onFloor {
 			var _dun = global.dungeonlist[global.dungeon]
 			var _has_unvisited_town = false
 			for (var _ti = 0; _ti < array_length(_dun.towns); _ti++) {

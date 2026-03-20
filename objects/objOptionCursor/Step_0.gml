@@ -21,20 +21,39 @@ selected = clamp(selected, 0, array_length(_active) - 1)
 if mouse_x != _prev_mx or mouse_y != _prev_my { using_kbd = false }
 _prev_mx = mouse_x
 _prev_my = mouse_y
+global.using_kbd = using_kbd
 
-// Reset all button tints
+// Reset all button keyboard highlights
 for (var _i = 0; _i < array_length(global.option_buttons); _i++) {
     if instance_exists(global.option_buttons[_i]) {
-        global.option_buttons[_i].image_blend = c_white
+        global.option_buttons[_i].keyboard_hover = false
     }
 }
 for (var _i = 0; _i < array_length(global.challenge_buttons); _i++) {
     if instance_exists(global.challenge_buttons[_i]) {
-        global.challenge_buttons[_i].image_blend = c_white
+        global.challenge_buttons[_i].keyboard_hover = false
     }
 }
-// Highlight selected only in keyboard mode
-if using_kbd and !global.pause { _active[selected].image_blend = c_ltgray }
+// Highlight selected and set tooltip in keyboard mode
+global.kbd_tooltip = ""
+if using_kbd and !global.pause and array_length(_active) > 0 {
+    var _btn = _active[selected]
+    _btn.keyboard_hover = true
+    if variable_instance_exists(_btn, "hovertext") and _btn.hovertext != "" {
+        global.kbd_tooltip = _btn.hovertext
+    } else {
+        var _oi = _btn.object_index
+        if      _oi == objAttack     { global.kbd_tooltip = "Attack" }
+        else if _oi == objItem       { global.kbd_tooltip = "Items" }
+        else if _oi == objPsynergy   { global.kbd_tooltip = "Psynergy" }
+        else if _oi == objDjinni     { global.kbd_tooltip = "Djinn" }
+        else if _oi == objSummon     { global.kbd_tooltip = "Summon" }
+        else if _oi == objReroll     { global.kbd_tooltip = "Reroll" }
+        else if _oi == objContinue   { global.kbd_tooltip = "Continue" }
+        else if _oi == objTownButton { global.kbd_tooltip = "Town" }
+        else if _oi == objShopButton { global.kbd_tooltip = "Shop" }
+    }
+}
 
 if global.pause { exit }
 

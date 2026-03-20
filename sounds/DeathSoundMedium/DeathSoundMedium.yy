@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"DeathSoundMedium",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":1.6709297,
+  "exportDir":"",
+  "name":"DeathSoundMedium",
+  "parent":{
+    "name":"SFX",
+    "path":"folders/Sounds/SFX.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"DeathSoundMedium.wav",
+  "volume":1.0,
+}

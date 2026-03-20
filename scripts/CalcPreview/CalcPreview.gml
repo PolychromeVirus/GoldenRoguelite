@@ -20,8 +20,6 @@ function CalcPreview(action_type, action_id, player) {
 			result.element = spell.element
 			result.targets = (spell.targetType == "Ally") ? "Ally" : "Enemy"
 
-			var weapon_type = global.itemcardlist[player.weapon].type
-			var weapon_subset = (weapon_type == "Staff") ? "melee" : "all"
 			var weapon_atk = WeaponAttack(false,false).dam
 
 			switch spell.base {
@@ -60,23 +58,18 @@ function CalcPreview(action_type, action_id, player) {
 					break
 				case "Diamond Dust":
 					result.dam = weapon_atk
-					if spell.stage == 1 { result.description = string(result.dam) + " (+" + string(max(1, ceil(result.dam * 0.5))) + " splash)" }
 					if spell.stage == 2 { result.dam *= 2 }
 					break
 				case "Frost":
 					if spell.stage == 1 { result.dam = QueryDice(player, "melee", "charge") }
 					else if spell.stage == 2 { result.dam = QueryDice(player, "mercury", "charge") * 2 + QueryDice(player, "melee", "charge") }
-					else { result.dam = QueryDice(player, "mercury", "charge") * 3 + QueryDice(player, "melee", "charge") }
+					else { result.dam = QueryDice(player, "melee", "charge") + QueryDice(player, "mercury", "charge") * 2 }
 					break
 				case "Froth":
 					if spell.stage < 3 {
-						result.dam = QueryDice(player, "all", "charge")
-						if QueryDice(player, "venus", "charge") >= 2 { result.description = string(result.dam) + " (-2 DEF)"; return result }
-					}
-					else {
+						result.dam = QueryDice(player, "mercury", "charge")
+					} else {
 						result.dam = QueryDice(player, "mercury", "charge") * 2
-						var _froth_def = QueryDice(player, "venus", "charge")
-						if (_froth_def > 0) { result.description = string(result.dam) + " (-" + string(_froth_def) + " DEF)"; return result }
 					}
 					break
 				case "Fume":
@@ -97,13 +90,8 @@ function CalcPreview(action_type, action_id, player) {
 				case "Prism":
 					if spell.stage < 3 {
 						result.dam = QueryDice(player, "mercury", "highest")
-						var _jup = QueryDice(player, "jupiter", "affinity")
-						if _jup > 0 { result.description = "Lose turn x" + string(_jup) }
 					} else {
-						var _hits = QueryDice(player, "mercury", "top2")
-						result.dam = 1
-						result.description = "1x" + string(_hits)
-						return result
+						result.dam = QueryDice(player, "mercury", "highest") * 2
 					}
 					break
 				case "Quake":
@@ -113,11 +101,17 @@ function CalcPreview(action_type, action_id, player) {
 					break
 				case "Ragnarok":
 					result.dam = QueryDice(player, "venus", "values")
-					if spell.stage == 2 { result.dam *= 2 }
+					if spell.stage == 2 {
+						result.description = string(result.dam) + "x2"
+						return result
+					}
 					break
 				case "Slash":
 					result.dam = weapon_atk
-					if spell.stage == 3 { result.dam *= 2 }
+					if spell.stage == 3 {
+						result.description = string(result.dam) + "x2"
+						return result
+					}
 					break
 				case "Spire":
 					if spell.stage == 1 { result.dam = QueryDice(player, "all", "charge") }
@@ -137,10 +131,18 @@ function CalcPreview(action_type, action_id, player) {
 					break
 				case "Whirlwind":
 					result.dam = QueryDice(player, "jupiter", "charge") * 2
-					if spell.stage == 3 { result.dam += QueryDice(player, "jupiter", "uncharge") }
+					if spell.stage == 3 { result.dam += QueryDice(player, "all", "charge") - QueryDice(player, "jupiter", "charge") }
 					break
 
 				// Offensive utility spells
+				case "Plasma":
+					if spell.stage >= 3 {
+						result.dam = QueryDice(player, "jupiter", "highest")
+						result.description = string(result.dam) + "x" + string(QueryDice(player, "jupiter", "charge"))
+					} else {
+						result.description = string(QueryDice(player, "jupiter", "highest")) + "+"
+					}
+					return result
 				case "Backstab":
 					result.dam = weapon_atk + 2
 					break
@@ -166,7 +168,7 @@ function CalcPreview(action_type, action_id, player) {
 				// Status-only offensive
 				case "Dull":
 					result.dam = 0
-					result.description = "ATK -3"
+					result.description = "ATK-"
 					return result
 				case "Delude":
 					result.dam = 0
@@ -178,7 +180,7 @@ function CalcPreview(action_type, action_id, player) {
 					return result
 				case "Break":
 					result.dam = 0
-					result.description = "Clear Stats"
+					result.description = "Brk"
 					return result
 
 				// Ally buff/utility
@@ -186,46 +188,46 @@ function CalcPreview(action_type, action_id, player) {
 					result.heal = 0
 					result.targets = "Ally"
 					var _aegis = QueryDice(player, "venus", "charge")
-					if (spell.stage >= 2 && _aegis == QueryDice(player, "venus", "affinity")) { result.description = "DEF +" + string(_aegis) }
-					else { result.description = "DEF +" + string(_aegis) + " / ATK -" + string(_aegis) }
+					if (spell.stage >= 2 && _aegis == QueryDice(player, "venus", "affinity")) { result.description = "DEF+"}
+					else { result.description = "DEF+" + " / ATK-"}
 					return result
 				case "Ward":
 					result.targets = "Ally"
-					result.description = "DEF +3"
+					result.description = "DEF+"
 					return result
 				case "Impact":
 					result.targets = "Ally"
-					result.description = "ATK +3"
+					result.description = "ATK+"
 					return result
 				case "Root":
 					var _rt = (spell.stage == 1) ? 3 : 6
 					result.targets = "Ally"
-					result.description = string(_rt) + " Root"
+					result.description = ""
 					return result
 				case "Revive":
-					result.heal = QueryDice(player, "venus", "affinity")
+					result.heal = QueryDice(player, "venus", "affinity") * 2
 					result.targets = "Ally"
-					result.description = "Revive"
+					result.description = "Rev"
 					return result
 				case "Burn Off":
 					result.targets = (spell.stage >= 2) ? "All Allies" : "Ally"
-					result.description = "Clear Buffs"
+					result.description = "Brk"
 					return result
 				case "Restore":
 					result.targets = (spell.stage >= 2) ? "All Allies" : "Ally"
-					result.description = "Cure Status"
+					result.description = "Cure"
 					return result
 				case "Resonate":
 					result.targets = "Self"
-					result.description = "Buff Spells"
+					result.description = ""
 					return result
 				case "Cloak":
 					result.targets = "Ally"
-					result.description = "Cloak"
+					result.description = ""
 					return result
 				case "Djinn Echo":
 					result.targets = "Self"
-					result.description = (spell.stage >= 2) ? "Djinn x3 + Unleash" : "Djinn x3"
+					result.description = (spell.stage >= 2) ? "Unl" : ""
 					return result
 
 				// Healing spells
@@ -285,8 +287,8 @@ function CalcPreview(action_type, action_id, player) {
 				case "Vial":       result.heal = 10; result.targets = "Ally"; break
 				case "Potion":     result.heal = 20; result.targets = "Ally"; break
 				case "Psy Crystal": result.heal = 3; result.targets = "Ally"; result.description = "+3 PP"; return result
-				case "Water of Life": result.heal = player.hpmax; result.targets = "Ally"; result.description = "Revive"; return result
-				case "Mist Potion": result.heal = 99; result.targets = "All Allies"; result.description = "Full Heal All"; return result
+				case "Water of Life": result.heal = player.hpmax; result.targets = "Ally"; result.description = "Rev"; return result
+				case "Mist Potion": result.heal = 99; result.targets = "All Allies"; result.description = "100% HP"; return result
 				case "Oil Drop":
 					result.dam = QueryDice(player, "elemental", "charge") + 1
 					result.element = "Mars"; result.targets = "All Enemies"; break
@@ -346,19 +348,16 @@ function CalcPreview(action_type, action_id, player) {
 					break
 				case "Sap":
 					result.dam = WeaponAttack(true,false).dam
-					result.description = string(result.dam) + " (drain)"
-					return result
+					break
 				case "Geode":
 					result.dam = WeaponAttack(true,false).dam + WeaponAttack(false,false).dam
 					break
 				case "Torch":
 					result.dam = weapon_atk
-					result.description = string(result.dam) + " (pierce)"
-					return result
+					break
 				case "Scorch":
 					result.dam = weapon_atk
-					result.description = string(result.dam) + " (stun)"
-					return result
+					break
 
 				// Heal all
 				case "Spritz":
@@ -380,17 +379,17 @@ function CalcPreview(action_type, action_id, player) {
 					result.targets = "Ally"
 					break
 				case "Fizz":
-					result.heal = floor(player.hpmax / 2)
+					result.description = "50% HP"
 					result.targets = "Ally"
 					break
 
 				// PP recovery
 				case "Ember":
-					result.description = string(QueryDice(player, "mars", "charge")) + " PP All"
+					result.description = string(QueryDice(player, "mars", "charge")) + " PP"
 					result.targets = "All Allies"
 					return result
 				case "Aroma":
-					result.description = string(QueryDice(player, "elemental", "charge")) + " PP All"
+					result.description = string(QueryDice(player, "elemental", "charge")) + " PP"
 					result.targets = "All Allies"
 					return result
 				case "Ether":
@@ -400,39 +399,38 @@ function CalcPreview(action_type, action_id, player) {
 
 				// Stat buffs (all)
 				case "Forge":
-					result.description = "ATK +2 All"
+					result.description = "ATK+"
 					result.targets = "All Allies"
 					return result
 				case "Iron":
-					result.description = "DEF +2 All"
+					result.description = "DEF+"
 					result.targets = "All Allies"
 					return result
 				case "Corona": case "Breeze":
-					result.description = "DEF +2 All"
+					result.description = "DEF+"
 					result.targets = "All Allies"
 					return result
 
 				// Status infliction
 				case "Luff": case "Rime":
-					result.description = "Psy Seal"
+					result.description = "Seal"
 					return result
 				case "Fog":
 					result.description = "Delude"
 					return result
 				case "Waft":
-					result.description = "Sleep x3"
+					result.description = "Sleep"
 					return result
 				case "Fury":
 					result.dam = QueryDice(player, "all", "charge")
-					result.description = string(result.dam) + " (haunt)"
-					return result
+					break
 				case "Gasp":
-					result.description = "Haunt All"
+					result.description = "Haunt"
 					return result
 
 				// Weapon-based djinn
 				case "Gel":
-					result.dam = WeaponAttack(true,false).dam + WeaponAttack(true,false).unleash.dam_bonus
+					result.dam = WeaponAttack(true,false).dam + WeaponAttack(true,false).unleash.dam_bonus * 2
 					break
 				case "Serac": case "Whorl":
 					result.dam = WeaponAttack(false,false).dam
@@ -448,27 +446,27 @@ function CalcPreview(action_type, action_id, player) {
 				case "Quartz":
 					result.heal = floor(player.hpmax / 2)
 					result.targets = "Ally"
-					result.description = "Revive"
+					result.description = "Rev"
 					return result
 				case "Dew":
 					result.heal = 9999
 					result.targets = "Ally"
-					result.description = "Revive"
+					result.description = "Rev"
 					return result
 				case "Spark":
 					result.targets = "Ally"
-					result.description = "Revive 50%"
+					result.description = "Rev"
 					return result
 				case "Tinder":
 					result.heal = QueryDice(player, "mars", "affinity")
 					result.targets = "Ally"
-					result.description = "Revive (delayed)"
+					result.description = "Rev"
 					return result
 
 				// Tonic
 				case "Tonic":
 					result.targets = "All Allies"
-					result.description = "Cure Status"
+					result.description = "Cure"
 					return result
 
 				// Steel
@@ -479,69 +477,67 @@ function CalcPreview(action_type, action_id, player) {
 
 				// Passives / utility
 				case "Shade": case "Granite":
-					result.description = "Halve DMG"
+					result.description = ""
 					result.targets = "All Allies"
 					return result
 				case "Flash":
-					result.description = "Cap DMG 1"
+					result.description = ""
 					result.targets = "All Allies"
 					return result
 				case "Ground":
-					result.description = "Skip Enemies"
+					result.description = "Skip"
 					result.targets = "All Allies"
 					return result
 				case "Salt":
-					result.description = "Cleanse All"
+					result.description = "Cure+?"
 					result.targets = "All Allies"
 					return result
 				case "Mud":
-					result.description = "Restrict"
+					result.description = ""
 					return result
 				case "Vine":
-					result.description = "Tangle"
+					result.description = ""
 					return result
 				case "Steam":
-					result.description = "Element Buff"
+					result.description = "Ele+"
 					return result
 				case "Kindle":
-					result.description = "Melee Buff"
+					result.description = "Mel+"
 					return result
 				case "Reflux":
-					result.description = "Counter"
+					result.description = ""
 					result.targets = "Self"
 					return result
 				case "Coal":
-					result.description = "Reroll (pick)"
+					result.description = ""
 					result.targets = "All Allies"
 					return result
 				case "Zephyr":
-					result.description = "Reroll (full)"
+					result.description = ""
 					result.targets = "All Allies"
 					return result
 				case "Lull":
-					result.description = "Ceasefire"
+					result.description = ""
 					return result
 				case "Haze":
 					result.targets = "Ally"
-					result.description = "Cloak"
+					result.description = ""
 					return result
 				case "Flower":
-					result.description = "Assign Venus"
+					result.description = "X HP"
 					result.targets = "Ally"
 					return result
 				case "Petra":
-					result.description = "Pick Target"
+					result.description = ""
 					return result
 				case "Gust":
 					result.dam = WeaponAttack(true,false).dam
-					result.description = string(result.dam) + " (33% x2)"
-					return result
+					break
 				case "Gale":
-					result.description = "50% KO"
+					result.description = "OHKO?"
 					return result
 				case "Fugue":
-					result.dam = QueryDice(player, "all", "charge")
-					result.description = string(result.dam) + " hits"
+					result.description = "1x" + string(QueryDice(player, "all", "charge"))
 					return result
 
 				default:
@@ -561,6 +557,81 @@ function CalcPreview(action_type, action_id, player) {
 
 		default:
 			result.description = "?"
+			break
+
+		// ── SUMMON ──────────────────────────────────────────────────────
+		case "summon":
+			var _summon = global.summonlist[action_id]
+			result.element = _summon.element
+
+			var weapon_atk = WeaponAttack(false,false).dam
+
+			switch _summon.name {
+				case "Zagan":
+					result.dam = weapon_atk
+					break
+				case "Megaera":
+					result.dam = WeaponAttack(true,false).dam
+					break
+				case "Flora":
+					for (var _p = 0; _p < array_length(global.players); _p++) {
+						if (global.players[_p].hp > 0) { result.dam += global.players[_p].jupiter }
+					}
+					break
+				case "Catastrophe":
+					result.dam = WeaponAttack(true,false).dam
+					break
+				case "Azul":
+					result.dam = QueryDice(player, "elemental", "affinity")
+					break
+				case "Haures":
+					result.description = "Poison"
+					result.targets = "All Enemies"
+					return result
+				case "Coatlicue":
+					result.heal = 9999
+					result.targets = "All Allies"
+					result.description = "Full HP"
+					return result
+				case "Ulysses":
+					result.description = "Skip"
+					result.targets = "All Enemies"
+					return result
+				case "Iris":
+					result.heal = 9999
+					result.targets = "All Allies"
+					result.description = "Full HP"
+					return result
+				case "Charon":
+					result.description = "OHKO"
+					return result
+				case "Judgment": case "Meteor": case "Thor": case "Boreas":
+					result.description = "Max Spell"
+					return result
+				case "Moloch":
+					result.description = "Nullify"
+					return result
+				case "Eclipse":
+					result.description = "50% HP"
+					result.targets = "All Enemies"
+					return result
+				case "Daedalus":
+					result.dam = QueryDice(player, "all", "values")
+					break
+				default:
+					result.description = "?"
+					return result
+			}
+
+			if result.description == "" {
+				if result.heal > 0 {
+					result.description = string(result.heal) + " HP"
+				} else if result.dam > 0 {
+					result.description = string(result.dam)
+				} else {
+					result.description = "?"
+				}
+			}
 			break
 	}
 

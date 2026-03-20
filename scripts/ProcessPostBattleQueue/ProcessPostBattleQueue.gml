@@ -20,6 +20,21 @@ function ProcessPostBattleQueue() {
 			}
 			global.activeChallengeIndex = -1
 		}
+		// Mini-boss set drops (djinn bosses, mimics)
+		if array_length(global.miniBossDrops) > 0 {
+			var _drop = global.miniBossDrops[0]
+			array_delete(global.miniBossDrops, 0, 1)
+			if _drop == "djinn_draft" {
+				DjinnDraft()
+			} else if _drop == "choice_draw" {
+				array_push(global.choiceDrawQueue, { player: global.players[0] })
+				array_push(global.choiceDrawQueue, { player: global.players[1] })
+				array_push(global.choiceDrawQueue, { player: global.players[2] })
+				array_push(global.choiceDrawQueue, { player: global.players[3] })
+				ProcessChoiceDrawQueue()
+			}
+			return
+		}
 		CreateOptions()
 		Autosave()
 	}

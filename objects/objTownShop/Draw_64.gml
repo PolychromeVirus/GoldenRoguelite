@@ -1,3 +1,8 @@
+// Draw backgrounds in GUI space — two full halves
+var _hw = sprite_get_width(HalfMenu) * 6
+draw_sprite_ext(HalfMenuMiddleSelector, 0, 0, 0, 6, 6, 0, c_white, 1)
+draw_sprite_ext(HalfMenu, 0, _hw, 0, 6, 6, 0, c_white, 1)
+
 var drawx = 50
 var drawy = 300
 var offset = 4
@@ -105,10 +110,9 @@ if (selected >= 0 && selected < array_length(shoplist)) {
 	var _desctext = ""
 
 	if (_sel.category == "Psynergy") {
-		var _sp = global.psynergylist[_sel.id]
-		_desctext = _sp.text
+		_desctext = BuildVerboseDesc("spell", _sel.id, global.players[global.turn])
 	} else if (_sel.category == "Summon") {
-		_desctext = global.summonlist[_sel.id].name + " Summon"
+		_desctext = BuildVerboseDesc("summon", _sel.id, global.players[global.turn])
 	} else if (_sel.category == "Artifact") {
 		var _art = global.itemcardlist[_sel.id]
 		var _bonustext = variable_struct_exists(_art, "artifact_bonus_text") ? _art.artifact_bonus_text : ""
@@ -151,8 +155,11 @@ if (selected >= 0 && selected < array_length(shoplist)) {
 	//	_desctext = string_delete(_desctext, 170, string_length(_desctext) - 169) + "..."
 	//}
 
-	draw_set_color(c_black)
-	draw_text_ext(descx + offset, descy + offset, _desctext, 40, 660)
-	draw_set_color(c_white)
-	draw_text_ext(descx, descy, _desctext, 40, 660)
+	//draw_set_color(c_black)
+	//draw_text_ext(descx + offset, descy + offset, _desctext, 40, 660)
+	//draw_set_color(c_white)
+	//draw_text_ext(descx, descy, _desctext, 40, 660)
+	
+	draw_rich_text(descx, descy, _desctext,660,offset,GoldenSun,40)
+	
 }

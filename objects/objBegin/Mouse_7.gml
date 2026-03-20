@@ -1,6 +1,5 @@
 
 global.charselect = false
-global.pause = false
 CreateDicePool()
 
 for (var i = 0; i < array_length(global.players); ++i) {

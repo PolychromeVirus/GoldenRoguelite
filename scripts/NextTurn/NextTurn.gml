@@ -1,10 +1,12 @@
 function NextTurn(){
 
+	// Clear any stale menus left on the stack
+	while array_length(global.menu_stack) > 0 { PopMenu() }
+
 	// --- Extra turn: skip djinn recovery, PP regen, boss phase — just reroll and go ---
 	if global.players[global.turn].extraTurns > 0 {
 		global.players[global.turn].extraTurns--
 		global.players[global.turn].dicepool = RollDice(global.players[global.turn])
-		CreateOptions()
 		exit
 	}
 
@@ -53,6 +55,12 @@ function _AdvanceTurn(){
 	else if (_cp.atkmod > 0) { _cp.atkmod-- }
 	else if (_cp.atkmod < 0) { _cp.atkmod++ }
 
+	// --- Psyseal countdown (outgoing player) ---
+	if (_cp.psyseal > 0) {
+		_cp.psyseal--
+		if (_cp.psyseal <= 0) { InjectLog(_cp.name + "'s psynergy is restored!") }
+	}
+
 	// --- Poison/venom tick for ALL players and monsters ---
 	var _poison_amt = 1
 	var _poison_passive = CheckPassive("poison_buff")
@@ -95,7 +103,7 @@ function _AdvanceTurn(){
 		global.playersActed = 0
 		global.turnPhase = "enemy"
 
-		ClearOptions()
+		
 		//TickPassives()
 		RunEnemyPhase(false, function() {
 			// Advance to firstPlayer (first alive from there)
@@ -114,8 +122,9 @@ function _AdvanceTurn(){
 		
 
 		global.turnPhase = "boss"
-		ClearOptions()
+		
 		RunEnemyPhase(true, function() {
+			TickMonsterStatuses()
 			_NextTurnSetupPlayer()
 		})
 	}
@@ -178,6 +187,7 @@ function _NextTurnSetupPlayer() {
 	if global.players[global.turn].hp <= 0 {
 		// Skip to next alive player without triggering another boss phase
 		for (var _sk = 0; _sk < 4; _sk++) {
+			TickPassiveForChar(global.turn)
 			global.turn = (global.turn + 1) mod 4
 			global.playersActed++
 			if global.players[global.turn].hp > 0 { break }
@@ -212,12 +222,12 @@ function _NextTurnSetupPlayer() {
 		}
 	}
 
-	// --- Curse check (cursed armor: d6, 1-2 = skip turn) ---
+// --- Curse check (cursed armor: d6, 1-2 = skip turn) ---
 	if _cur.cursed {
 		// Cleric's Ring negates curse turn-skip
 		var _hasClerics = false
 		for (var _ci = 0; _ci < array_length(_cur.armor); _ci++) {
-			if (global.itemcardlist[_cur.armor[_ci]].name == "Cleric's ring") {
+			if (global.itemcardlist[_cur.armor[_ci]].name == "Cleric's Ring") {
 				_hasClerics = true
 				break
 			}
@@ -225,8 +235,17 @@ function _NextTurnSetupPlayer() {
 		if (!_hasClerics) {
 			var _curseRoll = irandom(5) + 1
 			if (_curseRoll <= 2) {
-				InjectLog(_cur.name + " couldn't move due to a curse!")
-				_AdvanceTurn()
+				PushMenu(objMenuDialog, {
+					text:    _cur.name + " is under a curse!",
+					subtext: "Their turn is skipped.",
+					buttons: [{
+						label: "Continue", sprite: yes,
+						on_click: function() {
+							PopMenu()
+							_AdvanceTurn()
+						}
+					}]
+				})
 				return
 			}
 		}
@@ -258,5 +277,20 @@ function _NextTurnSetupPlayer() {
 	// Recreate action buttons for the new player's turn
 	if global.inCombat and !instance_exists(objAttack) {
 		CreateOptions()
+	}
+
+	// Planet Diver stage 2 detonation — fires automatically on the next turn after charging
+	if global.inCombat and variable_struct_exists(_cur, "planetary") and _cur.planetary.active {
+		_cur.planetary.active = false
+		_cur.halfheal = false
+		var _pkt = variable_clone(global.AggressionSchema)
+		_pkt.source  = "psynergy"
+		_pkt.dam     = _cur.planetary.damage
+		_pkt.dmgtype = _cur.planetary.element
+		_pkt.target  = "enemy"
+		_pkt.num     = 1
+		
+		InjectLog(_cur.name + " unleashes the planetary strike!")
+		SelectTargets(_pkt)
 	}
 }

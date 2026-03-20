@@ -26,6 +26,7 @@ function isEquippable(item){
 
 		case "Armor":
 			var _itemSlot = global.itemcardlist[item].slot
+			if array_length(_player.armor) > 3{ return false }
 			for (var i = 0; i < array_length(_player.armor); i++){
 				if global.itemcardlist[_player.armor[i]].slot == _itemSlot {
 					// Same slot occupied — allow swap unless existing piece is cursed (town overrides)

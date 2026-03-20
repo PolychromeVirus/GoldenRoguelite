@@ -3,6 +3,8 @@
 function DeleteButtons(){
 	global.option_buttons = []
 	global.challenge_buttons = []
+	global.kbd_tooltip = ""
+	global.using_kbd   = false
 	instance_destroy(objOptionCursor)
 	instance_destroy(objAttack)
 	instance_destroy(objBegin)

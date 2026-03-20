@@ -16,7 +16,7 @@ Mars,Fiery Blast,Fiery_Blast,16,3,Other,3,3,Blast,,,,,Target 3 // Mars Damage:\n
 Jupiter,Bolt,Bolt,3,1,Other,1,3,Bolt,,5,,,Target // 5 Jupiter Damage + Stun
 Jupiter,Flash Bolt,Flash_Bolt,6,3,Other,2,3,Bolt,,5,,,Target 3 // 5 Jupiter Damage + Stun
 Jupiter,Blue Bolt,Blue_Bolt,10,5,Other,3,3,Bolt,,10,,,Target 5 // 10 Jupiter Damage + Stun
-Mercury,Break,Break,3,1,Other,1,1,Break,,,,,Target 3 // Reset ATK and DEF
+Mercury,Break,Break,3,3,Other,1,1,Break,,,,,Target 3 // Reset ATK and DEF
 Mars,Burn Off,Dragon_Fire,2,1,Self,1,2,Burn Off,,,,,Target Adept // Reset ATK and DEF
 Mars,Burn Away,Epicenter,6,4,Self,2,2,Burn Off,,,,,Party // Reset ATK and DEF
 None,Catch,Catch,5,0,None,1,1,Catch,prompt,,,,"Auto // End of Combat, before Drawing:\nDraw an additional Item card."
@@ -63,20 +63,20 @@ None,Move,Move,3,0,None,1,1,Move,overworld,,,,Auto // Puzzle Drawn:\nShuffle Puz
 Mars,Planet Diver,Planet_Diver,8,1,Other,1,2,Planet Diver,,,,,Target // Mars or Venus Damage:\n2 Elemental Values\n(x 2 if one Mars and one Venus selected)
 Mars,Planetary,Planetary,18,1,Other,2,2,Planet Diver,,,,,Self // Set HP to 1\nPassive // 1 Round:\nReceive 1/2 Healing\nAuto // Start of Next Turn:\nTarget // Mars or Venus Damage:\nAll Values\n(x 2 if Venus Power and Mars Power equal)
 Jupiter,Plasma,Plasma,7,3,Other,1,3,Plasma,,,,,Target up to 3 // Jupiter Damage:\nAssigned Jupiter Values
-Jupiter,Shine Plasma,Shine_Plasma,10,5,Other,2,3,Plasma,,,,,Target up to 5 // Jupiter Damage:\nAssigned Jupiter Values\n(2 Dice may be assigned twice)
-Jupiter,Spark Plasma,Spark_Plasma,20,7,Other,3,3,Plasma,,,,,Target 7 // Jupiter Damage:\nSplit Jupiter Values
+Jupiter,Shine Plasma,Shine_Plasma,10,5,Other,2,3,Plasma,,,,,Target up to 5 // Jupiter Damage:\nAssigned Jupiter Values
+Jupiter,Spark Plasma,Spark_Plasma,20,7,Other,3,3,Plasma,,,,,"Random Targets // Jupiter Damage:\nHighest Jupiter Value, X times\n(X = Jupiter charge)"
 Mercury,Ply,Ply,2,1,Self,1,3,Ply,both,,,,Target Adept // Healing:\nHighest Mercury Value\nPassive // 3 Rounds: Auto // Start of target turn:\nTarget Adept // Recover 3 HP
 Mercury,Ply Well,Ply_Well,5,1,Self,2,3,Ply,both,,,,Target Adept // Healing:\nMercury Power\nPassive // 3 Rounds: Auto // Start of target turn:\nTarget Adept // Recover X HP (X = Mercury Power)
 Mercury,Pure Ply,Pure_Ply,10,1,Self,3,3,Ply,both,,,,Target Adept // Recover all HP\nPassive // 3 Rounds: Auto // Start of target turn:\nTarget Adept // Recover X HP (X = Mercury Power)
 Mercury,Prism,Prism,5,3,Other,1,3,Prism,,,,,Target 3 // Mercury Damage:\nHighest Mercury Value\nX Targets skip their turn (X = Jupiter Charge)
 Mercury,Hail Prism,Hail_Prism,7,5,Other,2,3,Prism,,,,,Target 5 // Mercury Damage:\nHighest Mercury Value\nX Targets skip their turn (X = Jupiter Charge)
-Mercury,Freeze Prism,Freeze_Prism,12,5,Other,3,3,Prism,,,,,Target 5 // 1 Mercury Damage\nRepeat X times (X = 2 x Highest Mercury Values)
+Mercury,Freeze Prism,Freeze_Prism,12,5,Other,3,3,Prism,,,,,Target 5 // 1 Mercury Damage\nRepeat X times (X = 2 x Highest Mercury Value)
 None,Psy Drain,Psy_Drain,0,1,Other,1,1,Psy Drain,,,,,Self // +X PP\n(X = All Charge)
 Venus,Quake,Quake,3,3,Other,1,3,Quake,,3,,,Target 3 // 3 Venus Damage
 Venus,Earthquake,Earthquake,7,5,Other,2,3,Quake,,,,,Target 5 // Venus Damage:\nVenus Power + 3
-Venus,Quake Sphere,Quake_Sphere,15,12,Other,3,3,Quake,,,,,Target 7 // Venus Damage:\nVenus Power x 2
+Venus,Quake Sphere,Quake_Sphere,15,7,Other,3,3,Quake,,,,,Target 7 // Venus Damage:\nVenus Power x 2
 Venus,Ragnarok,Ragnarok,10,1,Other,1,2,Ragnarok,,,,,Target // Venus Damage:\nVenus Values
-Venus,Odyssey,Odyssey,20,1,Other,2,2,Ragnarok,,,,,Target // Venus Damage:\nVenus Values\nTarget // Venus Damage:\nVenus Values\n\n(Both targets must be the same)
+Venus,Odyssey,Odyssey,20,1,Other,2,2,Ragnarok,,,,,Target // Venus Damage:\nVenus Values (Repeated once)
 Jupiter,Ray,Ray,3,3,Other,1,3,Ray,,3,,,Target 3 // 3 Jupiter Damage
 Jupiter,Storm Ray,Storm_Ray,6,3,Other,2,3,Ray,,8,,,Target 3 // 8 Jupiter Damage
 Jupiter,Destruct Ray,Destruct_Ray,10,3,Other,3,3,Ray,,12,,,Target 3 // 12 Jupiter Damage
@@ -109,6 +109,6 @@ Jupiter,Tempest,Tempest,12,5,Other,3,3,Whirlwind,,,,,Target 5 // Jupiter Damage:
 Mercury,Wish,Wish,4,4,Self,1,3,Wish,both,,,,Party // Healing:\nHighest Mercury Value
 Mercury,Wish Well,Wish_Well,6,4,Self,2,3,Wish,both,,,,Party // Healing:\nHighest Mercury Value + Mercury Power
 Mercury,Pure Wish,Pure_Wish,10,4,Self,3,3,Wish,both,,,,Party // Healing:\n(All Charge x 2) + Mercury Power
-None,Retreat,Retreat,5,0,None,1,1,Retreat,overworld,,,Isaac,"Auto // Puzzle revealed:\nTurn floor card face down on\ntop of the deck. You are no\nlonger on a floor.\n\nWhen revealed, a floor must be started from the beginning, even if it was started previously."
-Venus,Scoop,Scoop,5,0,None,1,1,Scoop,overworld,,,Felix,Self // Draw 1 Treasure
-Mercury,Insight,Bind,5,0,None,1,1,Insight,overworld,,,Amiti,"Auto // Not in battle:\nLook at the next floor card\nin the pile, and then put it\nback."
+None,Retreat,Retreat,5,0,None,1,1,Retreat,overworld,,,Isaac,[Utility] Restart Floor
+Venus,Scoop,Scoop,5,0,None,1,1,Scoop,overworld,,,Felix,[Self] Draw Card
+Mercury,Insight,Bind,5,0,None,1,1,Insight,overworld,,,Amiti,[Utility] Look at next floor's challenges
