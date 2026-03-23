@@ -285,6 +285,7 @@ function CastSummon(summonID, playerID){
 			_struct.splash = Daedalus1113
 			_defer_splash = true
 			_struct.dam = QueryDice(caster, "all", "values")
+			_struct.num = 1
 			global.daedalusCascade = true
 			break
 

@@ -1,1 +1,9 @@
-Macetail | dam=6 tempdam=6 resist=5 modif=0 defmod=0 element=Mars dmgtype=mars pierce=0
+DoDamage: Macetail | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Mars dmgtype=normal pierce=0
+DoDamage: Macetail | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Mars dmgtype=normal pierce=0
+DoDamage: Ghost Army | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Mercury dmgtype=normal pierce=0
+DoDamage: Ghost Army | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Mercury dmgtype=normal pierce=0
+DoDamage: Wyvern | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Venus dmgtype=normal pierce=0
+DoDamage: Wyvern | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Venus dmgtype=normal pierce=0
+DoDamage: Wyvern | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Venus dmgtype=normal pierce=0
+
+Daedalus cascade: tempdam=43 dam=43

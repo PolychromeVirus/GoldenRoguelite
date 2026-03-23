@@ -341,6 +341,7 @@ function DoDamage(struct){
 	// Daedalus cascade: spread half damage outward from selected target
 	if (variable_global_exists("daedalusCascade") and global.daedalusCascade) {
 		global.daedalusCascade = false
+		show_debug_message("Daedalus cascade: tempdam=" + string(tempdam) + " dam=" + string(dam))
 		var _cascade_dam = max(1, ceil(tempdam / 2))
 		// Spread left from selected
 		for (var _c = selected - 1; _c >= 0; _c--) {
