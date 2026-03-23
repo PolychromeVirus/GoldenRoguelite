@@ -48,10 +48,27 @@ function _PushSummonSpellMenu(pick) {
 	// Build carousel items with damage previews
 	var _items = []
 	for (var _ii = 0; _ii < array_length(_maxSpellIDs); _ii++) {
-		var _sp = global.psynergylist[_maxSpellIDs[_ii]]
-		var _prevDam = CalcPreview("spell",_maxSpellIDs[_ii], pick.playerID)
-		var _detail  = "Dmg: " + string(_prevDam) + "  Range: " + string(_sp.range)
-		array_push(_items, { name: _sp.name, detail: _detail, data: { spellID: _filteredSpells[_ii] } })
+		var _sp      = global.psynergylist[_maxSpellIDs[_ii]]
+		var _spOrig  = global.psynergylist[_filteredSpells[_ii]]
+		var _prev    = CalcPreview("spell", _maxSpellIDs[_ii], _caster)
+		var _detail  = ""
+		var _detail_color = c_white
+		if _prev.description != "" and _prev.description != "?" {
+			_detail = _prev.description
+			if _prev.heal > 0 { _detail_color = make_color_rgb(80, 220, 80) }
+			else { _detail_color = ElementColor(_prev.element) }
+		}
+		var _desc = BuildVerboseDesc("spell", _maxSpellIDs[_ii], _caster)
+		array_push(_items, {
+			name:         _sp.name + " - " + string(_spOrig.cost) + " PP",
+			element:      _sp.element,
+			sprite:       asset_get_index(_sp.alias),
+			right_sprite: asset_get_index("range_" + _sp.range),
+			detail:       _detail,
+			detail_color: _detail_color,
+			desc:         _desc,
+			data:         { spellID: _filteredSpells[_ii] },
+		})
 	}
 
 	_caster.dicepool = _savedPool
@@ -59,8 +76,15 @@ function _PushSummonSpellMenu(pick) {
 	PopMenu()
 	PushMenu(objMenuCarousel, {
 		items:         _items,
+		description:   "quarter",
 		confirm_label: "Cast",
-		on_confirm:    method({ _pick: pick }, function(i, item) {
+		draw_pane: method(undefined, function(sel, item) {
+			var _descx  = 820
+			var _descy  = 411
+			var _offset = 4
+			draw_rich_text(_descx, _descy, item.desc, 660, _offset, GoldenSun, 40, 6)
+		}),
+		on_confirm: method({ _pick: pick }, function(i, item) {
 			ExhaustSummonDjinn(_pick.summonID)
 			if _pick.splash != -1 {
 				instance_create_depth(0, 0, -100, objSummonSplash, { spr: _pick.splash })

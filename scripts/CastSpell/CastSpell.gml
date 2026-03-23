@@ -9,6 +9,7 @@ function CastSpell(spellID, playerID) {
 	var _cost = spell.cost
 	
 		_cost = max(1, _cost - caster.ppdiscount)
+	global.pendingAnim = undefined
 
 
 	// PP deduction deferred to target confirmation for spells that go through SelectTargets/objCharTarget
@@ -34,16 +35,51 @@ function CastSpell(spellID, playerID) {
 		case "Bolt":    // 5 / 5 / 10
 			struct.dam = real(spell.damage)
 			struct.statuses.inflict_stun = true
+			if spell.stage == 2 {
+				// Stage 2: one big bolt covers all targets simultaneously
+				SetAnim("sprite", "jupiter", { spr: sprZap, blend: "add", hold: 40, fires_hit: true, single_anim: true,
+					sub: [
+						{ type: "flash", at: 1, hold: 6, peak: 1, alpha: 0.5, shake: 8, shake_duration: 20 },
+						{ type: "burst", at: "hit", at_foot: true, count: 60, max_speed: 5, max_scale: 4, shake: 3, shake_duration: 10 },
+					]
+				})
+			} else {
+				SetAnim("sprite", "jupiter", { spr: sprZap, blend: "add", hold: 10 + spell.stage * 15, fires_hit: true,
+					stagger_damage: spell.stage == 3, stagger: 25,
+					sub: [
+						{ type: "flash", at: 1, hold: 6, peak: 1, alpha: 0.3 + spell.stage * 0.1, shake: 4 + spell.stage * 2, shake_duration: 20 },
+						{ type: "burst", at: "hit", at_foot: true, count: 30 + spell.stage * 15, max_speed: 5, max_scale: 2 + spell.stage, shake: 1 + spell.stage, shake_duration: 10 },
+					]
+				})
+			}
 			break
 		
 		case "Flare":   // 5 / 10 / 15
 		case "Ray":     // 3 / 8 / 12
 			struct.dam = real(spell.damage)
+			if spell.base == "Flare" {
+				SetAnim("fire", "mars", { fires_hit: true, stagger_damage: true, stagger: 20, width: 0.5, life: 40, life_var: 20, scl_var: spell.stage, shake: spell.stage, shake_duration: 10,
+					sub: [
+						{ type: "flash", at: 1, hold: 40 + spell.stage * 10, element: "mars" },
+						{ type: "fire", at: 1, count: 8 + spell.stage * 4, element: "mars" },
+					]
+				})
+			} else {
+				SetAnim("ray", "jupiter", { fires_hit: true, hit_delay: 40,
+					bolts: 3 + spell.stage * 2, spread: 12 + spell.stage * 4, bolt_w: 1,
+					hold: 60 + spell.stage * 15, linger: 40, flicker: 2, drizzle: 1, bolt_delay: 18,
+					cloud_height: 16, cloud_scl: 3 + spell.stage, cloud_scl_var: 2,
+					shake: spell.stage, shake_duration: 10
+				})
+			}
 			break
 
 		case "Douse":   // 3 / 8 / 12
-			
 			struct.dam = real(spell.damage)
+			SetAnim("drizzle", "mercury", { fires_hit: true, hit_delay: 80, hold: 80, linger: 50,
+				splash: true, splash_rate: 2, splash_life: 12, splash_scl: 1, splash_delay: 35,
+				clouds: true, cloud_height: 30, cloud_scl: 4, cloud_scl_var: 2, cloud_alpha: 0.8
+			})
 			break
 
 		// ── TIER 2: Dice-based damage (offensive) ───────────────────────────
@@ -56,6 +92,10 @@ function CastSpell(spellID, playerID) {
 			} else {
 				struct.dam = QueryDice(caster, "jupiter", "values")
 			}
+			SetAnim("burst", "jupiter", { fires_hit: true, windup: true, windup_duration: 8 + spell.stage * 4,
+				count: 25 + spell.stage * 15, max_speed: 3 + spell.stage, max_scale: spell.stage + 1,
+				shake: 2 + spell.stage, shake_duration: 12 + spell.stage * 3
+			})
 			break
 
 		case "Beam":
@@ -66,6 +106,13 @@ function CastSpell(spellID, playerID) {
 			} else {
 				struct.dam = QueryDice(caster, "mars", "charge") * 3
 			}
+			
+			var _core = 2 + spell.stage * 2     // stage 1: 8, stage 2: 12, stage 3: 16
+			var _outer = _core + 6               // stage 1: 14, stage 2: 18, stage 3: 22
+			SetAnim("pillar", "mars", { fires_hit: true, core_w: _core, outer_w: _outer, hold: 60, shake: 1 + spell.stage, shake_duration: 15,
+				sub: { type: "burst", at: 20, count: 10 + struct.dam * 3, max_scale: spell.stage }
+			})
+			
 			break
 
 		case "Blast":
@@ -77,7 +124,7 @@ function CastSpell(spellID, playerID) {
 			if caster.mercury > 0{struct.num += 1}
 			struct.dam = QueryDice(caster, "all", "charge")
 			if spell.stage == 2{struct.dam += struct.num * 2}
-			
+
 			if spell.stage == 3{
 				struct.num = 3
 				struct.dam = 0
@@ -86,7 +133,9 @@ function CastSpell(spellID, playerID) {
 				if caster.jupiter > 0{struct.dam += QueryDice(caster, "jupiter", "highest")}
 				if caster.mercury > 0{struct.dam += QueryDice(caster, "mercury", "highest")}
 			}
-			
+			SetAnim("burst", "mars", { fires_hit: true, count: 20 + spell.stage * 20, windup: (spell.stage >= 2), shake: spell.stage * 2, shake_duration: 10 + spell.stage * 5,
+				sub: (spell.stage >= 3) ? { type: "flash", at: "hit", hold: 10 } : undefined
+			})
 			break
 
 		case "Cool":
@@ -100,15 +149,53 @@ function CastSpell(spellID, playerID) {
 			} else {
 				struct.dam = QueryDice(caster, "all", "charge")
 			}
+			// Phase 1: quick flash + freeze all
+			SetAnim("flash", "mercury", {
+				hold: 10, peak: 1, alpha: 0.2,
+				freeze_target: true
+			})
+			// Phase 2: frozen hold with random glints
+			SetAnim("flash", "mercury", {
+				hold: 15 + spell.stage * 5, peak: 1, alpha: 0.0,
+				glint: true, glint_interval: 4 + irandom(3)
+			})
+			// Phase 3: thin icy pillars — staggered per target
+			var _core = 2 + spell.stage
+			var _outer = _core + 3
+			SetAnim("pillar", "mercury", { fires_hit: true, stagger_damage: true, unfreeze_target: true,
+				core_w: _core, outer_w: _outer, hold: 30 + spell.stage * 5, fade: 0, linger: 20,
+				stagger: 20, shake: 1 + spell.stage, shake_duration: 10
+			})
 			break
 
 		case "Diamond Dust":
 			// Stage 1: weapon attack as Mercury, half damage to neighbours
-			// Stage 2 (Diamond Berg): weapon attack × 2
+			// Stage 2 (Diamond Berg): weapon attack × 2, freeze → pillar shatter
 			if spell.stage == 1 {struct.onConfirm.splash_ratio = 0.5
-				struct.onConfirm.splash_element = "mercury"}
+				struct.onConfirm.splash_element = "mercury"
+				struct.onConfirm.splash_delay = 20}
 			struct.dam = weapon_atk
-			if spell.stage == 2 { struct.dam *= 2 }
+			if spell.stage == 2 {
+				struct.dam *= 2
+				// Freeze target
+				SetAnim("flash", "mercury", {
+					hold: 8, peak: 1, alpha: 0.15,
+					freeze_target: true
+				})
+				// Frozen hold with glints
+				SetAnim("flash", "mercury", {
+					hold: 60, peak: 1, alpha: 0.0,
+					glint: true, glint_interval: 5 + irandom(3)
+				})
+				// Pillar shatter + burst
+				var _dd_core = 4
+				var _dd_outer = 10
+				SetAnim("pillar", "mercury", { fires_hit: true, unfreeze_target: true,
+					core_w: _dd_core, outer_w: _dd_outer, hold: 30, fade: 0, linger: 20,
+					shake: 3, shake_duration: 12,
+					sub: { type: "burst", at: "hit", count: 25, max_speed: 3, max_scale: 0, trail: 0 }
+				})
+			}
 			break
 
 		case "Frost":
@@ -123,6 +210,24 @@ function CastSpell(spellID, playerID) {
 			} else {
 				struct.dam = QueryDice(caster, "melee", "charge") + QueryDice(caster, "mercury", "charge") * 2
 			}
+			// Phase 1: mercury wind swirl, then freeze target
+			SetAnim("wind", "mercury", {
+				rate: 2 + spell.stage * 2, amp: 10 + spell.stage * 3, osc_speed: 0.14 + spell.stage * 0.02,
+				osc_y: 2 + spell.stage, spread_x: 4, spread_y: 6 + spell.stage * 3,
+				life: 30 + spell.stage * 8, trail: 4, scl: 1, scl_var: spell.stage,
+				hold: 40 + spell.stage * 10, linger: 10,
+				freeze_target: true
+			})
+			// Phase 2: frozen hold — white glint flashes on the frozen target
+			SetAnim("flash", "mercury", {
+				hold: 60 + spell.stage * 10, peak: 1, alpha: 0.15,
+				glint: true, glint_interval: 10
+			})
+			// Phase 3: shatter burst — unfreeze + damage (staggered per target)
+			SetAnim("burst", "mercury", { fires_hit: true, stagger_damage: true, unfreeze_target: true,
+				count: 20 + spell.stage * 15, max_speed: 4 + spell.stage, max_scale: 1 + spell.stage,
+				shake: 2 + spell.stage * 2, shake_duration: 12 + spell.stage * 3
+			})
 			break
 
 		case "Froth":
@@ -136,6 +241,14 @@ function CastSpell(spellID, playerID) {
 				var _froth_def = QueryDice(caster, "venus", "charge")
 				if (_froth_def > 0) { struct.statuses.inflict_defdown = _froth_def }
 			}
+			var _struct = { fires_hit: true, hit_delay: 80, hold: 80, linger: 50,
+				splash: true, splash_rate: 2, splash_life: 12, splash_scl: 1, splash_delay: 35,
+				clouds: true, cloud_height: 30, cloud_scl: 4, cloud_scl_var: 2, cloud_alpha: 0.8,
+				overlay_element: "venus", overlay_rate: 0.5
+			}
+			if (struct.statuses[$ "inflict_defdown"] ?? 0) > 0 { _struct.sub = { type: "flash", element: "venus", at: 10 } }
+			SetAnim("drizzle", "mercury", _struct)
+			
 			break
 
 		case "Fume":
@@ -149,6 +262,12 @@ function CastSpell(spellID, playerID) {
 			} else {
 				struct.dam = QueryDice(caster, "mars", "values") * 2
 			}
+			
+			SetAnim("meteor", "mars", { fires_hit: true, power: struct.dam, no_burst: true, trail_life: 40,
+				impact_foot: true, fire: true, fire_rate: 3 + spell.stage * 2, fire_hold: 60 + spell.stage * 20,
+				shake: 2 + spell.stage * 2, shake_duration: 15 + spell.stage * 5
+			})
+			
 			break
 
 		case "Gaia":
@@ -159,6 +278,15 @@ function CastSpell(spellID, playerID) {
 			if spell.stage == 2 { struct.dam *= 2 }
 			if spell.stage == 2 and QueryDice(caster,"jupiter","charge"){struct.num = 6}
 			if spell.stage == 3{ struct.dam *= power(2,QueryDice(caster,"jupiter","charge")) }
+			
+			var _shake = 2 + spell.stage * 2  // stage 1: 4, stage 2: 6, stage 3: 8
+			var _open = 20 + spell.stage * 5
+			SetAnim("fire", "venus", { fires_hit: true,
+				rate: 0.5 + spell.stage * 0.5, hold: 120 + spell.stage * 30, hit_delay: 120 + spell.stage * 30,
+				linger: 40 + spell.stage * 10, shake: _shake, shake_duration: 120 + spell.stage * 30,
+				fissure: true, fissure_open: _open, fissure_width: 1.2 + spell.stage * 0.2,
+			})
+			
 			break
 
 		case "Ice":
@@ -172,20 +300,42 @@ function CastSpell(spellID, playerID) {
 			} else {
 				struct.dam = QueryDice(caster, "all", "charge") * 2
 			}
+			var _ice_hold = 60 + spell.stage * 20
+			SetAnim("drizzle", "mercury", { fires_hit: true, hit_delay: _ice_hold + 30,
+				rate: 1 + spell.stage * 4, hold: _ice_hold, linger: 60,
+				grav: 0.02, scl: 1, scl_var: 0, life: 60 + spell.stage * 10, life_var: 20,
+				splash: true, splash_rate: 1 + spell.stage * 2, splash_life: 8, splash_scl: 1, splash_delay: 30,
+				clouds: true, cloud_height: 30, cloud_scl: 3 + spell.stage, cloud_scl_var: 2, cloud_alpha: 0.6 + spell.stage * 0.1,
+				shake: spell.stage, shake_duration: 8
+			})
 			break
 
 		case "Prism":
 			// Stages 1+2: highest Mercury pip + Jupiter affinity → lose turn
-			// Stage 3 (Freeze Prism): top 2 Mercury pips
+			// Stage 3 (Freeze Prism): barrage of tiny meteors (1 dmg each, N hits)
 			if spell.stage < 3 {
 				struct.dam = QueryDice(caster, "mercury", "highest")
 				var _jup = QueryDice(caster, "jupiter", "charge")
 				if _jup > 0 {
 					struct.statuses.inflict_lose_turn = _jup
 				}
+				var _prism_struct = { fires_hit: true, stagger_damage: true, power: 20 + spell.stage * 10,
+					trail_life: 8, trail: 3, speed: 5, accel: 0.15, linger: 15, stagger: 8,
+					shake: 2 + spell.stage, shake_duration: 10 + spell.stage * 3
+				}
+				if (struct.statuses[$ "inflict_lose_turn"] ?? 0) > 0 {
+					_prism_struct.sub = { type: "flash", element: "jupiter", at: "hit", hold: 10 }
+				}
+				SetAnim("meteor", "mercury", _prism_struct)
 			} else {
 				struct.dam = 1
-				struct.repeater = QueryDice(caster, "mercury", "highest") * 2
+				var _hits = QueryDice(caster, "mercury", "highest") * 6
+				SetAnim("meteor", "mercury", { fires_hit: true, stagger_damage: true,
+					barrage: _hits, power: 5, spread_x: 15,
+					trail_life: 4, trail: 1, speed: 6, accel: 0.2, linger: 10, stagger: 4,
+					count: 6, max_speed: 2, max_scale: 1,
+					shake: 1, shake_duration: 5
+				})
 			}
 			break
 
@@ -201,6 +351,15 @@ function CastSpell(spellID, playerID) {
 				struct.num = 7
 				struct.dam = QueryDice(caster, "venus", "affinity") * 2
 			}
+			var _qshake = 2 + spell.stage * 2
+			var _shake_hold = 60 + spell.stage * 20
+			SetAnim("fire", "venus", { fires_hit: true, hit_delay: _shake_hold,
+				rate: 2 + spell.stage, width: 0.8, life: 6, life_var: 4,
+				scl: 1, scl_var: 0, grav: -0.01, trail: 0,
+				hold: _shake_hold + 30, linger: 20,
+				shake: _qshake, shake_duration: _shake_hold + 30,
+				sub: [{ type: "burst", at: "hit", count: 10 + spell.stage * 6, max_speed: 2, max_scale: 1, trail: 0, at_foot: true }]
+			})
 			break
 
 		case "Ragnarok":
@@ -208,6 +367,13 @@ function CastSpell(spellID, playerID) {
 			// Stage 2 (Odyssey): ragnarok twice
 			struct.dam = QueryDice(caster, "venus", "values")
 			if spell.stage == 2 { struct.repeater=2}
+			SetAnim("sprite", "venus", { spr: RagnarokSword, blend: "add", hold: 75, fires_hit: true,
+				sub: [
+					{ type: "flash", at: "hit", hold: 3, shake: 8, shake_duration: 35 },
+					{ type: "flash", at: "hit", delay: 30, hold: 15 },
+					{ type: "burst", at: "hit", delay: 30, at_foot: true, count: 120, max_scale: 4 },
+				]
+			})
 			break
 
 		case "Slash":
@@ -219,6 +385,9 @@ function CastSpell(spellID, playerID) {
 			if spell.stage == 3 { struct.repeater = 2 }
 			if spell.stage >= 2 and QueryDice(caster,"mercury","charge") >= 2{struct.slash= true;struct.pierce= true }
 			else{struct.pierce= true}
+			SetAnim("flash", spell.stage >= 2 ? "jupiter" : "none", { fires_hit: true, hold: 8, peak: 1, alpha: 0.3 + spell.stage * 0.1,
+				shake: spell.stage, shake_duration: 8
+			})
 			break
 
 		case "Spire":
@@ -232,6 +401,13 @@ function CastSpell(spellID, playerID) {
 			} else {
 				struct.dam = QueryDice(caster, "all", "charge") * 2
 			}
+			SetAnim("meteor", "venus", { fires_hit: true, stagger_damage: true,
+				speed: 1.5 + spell.stage * 0.5, power: 15 + spell.stage * 5,
+				stagger: 10 + spell.stage * 3, linger: 20,
+				trail_life: 8, trail: 3, accel: 0.06,
+				no_burst: true, shake: 1 + spell.stage, shake_duration: 8,
+				sub: [{ type: "burst", at: "hit", count: 8 + spell.stage * 3, max_speed: 2, max_scale: 1, trail: 0, at_foot: true }]
+			})
 			break
 
 		case "Thorn":
@@ -245,6 +421,15 @@ function CastSpell(spellID, playerID) {
 			} else {
 				struct.dam = QueryDice(caster, "all", "charge")
 			}
+			// Spore cloud near the ground, persists through burst phase
+			SetAnim("cloud", "venus", { persist: true, spawn: 30, count: 80 + spell.stage * 20, scl: 3 + spell.stage, scl_var: 2,
+				cloud_hold: 130 + spell.stage * 15, cloud_y: 85, alpha: 0.7 })
+			// Staggered bursts with background fire on all enemies
+			SetAnim("burst", "venus", { fires_hit: true, stagger_damage: true,
+				windup: false, count: 8 + spell.stage * 6, max_speed: 1.5, max_scale: 0, trail: 0, at_foot: true,
+				stagger: 25, duration: 30,
+				bg_fire: true, bg_fire_rate: 2 + spell.stage, bg_fire_life: 8, bg_fire_width: 0.6,
+			})
 			break
 
 		case "Volcano":
@@ -253,18 +438,36 @@ function CastSpell(spellID, playerID) {
 			if spell.stage == 2 { base_flat = 6 }
 			else if spell.stage == 3 { base_flat = 10 }
 			struct.dam = base_flat + QueryDice(caster, "mars", "affinity")
+			var _vcore = 12 + spell.stage * 8       // 20 / 28 / 36
+			var _vouter = _vcore + 14 + spell.stage * 4 // 38 / 50 / 62
+			var _ember_w = _vouter + 10 + spell.stage * 4  // embers wider than pillar
+			SetAnim("pillar", "mars", { fires_hit: true, embers: true, fire_overlay: true,
+				core_w: _vcore, outer_w: _vouter, ember_w: _ember_w,
+				fire_w: _vcore, fire_rate: 1 + spell.stage,
+				ember_count: 3 + spell.stage * 2, ember_scl: spell.stage,
+				ember_linger: 40,
+				hold: 80 + spell.stage * 20, fade: 0, linger: 60,
+				shake: 2 + spell.stage * 2, shake_duration: 15 + spell.stage * 5,
+				sub: (spell.stage >= 2) ? { type: "burst", at: "hit", at_foot: true, count: 15 * spell.stage, max_scale: spell.stage } : undefined
+			})
 			break
 
 		case "Whirlwind":
-			
+
 			// Stages 1+2: charged Jupiter * 2
 			// Stage 3 (Tempest): charged Jupiter * 2 + charged non-Jupiter * 1
-			
+
 			struct.dam = QueryDice(caster, "jupiter", "charge") * 2
 			if spell.stage == 3{
 				struct.dam += QueryDice(caster, "all", "charge") - QueryDice(caster, "jupiter", "charge")
 			}
-			
+			SetAnim("wind", "jupiter", { fires_hit: true, hit_delay: 40 + spell.stage * 10,
+				rate: 2 + spell.stage * 2, amp: 12 + spell.stage * 4, osc_speed: 0.12 + spell.stage * 0.02,
+				osc_y: 3 + spell.stage, spread_x: 6, spread_y: 8 + spell.stage * 4,
+				life: 50 + spell.stage * 10, trail: 6, scl: 1, scl_var: spell.stage,
+				hold: 80 + spell.stage * 20, linger: 40,
+				shake: spell.stage, shake_duration: 10
+			})
 			break
 
 		// ── TIER 2: Dice-based healing ──────────────────────────────────────
@@ -278,7 +481,7 @@ function CastSpell(spellID, playerID) {
 			var aura_heal = QueryDice(caster, "mars", "lowest")
 			if spell.stage >= 2 { aura_heal += QueryDice(caster, "mars", "highest") }
 			if spell.stage == 3 { aura_heal *= 2 }
-			
+
 			struct.num = 4
 			struct.healing = aura_heal
 			struct.target = "ally"
@@ -325,28 +528,43 @@ function CastSpell(spellID, playerID) {
 			struct.healing = wish_heal
 			struct.num = 4
 			struct.target = "ally"
-
-
 			break
 
 		case "Psy Drain":
 			// Recover PP equal to charged die count + 1 (the +1 offsets the unavoidable min cost of 1)
 			caster.pp -= _cost
 			global.pendingPPCost = 0
-			caster.pp = caster.pp + QueryDice(caster, "all", "charge") + 1
-			if caster.pp >= caster.ppmax{caster.pp = caster.ppmax}
-			NextTurn()
+			var _pp_gain = QueryDice(caster, "all", "charge") + 1
+			var _old_pp  = caster.pp
+			caster.pp = min(caster.ppmax, caster.pp + _pp_gain)
+			var _actual_gain = caster.pp - _old_pp
+			if _actual_gain > 0 {
+				var _ti    = global.turn
+				var _colW  = (display_get_gui_width() - HUD_MARGIN - HUD_END_MARGIN) / array_length(global.players)
+				var _num_x = HUD_MARGIN + _ti * _colW + HUD_PORTRAIT_OFFSET + HUD_PORTRAIT_SIZE / 2
+				var _num_y = HUD_TOP_Y + HUD_PORTRAIT_OFFSET + HUD_PORTRAIT_SIZE / 2
+				caster.heal_flash = 12
+				instance_create_depth(0, 0, -200, objDamageNumber, {amount: _actual_gain, world_x: _num_x, world_y: _num_y, col: global.c_important, gui_mode: true})
+			}
+			PopAll()
+			QueueAnim("flash", "none", noone, { fires_hit: false, hold: 40, peak: 3, alpha: 0.3 })
+			PlayAnimation(function() {}, function() { MakeTurnDelay(30, NextTurn) })
 			exit
 			break
 
-		
+
 		// Complex effects, status infliction, token manipulation, etc.
 
 		case "Backstab":
 			struct.dam += weapon_atk
 			struct.dam += 2
 			struct.dmgtype = "jupiter"
-			if irandom(9) == 0{struct.dam = 9999}
+			var _instakill = (irandom(9) == 0)
+			if _instakill { struct.dam = 9999 }
+			SetAnim("burst", "jupiter", { fires_hit: true, windup: false,
+				count: _instakill ? 80 : 12, max_speed: _instakill ? 6 : 3, max_scale: _instakill ? 3 : 1,
+				duration: 20, shake: _instakill ? 6 : 1, shake_duration: _instakill ? 25 : 8
+			})
 			break// weapon attack + 2 Jupiter + d10 instakill
 			
 		case "Aegis":       // DEF up tokens per charged Venus die
@@ -367,23 +585,27 @@ function CastSpell(spellID, playerID) {
 				subtext: "(Value: +" + string(_res_value) + ")",
 				buttons: [
 					{
-						label: "Range", sprite: Resonate,
+						label: "Range", sprite: Resonate, text: "Range", hovertext: "Range",
 						on_click: method({ val: _res_value, cd: 1, idx: playerID, nm: caster.name, cost: _cost }, function() {
 							AddPassive("_Resonate", cd, Resonate, "Resonate", { mode: "range", amount: val }, idx)
 							InjectLog(nm + " casts Resonate! (+" + string(val) + " range)")
 							global.players[idx].pp -= cost
 							global.pendingPPCost = 0
+							QueueAnim("flash", "venus", global.players[idx], { fires_hit: false })
+							PlayAnimation(function() {}, function() {})
 							PopMenu()
 							NextTurn()
 						})
 					},
 					{
-						label: "Damage", sprite: Resonate,
+						label: "Damage", sprite: Resonate, text: "Damage", hovertext: "Damage",
 						on_click: method({ val: _res_value, cd: 1, idx: playerID, nm: caster.name, cost: _cost }, function() {
 							AddPassive("_Resonate", cd, Resonate, "Resonate", { mode: "damage", amount: val }, idx)
 							InjectLog(nm + " casts Resonate! (+" + string(val) + " damage)")
 							global.players[idx].pp -= cost
 							global.pendingPPCost = 0
+							QueueAnim("flash", "venus", global.players[idx], { fires_hit: false })
+							PlayAnimation(function() {}, function() {})
 							PopMenu()
 							NextTurn()
 						})
@@ -411,6 +633,8 @@ function CastSpell(spellID, playerID) {
 			AddPassive("_DjinnEcho", spell.stage + 1, Djinn_Echo, "Djinn Echo", {}, playerID)
 			caster.pp -= _cost
 			global.pendingPPCost = 0
+			QueueAnim("flash", "jupiter", caster, { fires_hit: false })
+			PlayAnimation(function() {}, function() {})
 			if (spell.stage >= 2) {
 				// Stage 2+: unleash any djinn from any party member
 				var _echo_items = []
@@ -442,6 +666,7 @@ function CastSpell(spellID, playerID) {
 				tempdam += QueryDice(caster,"mars","highest")
 				struct.dam += tempdam*2
 			}else{struct.dam += QueryDice(caster,"elemental","top2")}
+			SetAnim("meteor", "mars", { fires_hit: true, power: struct.dam, shake: 3, shake_duration: 15 })
 		}else{
 			caster.pp -= _cost
 			global.pendingPPCost = 0
@@ -466,7 +691,11 @@ function CastSpell(spellID, playerID) {
 				struct.dam = QueryDice(caster,"mars","charge")
 				struct.num = 3
 				struct.dmgtype = "mars"
-				array_push(global.attackQueue,variable_clone(struct));
+				var _mars_pkt = variable_clone(struct)
+				_mars_pkt.pendingAnim = [{ type: "pillar", element: "mars", fires_hit: true, stagger_damage: true, stagger: 15,
+					sub: [{ type: "burst", at: "hit", count: 10, max_speed: 2, max_scale: 1, trail: 0 }]
+				}]
+				array_push(global.attackQueue, _mars_pkt);
 				InjectLog(caster.name + " unleashes the power of Mars! (" + string(QueryDice(caster,"mars","charge")) + " Damage!)")}
 			var select = irandom(4)
 			switch select{
@@ -490,7 +719,11 @@ function CastSpell(spellID, playerID) {
 				struct.dam = 0
 				struct.num = QueryDice(caster,"jupiter","charge")
 				struct.dmgtype = "jupiter"
-				array_push(global.attackQueue,variable_clone(struct));
+				var _jup_pkt = variable_clone(struct)
+				_jup_pkt.pendingAnim = [{ type: "pillar", element: "jupiter", fires_hit: true, stagger_damage: true, stagger: 15,
+					sub: [{ type: "burst", at: "hit", count: 10, max_speed: 2, max_scale: 1, trail: 0 }]
+				}]
+				array_push(global.attackQueue, _jup_pkt);
 				InjectLog(caster.name + " unleashes the power of Jupiter! (" + string(QueryDice(caster,"jupiter","charge")) + " Enemies!)")}
 			if caster.mercury and QueryDice(caster,"mercury","charge") > 0 {
 				var _merc_packet = variable_clone(global.AggressionSchema)
@@ -514,24 +747,34 @@ function CastSpell(spellID, playerID) {
 			struct.repeater      = QueryDice(caster, "jupiter", "charge")
 			struct.num           = 1
 			struct.unleash       = { scatter: true, scatter_any: true }
+			SetAnim("burst", "jupiter", { fires_hit: true, windup: true, windup_duration: 6,
+				count: 30 + struct.dam * 8, max_speed: 4 + struct.dam, max_scale: 3,
+				stagger: 10, shake: 4 + struct.dam, shake_duration: 20
+			})
 		} else {
 			var _plasma_num  = (spell.stage == 2) ? 5 : 3
 			var _plasma_dice = BuildDiceArray(caster, "jupiter")
 			var _plasma_max  = min(_plasma_num, instance_number(objMonster), array_length(_plasma_dice))
+			var _plasma_stage = spell.stage
 			PushMenu(objDicePicker, {
 				dice:          _plasma_dice,
 				max_select:    _plasma_max,
 				confirm_label: "Assign",
 				title:         "Pick " + string(_plasma_max) + " dice",
-				on_confirm:    method({}, function(sel) {
+				on_confirm:    method({ _pstage: _plasma_stage }, function(sel) {
 					for (var _i = 0; _i < array_length(sel); _i++) {
+						var _pip = sel[_i].pip
 						var _s = variable_clone(global.AggressionSchema)
-						_s.source = "psynergy"; _s.dam = sel[_i].pip
+						_s.source = "psynergy"; _s.dam = _pip
 						_s.num = 1; _s.dmgtype = "jupiter"; _s.target = "enemy"
+						_s.pendingAnim = [{ type: "burst", element: "jupiter", fires_hit: true, windup: true, windup_duration: 6,
+							count: 10 + _pip * 8, max_speed: 3 + _pip, max_scale: 1 + ceil(_pip / 2),
+							stagger: 10, shake: 2 + _pip, shake_duration: 15
+						}]
 						array_push(global.attackQueue, _s)
 					}
-					PopMenu()
-					
+					PopAll()
+
 					ProcessAttackQueue()
 				}),
 			})
@@ -574,11 +817,12 @@ function CastSpell(spellID, playerID) {
 					for (var _i = 0; _i < v; _i++) { _d += pips[_i] }
 					global.pendingPPCost = v * cp
 					var _s = variable_clone(global.AggressionSchema)
-					_s.source  = "psynergy"
-					_s.dam     = _d
-					_s.num     = 1
-					_s.dmgtype = "none"
-					_s.target  = "enemy"
+					_s.source       = "psynergy"
+					_s.dam          = _d
+					_s.num          = 1
+					_s.dmgtype      = "none"
+					_s.target       = "enemy"
+					SetAnim("burst", "none", { windup: true, fires_hit: true })
 					PopMenu()
 					SelectTargets(_s)
 				}),
@@ -586,8 +830,12 @@ function CastSpell(spellID, playerID) {
 			exit
 			break
 		case "Dull":        // ATK down 3 on enemies
-			struct.statuses.inflict_atkdown= 3 
+			struct.statuses.inflict_atkdown= 3
 			struct.dam = 0
+			SetAnim("flash", "jupiter", { fires_hit: true, hold: 30, peak: 3, alpha: 0.15,
+				tint_target: c_red, tint_duration: 30,
+				sub: [{ type: "burst", at: 1, count: 4, max_speed: 1.5, max_scale: 0, trail: 0, element: "jupiter" }]
+			})
 			break
 
 		case "Ward":        // DEF up tokens on allies
@@ -641,11 +889,13 @@ function CastSpell(spellID, playerID) {
 		case "Delude":      // inflict delusion on 3 opponents
 			struct.dam = 0
 			struct.statuses.inflict_delude= true
+			SetAnim("cloud", "jupiter", { fires_hit: true, hit_delay: 68, spawn: 30 })
 			break
 
 		case "Sleep":       // inflict sleep on 3 opponents
 			struct.dam = 0
-			struct.statuses.inflict_sleep= true 
+			struct.statuses.inflict_sleep= true
+			SetAnim("cloud", "jupiter", { fires_hit: true, hit_delay: 68, spawn: 30 })
 			break
 
 		case "Burn Off":    // clear ATK/DEF tokens from allies
@@ -672,6 +922,7 @@ function CastSpell(spellID, playerID) {
 		case "Break":       // remove stat changes from enemy
 			struct.statuses.inflict_clearstats= true
 			struct.dam = 0
+			SetAnim("burst","mercury",{count:4,windup: false})
 			break
 		case "Restore":     // cure status conditions
 			struct.removepoison = true

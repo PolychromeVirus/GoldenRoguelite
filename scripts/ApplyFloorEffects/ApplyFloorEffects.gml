@@ -40,7 +40,7 @@ function ApplyFloorEffects() {
 				}
 				_template.extra = true
 				_template.slotID = instance_number(objMonster)
-				instance_create_depth(irandom_range(40, room_width - 40), 100, 5, objMonster, _template)
+				instance_create_depth(irandom_range(40, room_width - 40), 100, 200, objMonster, _template)
 			}
 		}
 		else if (_name == "Falling Rocks") {

@@ -1,15 +1,13 @@
 if !global.pause{
-	DeleteButtons()
-	DestroyAllBut(objMonsterStat)
 	var target = {};
-	var _var_names = variable_struct_get_names(id); // Get names from the instance's internal struct
+	var _var_names = variable_struct_get_names(id);
 
 	for (var i = 0; i < array_length(_var_names); i++)
 	{
 		var _name = _var_names[i];
-		var _value = variable_instance_get(id, _name); // Get the value
+		var _value = variable_instance_get(id, _name);
 
-		variable_struct_set(target, _name, _value); // Set in the new struct
+		variable_struct_set(target, _name, _value);
 	}
-	instance_create_depth(0,0,0,objMonsterStat, target)
+	PushMenu(objMonsterStat, target)
 }

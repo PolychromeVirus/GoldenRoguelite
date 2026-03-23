@@ -1,9 +1,19 @@
 function InitGlobalVars(){
 	global.darken = false
+	global.shake_intensity = 0
+	global.shake_timer     = 0
+	global.shake_max       = 0
+	global._anim_clock     = 0
 	global.textdisplay = ""
+	global.log = []
+	var _logf = file_text_open_write("log.txt")
+	file_text_write_string(_logf, "=== Run started ===\n")
+	file_text_close(_logf)
 	global.option_buttons = []
 	global.challenge_buttons = []
 	global.menu_stack = []
+	global.animQueue  = []
+	global.pendingAnim = undefined
 	global.turn = 0
 	global.errormessage = ""
 	global.genbackground = Sol_Sanctum
@@ -28,6 +38,9 @@ function InitGlobalVars(){
 	#macro INPUT_RIGHT    5
 	#macro INPUT_INFO     6
 	#macro INPUT_TAB      7
+	#macro INPUT_LOG      8
+	#macro INPUT_SAVE     9
+	#macro INPUT_DEBUG   10
 
 	#macro BOTTOMROW 124
 	#macro TOPROW 32
@@ -68,6 +81,7 @@ function InitGlobalVars(){
 	#macro BTN_EASE_OUT     0.2
 	#macro FLASH_DURATION   10
 	#macro DAMAGE_DURATION  45
+	#macro ANIM_TICK        3       // animation step rate: 1=60fps, 2=30fps, 3=20fps
 
 	#macro STATUS_BEHAVIOR_OX  0   // x offset (centers 32px sprite on monster)
 	#macro STATUS_BEHAVIOR_OY  0    // y offset from bbox top — negative = above visible area
@@ -84,6 +98,7 @@ function InitGlobalVars(){
 	#macro BIGHITMULT audio_play_sound(BigHit,0,0)
 	#macro SUMMONHIT audio_play_sound(VeryBigHit,0,0)
 	#macro INFLICT audio_play_sound(InflictStatus,0,0)
+	#macro HEALSOUND audio_play_sound(HealSound,0,0)
 
 	global.floor = 1
 	global.dungeon = 0

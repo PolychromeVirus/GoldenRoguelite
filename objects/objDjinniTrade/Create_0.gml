@@ -22,10 +22,17 @@ _confirm = method(id, function() {
     var _source    = global.players[sourcePlayer]
     var _target    = global.players[selected]
     var _djinnName = global.djinnlist[sourceDjinn].name
+    var _swap      = targetSlot < array_length(_target.djinn)
+    var _targetDjinnID, _targetDjinnName
+    if _swap {
+        _targetDjinnID   = _target.djinn[targetSlot]
+        _targetDjinnName = global.djinnlist[_targetDjinnID].name
+    }
 
-    if targetSlot < array_length(_target.djinn) {
-        var _targetDjinnID   = _target.djinn[targetSlot]
-        var _targetDjinnName = global.djinnlist[_targetDjinnID].name
+    // Pop menus BEFORE modifying djinn arrays — carousel's filter holds a live reference
+    PopAll()
+
+    if _swap {
         _source.djinn[sourceSlot] = _targetDjinnID
         _target.djinn[targetSlot] = sourceDjinn
         InjectLog(_source.name + " traded " + _djinnName + " for " + _target.name + "'s " + _targetDjinnName + "!")
@@ -36,12 +43,6 @@ _confirm = method(id, function() {
     }
 
     CreateDicePool()
-
-    if global.inCombat {
-        PopAll()
-    } else {
-        PopMenu() // trade screen only; return to carousel
-    }
 })
 
 clickable = false

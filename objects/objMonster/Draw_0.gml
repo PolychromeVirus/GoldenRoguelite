@@ -55,7 +55,22 @@ if dying and death_timer > 0 {
 	}
 } else {
 	if global.gameover { shader_set(shGreyscale) }
+	if frozen > 0 {
+		shader_set(shFreeze)
+		shader_set_uniform_f(shader_get_uniform(shFreeze, "u_amount"), 1.0)
+	}
 	draw_self()
+	if frozen > 0 { shader_reset() }
+
+	// Colored tint overlay (e.g. red for Dull debuff)
+	if tint_timer > 0 {
+		gpu_set_blendmode(bm_add)
+		var _tint_alpha = min(tint_timer / 10, 0.5)
+		draw_sprite_ext(sprite_index, image_index, x, y,
+			image_xscale, image_yscale, image_angle, tint_color, _tint_alpha)
+		gpu_set_blendmode(bm_normal)
+		tint_timer--
+	}
 
 	if (flash_timer > 0) {
 		shader_set(shFlash)

@@ -6,4 +6,11 @@ function InjectLog(in){
 	with (objTextManager){
 		alarm_set(0,120)
 	}
+
+	array_push(global.log, in)
+	if array_length(global.log) > 200 { array_delete(global.log, 0, 1) }
+
+	var _f = file_text_open_append("log.txt")
+	file_text_write_string(_f, in + "\n")
+	file_text_close(_f)
 }

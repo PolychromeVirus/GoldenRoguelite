@@ -1,3 +1,16 @@
+/// @func AnimColor(element_str)
+/// @desc Saturated element colours for particle animations.
+function AnimColor(element_str) {
+	switch string_lower(element_str) {
+		case "venus":   return #f0c000   // warm gold
+		case "mars":    return #ff3300   // hot red-orange
+		case "jupiter": return #cc44ff   // vivid purple
+		case "mercury": return #00aaee   // cyan-blue
+		case "melee":   return c_white
+		default:        return make_color_rgb(180, 180, 180)  // neutral gray
+	}
+}
+
 /// @func ElementColor(element_str)
 /// @desc Return the global constant containing a given element's colour. White for normal/damage. (lowercase)
 function ElementColor(element_str) {
@@ -13,7 +26,13 @@ function ElementColor(element_str) {
 
 function SelectTargets(struct){
 	//passes through aggression struct
-	
+
+	// If the packet carries its own anim, promote it to global.pendingAnim
+	if variable_struct_exists(struct, "pendingAnim") {
+		global.pendingAnim = struct.pendingAnim
+		variable_struct_remove(struct, "pendingAnim")
+	}
+
 	struct.caster = global.players[global.turn]
 	struct.dmgtype = string_lower(struct.dmgtype)
 	
@@ -47,7 +66,8 @@ function SelectTargets(struct){
 			if _party_heal > 0 and (global.players[j].hp > 0 or struct.dmgtype == "mercury"){global.players[j].hp = min(global.players[j].hp + _party_heal, global.players[j].hpmax)}
 		}
 		PushMenu(objMenuGrid,{read_only: true, corner: "topright"})
-		MakeTurnDelay(60,NextTurn)
+		HEALSOUND
+		if global.inCombat{ MakeTurnDelay(60,NextTurn)}else{MakeTurnDelay(60,PopMenu)}
 		return
 	}
 	if global.lastselected != -1{struct.selected = global.lastselected}
@@ -131,15 +151,75 @@ function _FireRepeats(_struct, _remaining, _delay, _total) {
 /// @desc Apply damage + statuses to an array of monster instances, then check victory or NextTurn.
 function ApplyDamageToTargets(struct) {
 	global.textdisplay = ""
-	
-	
-	DoDamage(struct)
-	
-	CheckVictory()
-	
-	PopAll()
-	MakeTurnDelay(60,NextTurn)
-	
+
+	var _anims = global.pendingAnim
+	global.pendingAnim = undefined
+
+	if _anims != undefined {
+		if !is_array(_anims) { _anims = [_anims] }
+		PopAll()
+		var _targets = struct.targets
+
+		// Check for stagger_damage
+		var _stagger_dmg = false
+		for (var _a = 0; _a < array_length(_anims); _a++) {
+			if _anims[_a][$ "stagger_damage"] ?? false { _stagger_dmg = true; break }
+		}
+
+		// Step-major ordering when staggered, target-major otherwise
+		var _first_hit = true
+		if _stagger_dmg {
+			for (var _a = 0; _a < array_length(_anims); _a++) {
+				for (var _t = 0; _t < array_length(_targets); _t++) {
+					var _anim = variable_clone(_anims[_a])
+					if variable_struct_exists(_anim, "fires_hit") and _anim.fires_hit {
+						_anim._stagger_target_index = _t
+					}
+					QueueAnim(_anim.type, _anim.element, _targets[_t], _anim)
+				}
+			}
+		} else {
+			for (var _t = 0; _t < array_length(_targets); _t++) {
+				for (var _a = 0; _a < array_length(_anims); _a++) {
+					var _anim = variable_clone(_anims[_a])
+					if variable_struct_exists(_anim, "fires_hit") and _anim.fires_hit {
+						if !_first_hit { _anim.fires_hit = false }
+						_first_hit = false
+					}
+					QueueAnim(_anim.type, _anim.element, _targets[_t], _anim)
+				}
+			}
+		}
+
+		var _on_hit = _stagger_dmg
+			? method({ s: struct, tgts: _targets }, function() {
+				var _anim_inst = instance_find(objSpellAnimation, 0)
+				var _copy = variable_clone(s)
+				if instance_exists(_anim_inst) and variable_instance_exists(_anim_inst, "_barrage_hit_target")
+					and instance_exists(_anim_inst._barrage_hit_target) {
+					_copy.targets = [_anim_inst._barrage_hit_target]
+				} else {
+					var _ti = 0
+					if instance_exists(_anim_inst) {
+						var _step = _anim_inst._queue[_anim_inst._qi]
+						_ti = _step[$ "_stagger_target_index"] ?? 0
+					}
+					_copy.targets = [tgts[_ti]]
+				}
+				DoDamage(_copy)
+			})
+			: method({ s: struct }, function() { DoDamage(s) })
+
+		PlayAnimation(_on_hit, method({}, function() {
+			CheckVictory()
+			MakeTurnDelay(60, NextTurn)
+		}))
+	} else {
+		DoDamage(struct)
+		CheckVictory()
+		PopAll()
+		MakeTurnDelay(60, NextTurn)
+	}
 }
 
 

@@ -2,21 +2,28 @@
 
 ## Near-Term Polish
 
-### Visual Flair Pass *(in progress)*
-Animations and flash effects were partially lost during the menu overhaul. Re-add timing/visual feedback where missing. Audit:
-- Hit flash on enemies
-- Damage number pop timing
-- Spell/djinn cast animations
-- Status inflict feedback
+### Visual & Audio Polish Pass *(in progress)*
+Full timing + audio audit to make combat feel satisfying. Existing: enemy hit/hurt/death animations, player flash, status inflict feedback, damage numbers. Needs audit:
+- Damage number delays and sequencing (stagger, pop timing)
+- Sound effects for all combat actions (attack, spell cast, djinn unleash, status inflict, heal, death, level up, etc.)
+- Spell/djinn cast animation hooks (where to fire, what to show)
+- Djinni unleash animations (per djinn or per element)
+- Battle item use animations
+- Turn transition feel (delay between actions)
+- Review all `MakeTurnDelay` values for pacing
 
-### UI Pass — Menu Stack & Input Parity
-All menus should use `PushMenu`/`PopMenu` and support both mouse and keyboard navigation. Audit every remaining menu/prompt to confirm:
-- Created via `PushMenu()`
-- Confirm works via mouse click AND `INPUT_CONFIRM`
-- Cancel works via `objCancel` / `PopMenu()` AND `INPUT_CANCEL`
-- Navigation (where applicable) responds to `INPUT_LEFT`/`INPUT_RIGHT`/`INPUT_UP`/`INPUT_DOWN`
+### ✅ UI Pass — Menu Stack & Input Parity
+All in-game menus use PushMenu/PopMenu and support mouse + keyboard. Known remaining gap: keyboard nav on CharacterSelect (non-blocking, deferred).
 
-Known exceptions (kept outside stack intentionally): `objMonsterTarget`, `objMultiKillTarget`, `objCharonPicker`, `objPuzzlePrompt`
+### Monster Stat Viewer
+- Click/hover on a monster in combat to see its stats (HP, ATK, DEF, weaknesses, resistances, status effects, etc.)
+- Design TBD (tooltip, popup, sidebar?)
+
+### Carousel Live Data
+- objMenuCarousel currently receives a static items array that can go stale (e.g. djinn trade modifies the backing array mid-draw)
+- Refactor: pass `{ source_player, source_field }` so carousel reads from `global.players[source_player][source_field]` each frame
+- Formatter callback (e.g. `item_builder(index)`) converts raw data (djinn ID, spell ID, etc.) into display structs on the fly
+- Filter/on_confirm callbacks work the same but always see current data
 
 ---
 
@@ -26,11 +33,8 @@ Known exceptions (kept outside stack intentionally): `objMonsterTarget`, `objMul
 
 ## Milestone Features
 
-### Logging/Output
-
-Currently all text feedback is managed by an object that draws one line at a time, replacing the last line that was drawn. it combines hovertext tooltips and log entries. when log entries are pushed they clear after 1 second, but only show the most recent log entry.
-
-An alternative should be formulated that allows for easier access to the log and clearer outcomes from effects and abilities.
+### ✅ Logging/Output
+Persistent `global.log[]` with scrollable `objLogViewer` overlay (G key), file output to `log.txt`, tooltip bar still shows most recent entry.
 
 ### Win Condition & Screen
 - Define what constitutes a run completion (clear all dungeons? final boss?)

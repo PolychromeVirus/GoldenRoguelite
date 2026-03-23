@@ -46,7 +46,7 @@ function _BuildCharTargetConfig(packet) {
             var _ratio_amount = 0
             if variable_struct_exists(p, "healingratio") and p.healingratio != 0 {
                 _ratio_amount = sel.hpmax * p.healingratio
-                if sel.halfheal and _ratio_amount > 0 { _ratio_amount = floor(_ratio_amount / 2) }
+                if sel.halfheal and _ratio_amount > 0 { _ratio_amount = floor(_ratio_amount / 2); HEALSOUND }
             }
 
             if !variable_struct_exists(p, "delayed") or !p.delayed {
@@ -56,6 +56,7 @@ function _BuildCharTargetConfig(packet) {
                 if p.revive and sel.hp <= 0 {
                     sel.hp = min(_heal_amount, sel.hpmax)
                     sel.heal_flash = 12
+					HEALSOUND
                     instance_create_depth(0, 0, -200, objDamageNumber, {amount: sel.hp, world_x: _gui_x, world_y: _gui_y, col: global.c_important, gui_mode: true})
                     choice = true
                 }
@@ -66,6 +67,7 @@ function _BuildCharTargetConfig(packet) {
                     InjectLog(sel.name + " is healed " + string(_heal_amount) + " (" + string(_oldhp) + " to " + string(sel.hp) + ")")
                     sel.heal_flash = 12
                     instance_create_depth(0, 0, -200, objDamageNumber, {amount: sel.hp - _oldhp, world_x: _gui_x, world_y: _gui_y, col: global.c_important, gui_mode: true})
+					HEALSOUND
                     choice = true
                 }
 
@@ -74,6 +76,7 @@ function _BuildCharTargetConfig(packet) {
                     sel.hp = min(sel.hpmax, sel.hp + _ratio_amount)
                     if _ratio_amount > 0 {
                         sel.heal_flash = 12
+						HEALSOUND
                         instance_create_depth(0, 0, -200, objDamageNumber, {amount: sel.hp - _old_ratio_hp, world_x: _gui_x, world_y: _gui_y, col: global.c_important, gui_mode: true})
                     }
                 }
@@ -82,6 +85,7 @@ function _BuildCharTargetConfig(packet) {
                     var _oldpp = variable_clone(sel.pp)
                     sel.pp = min(sel.ppmax, sel.pp + p.ppheal)
                     sel.heal_flash = 12
+					HEALSOUND
                     instance_create_depth(0, 0, -200, objDamageNumber, {amount: sel.pp - _oldpp, world_x: _gui_x, world_y: _gui_y, col: global.c_important, gui_mode: true})
                     choice = true
                 }

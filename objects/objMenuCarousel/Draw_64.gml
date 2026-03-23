@@ -44,7 +44,8 @@ for (var i = 0; i < _len; i++) {
     if (selected - i) > _show_above { continue }
     if (i - selected) > _show_below { continue }
 
-    var _filtered = !is_undefined(filter) and filter(i)
+    var _filtered = false
+    try { _filtered = !is_undefined(filter) and filter(i) } catch (_e) { _filtered = true }
     var _col = _filtered ? c_grey : (variable_struct_exists(_item, "color") ? _item.color : c_white)
 
     var _ix = _list_x

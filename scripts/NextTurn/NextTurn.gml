@@ -291,6 +291,24 @@ function _NextTurnSetupPlayer() {
 		_pkt.num     = 1
 		
 		InjectLog(_cur.name + " unleashes the planetary strike!")
+		// Barrage of small meteors, then one massive impact
+		var _el = _cur.planetary.element
+		global.pendingAnim = []
+		array_push(global.pendingAnim, { type: "meteor", element: _el,
+			barrage: 6, speed: 2, power: 3, stagger: 8, spread_x: 12,
+			trail_life: 8, trail: 3, accel: 0.1, no_burst: true, linger: 5,
+			fires_hit: false
+		})
+		// Brief flash to break consecutive meteor chain
+		array_push(global.pendingAnim, { type: "flash", element: _el,
+			fires_hit: false, hold: 10, peak: 2, alpha: 0.15
+		})
+		array_push(global.pendingAnim, { type: "meteor", element: _el,
+			fires_hit: true, power: _pkt.dam, speed: 1.5, accel: 0.04,
+			trail_life: 30, trail: 8, impact_foot: true,
+			shake: 8, shake_duration: 30, linger: 30,
+			sub: [{ type: "burst", at: "hit", count: 60, max_speed: 6, max_scale: 4 }]
+		})
 		SelectTargets(_pkt)
 	}
 }

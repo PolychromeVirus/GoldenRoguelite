@@ -1,4 +1,5 @@
 function Autosave(){
+	if global.charselect or global.inCombat { exit }  // never save during character select or combat
 
 	var _f = file_text_open_write("Save.txt")
 	
@@ -34,5 +35,6 @@ function Autosave(){
 	file_text_write_string(_f, json_stringify(_save))
 	
 	file_text_close(_f)
-	
+
+	with (objTextManager) { save_flash = 180 }
 }

@@ -9,6 +9,29 @@ if global.gameover {
     exit
 }
 
+// Saving... fade indicator — always visible
+if save_flash > 0 {
+    save_flash--
+    draw_set_font(GoldenSun)
+    draw_set_halign(fa_right)
+    draw_set_valign(fa_bottom)
+    draw_set_alpha(save_flash / 180)
+    draw_set_color(c_white)
+    draw_text(display_get_gui_width() - 200, display_get_gui_height() - 4, "Saving...")
+    draw_set_alpha(1)
+    draw_set_valign(fa_top)
+}
+
+// Log button hint — everywhere except character select
+if room != CharacterSelect {
+    draw_set_font(GoldenSun)
+    draw_set_halign(fa_right)
+    draw_set_valign(fa_top)
+    draw_rich_text(display_get_gui_width() - 8, 726 - 48, "LOG",9999)
+    draw_set_halign(fa_left)
+	draw_set_color(c_white)
+}
+
 // ── Scan menu stack for any carousel (occupies a half of the screen) ──────────
 var _half_open    = false
 var _half_side    = "left"   // side the menu occupies ("left" or "right")
@@ -40,17 +63,16 @@ var _targeting = (instance_number(objMonsterTarget) > 0)
 var _stat_open = (instance_number(objStatDisplay) > 0)
 if global.charselect == false and !_targeting and !_stat_open {
 
-    var _guiW        = display_get_gui_width()
-    var _portraitFull = 144
-    var _scale        = 0.79
-    var _portraitSize = round(_portraitFull * _scale)
-    var _portraitOffset = (_portraitFull - _portraitSize) / 2
-    var _portraitGap  = 2
-    var _margin       = 3
-    var _endMargin    = 15
-    var _barH         = 16
-    var _nameH        = string_height("HP:")
-	var _ssize = 32
+    var _guiW           = display_get_gui_width()
+    var _portraitFull   = HUD_PORTRAIT_FULL
+    var _portraitSize   = HUD_PORTRAIT_SIZE
+    var _portraitOffset = HUD_PORTRAIT_OFFSET
+    var _portraitGap    = HUD_PORTRAIT_GAP
+    var _margin         = HUD_MARGIN
+    var _endMargin      = HUD_END_MARGIN
+    var _barH           = 16
+    var _nameH          = string_height("HP:")
+    var _ssize          = 32
 
     if _half_open and _show_compact {
         // ── COMPACT MODE: single current-player cell ──────────────────────────
@@ -139,7 +161,7 @@ if global.charselect == false and !_targeting and !_stat_open {
         if _p.cloak       { draw_sprite_stretched(Cloak,        0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
         if _p.psyseal       { draw_sprite_stretched(Psy_Seal,   0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
         if array_length(_p.rerolls) > 0 { draw_sprite_stretched(Lucky_Medal1503, 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
-        if variable_struct_exists(_p, "extraTurns") and _p.extraTurns > 0 { draw_sprite_stretched(jupiter1491, 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
+        if variable_struct_exists(_p, "extraTurns") and _p.extraTurns > 0 { draw_sprite_stretched( Jupiter861 , 0, _tokenX, _tokenY, _ssize, _ssize); _tokenX += _ssize + 4 }
         if variable_struct_exists(_p.delaydata, "revive") and _p.delaydata.revive { draw_sprite_stretched(Revive, 0, _tokenX, _tokenY, _ssize, _ssize) }
 
     } else {
@@ -414,4 +436,5 @@ draw_set_halign(fa_left)
 
 draw_set_color(c_white)
 draw_text(0, 0, string(global.errormessage))
+
 

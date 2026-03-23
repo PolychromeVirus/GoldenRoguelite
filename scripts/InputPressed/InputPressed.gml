@@ -10,6 +10,9 @@ function InputPressed(action) {
         case INPUT_RIGHT:   return keyboard_check_pressed(vk_right)  || (_gp && gamepad_button_check_pressed(_pad, gp_padr))
         case INPUT_INFO:    return keyboard_check_pressed(ord("L"))  || (_gp && gamepad_button_check_pressed(_pad, gp_face3))
         case INPUT_TAB:     return keyboard_check_pressed(vk_tab)    || (_gp && gamepad_button_check_pressed(_pad, gp_shoulderl))
+        case INPUT_LOG:     return keyboard_check_pressed(ord("G"))  || (_gp && gamepad_button_check_pressed(_pad, gp_shoulderr))
+        case INPUT_SAVE:    return keyboard_check_pressed(ord("S"))
+		case INPUT_DEBUG:   return keyboard_check_pressed(ord("Q"))
     }
     return false
 }

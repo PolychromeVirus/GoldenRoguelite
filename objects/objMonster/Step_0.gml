@@ -7,13 +7,13 @@ if !dying {
         var _dmg_spr = asset_get_index(sprite_get_name(alias) + "_Damaged")
         if _dmg_spr != -1 { sprite_index = _dmg_spr }
         damage_timer--
-    } else if sleep or stun > 0{
+    } else if sleep or stun > 0 or frozen > 0 {
         image_speed = 0
-        sprite_index = alias
+        if frozen <= 0 { sprite_index = alias }
     } else if global.gameover{
 		image_speed = 0
 	}else{
-        //image_speed = 1
+        image_speed = 1
         sprite_index = alias
     }
 } else {

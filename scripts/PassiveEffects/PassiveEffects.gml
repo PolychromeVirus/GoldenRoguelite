@@ -77,8 +77,6 @@ function TickPassiveForChar(char) {
 	}
 	var _char = global.players[char]
 	//clear effects controlled by outgoing player
-	show_debug_message(_char.cloaking)
-	if _char.cloaking < 5{show_debug_message(global.players[_char.cloaking].name)}
 	if _char.cloaking < 5 and !_char.cloak_fresh{
 		global.players[_char.cloaking].cloak = false
 		InjectLog(global.players[_char.cloaking].name + " became visible!")

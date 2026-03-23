@@ -1,7 +1,10 @@
 // Game over countdown
 if global.gameover {
     global.gameover_timer--
-    if global.gameover_timer == 239 { audio_stop_all() }
+    if global.gameover_timer == 239 {
+        audio_stop_all()
+        while array_length(global.menu_stack) > 0 { PopMenu() }
+    }
     if global.gameover_timer == 180 {
         var _go_snd = audio_play_sound(_09_Game_Over__Variation_, 1, true)
         audio_sound_gain(_go_snd, 0.5, 0)
@@ -17,6 +20,8 @@ if global.gameover {
 }
 
 global.pause = (array_length(global.menu_stack) > 0)
+global._anim_clock = (global._anim_clock + 1) mod ANIM_TICK
+_ProcessShake()
 
 // Tick flash timers every step regardless of what's drawn
 for (var _fi = 0; _fi < array_length(global.players); _fi++) {
@@ -106,3 +111,18 @@ if room == PostGame {
         cs_kbd = true
     }
 }
+
+// Open log viewer via keyboard shortcut or corner button click
+var _log_btn_x = display_get_gui_width() - 8
+var _log_btn_y = 726 - 24
+var _log_click = mouse_check_button_pressed(mb_left)
+    and device_mouse_x_to_gui(0) > _log_btn_x - 48
+    and device_mouse_y_to_gui(0) > _log_btn_y - 8
+    and device_mouse_y_to_gui(0) < _log_btn_y + 24
+
+if InputPressed(INPUT_SAVE) { Autosave() }
+
+var _log_open = instance_number(objLogViewer) > 0
+if (InputPressed(INPUT_LOG) or _log_click) and !_log_open and room != CharacterSelect {
+    PushMenu(objLogViewer, {})
+}else if InputPressed(INPUT_LOG) and _log_open{PopMenu()}

@@ -20,6 +20,7 @@ function RunEnemyPhase(bosses_only, on_complete=undefined) {
 		}
 	}
 	var act = true
+	show_debug_message("RunEnemyPhase: bosses_only=" + string(bosses_only) + " skip_bosses=" + string(CheckPassive("skip_bosses") != undefined) + " passives=" + string(array_length(global.passiveEffects)))
 	if bosses_only and CheckPassive("skip_bosses") != undefined {
 		InjectLog("Bosses held in place!")
 		act = false

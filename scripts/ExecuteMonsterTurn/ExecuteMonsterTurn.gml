@@ -1,8 +1,9 @@
 /// @function ExecuteMonsterTurn(mon_id)
-/// @desc Execute a single monster's turn (extracted from RunEnemyPhase)
+/// @desc Phase 1: Resolve status checks, pick move, show announcement.
+///       Returns a struct with move data for phase 2, or undefined if turn was skipped.
 function ExecuteMonsterTurn(mon_id) {
 	with (mon_id) {
-		if monsterHealth <= 0 { return }
+		if monsterHealth <= 0 { return undefined }
 
 		// --- Enemy DEF decay (move toward 0) ---
 		if (defmod_fresh) { defmod_fresh = false }
@@ -13,14 +14,14 @@ function ExecuteMonsterTurn(mon_id) {
 		if lose_turn {
 			InjectLog(name + " lost their turn!")
 			lose_turn = false
-			return
+			return undefined
 		}
 
 		// --- Sleep check ---
 		if sleep and !locked{
 			if irandom(1) == 0 {
 				InjectLog(name + " is asleep!")
-				return
+				return undefined
 			} else {
 				InjectLog(name + " woke up!")
 				sleep = false
@@ -28,7 +29,7 @@ function ExecuteMonsterTurn(mon_id) {
 		}else if sleep and locked{
 			InjectLog(name + " is sleeping deeply")
 			locked = false
-			return
+			return undefined
 		}
 
 		// --- Stun check ---
@@ -36,7 +37,7 @@ function ExecuteMonsterTurn(mon_id) {
 			if irandom(1) == 0 {
 				InjectLog(name + " is stunned!")
 				if !locked{stun--}
-				return
+				return undefined
 			} else {
 				InjectLog(name + " attacks through stun!")
 				if !locked{stun--}
@@ -78,7 +79,7 @@ function ExecuteMonsterTurn(mon_id) {
 			}
 		}
 
-		if array_length(_attacks) == 0 { return }
+		if array_length(_attacks) == 0 { return undefined }
 
 		// Roll a 1-based index into the weighted move list (simulates d6 move table)
 		var _roll = irandom(array_length(_attacks) - 1)
@@ -89,7 +90,7 @@ function ExecuteMonsterTurn(mon_id) {
 		var _nullify = CheckPassive("nullify_move")
 		if (_nullify != undefined and (_roll + 1) == _nullify.data.number) {
 			InjectLog(name + " tries to act but is nullified by Moloch!")
-			return
+			return undefined
 		}
 		//petra passive, reroll until the selected number isn't selected
 		var _reroll = CheckPassive("reroll_move")
@@ -98,7 +99,6 @@ function ExecuteMonsterTurn(mon_id) {
 				_roll = irandom(array_length(_attacks) - 1)
 			}
 			InjectLog(name + " tries to act but is forced to try again by Petra!")
-			
 		}
 
 		// --- Special moves ---
@@ -111,7 +111,7 @@ function ExecuteMonsterTurn(mon_id) {
 					global.gold = global.goldAtCombatStart
 					global.enemyFled = true
 					InjectLog("Mimic ran away!")
-					instance_create_depth(0,0,0,TurnDelay,{on_complete: function(){CheckVictory()}})	
+					instance_create_depth(0,0,0,TurnDelay,{on_complete: function(){CheckVictory()}})
 				}else{
 					InjectLog("Mimic couldn't escape!")
 				}
@@ -143,29 +143,44 @@ function ExecuteMonsterTurn(mon_id) {
 
 						with (_dead_slot) {
 							name          = _template.name
+							alias         = _template.alias
 							sprite_index  = _template.alias
+							image_index   = 0
 							maxhp         = _template.maxhp
 							monsterHealth = _template.monsterHealth
 							weakness      = _template.weakness
 							element       = _template.element
 							atk           = _template.atk
 							res           = _template.res
+							boss          = _template.boss
+							status_resist = _template[$ "status_resist"] ?? 0
+							defmod = 0; atkmod = 0
+							defmod_fresh = false; atkmod_fresh = false
 							poison = false; venom = false; stun = 0
 							sleep = false; delude = false; lose_turn = false
+							psyseal = false; haunt = 0; frozen = 0
 							dying = false; death_timer = -1
+							image_alpha = 1; image_xscale = 1; image_yscale = 1
 						}
 						InjectLog(name + " calls " + _ballname + "!")
 					}
 				} else {
 					InjectLog(name + " calls... but no one is missing!")
 				}
-				return
+				return undefined
 			}
 
 			InjectLog(name + " uses " + _move.movename + "!")
-			return
+			return undefined
 		}
 
+		// --- Announce the move ---
+		flash_timer = 15
+		flash_color = c_white
+		instance_create_depth(0, 0, -200, objDamageNumber, {
+			text: _move.movename, world_x: x, world_y: y - sprite_height - 10,
+			col: c_white, life: 90, no_rise: true
+		})
 		InjectLog(name + " uses " + _move.movename + "!")
 
 		// --- Calculate base damage and determine element ---
@@ -181,6 +196,21 @@ function ExecuteMonsterTurn(mon_id) {
 		if _move.jdam > _max_edam { _max_edam = _move.jdam; _move_element = "Jupiter" }
 		if _move.medam > _max_edam { _max_edam = _move.medam; _move_element = "Mercury" }
 
+		// Return data for phase 2
+		return { mon: id, move: _move, base_dam: _base_dam, move_element: _move_element, deluded: _deluded }
+	}
+}
+
+/// @function ApplyMonsterDamage(data)
+/// @desc Phase 2: Apply the pre-calculated move effects (damage, statuses, heals)
+function ApplyMonsterDamage(data) {
+	var _mon = data.mon
+	var _move = data.move
+	var _base_dam = data.base_dam
+	var _move_element = data.move_element
+	var _deluded = data.deluded
+
+	with (_mon) {
 		// --- Self-damage (negative dam field) ---
 		if _move.dam < 0 {
 			monsterHealth -= abs(_move.dam)
@@ -195,14 +225,12 @@ function ExecuteMonsterTurn(mon_id) {
 		// Confusion: deluded monster hits left or right neighbor
 		if _deluded and _range >= 1 {
 			InjectLog("  " + name + " is confused!")
-			// Build ordered list of all monsters (alive or dead, to preserve positions)
 			var _all_mons = []
 			var _self_idx = -1
 			with (objMonster) {
-				if id == mon_id { _self_idx = array_length(_all_mons) }
+				if id == _mon { _self_idx = array_length(_all_mons) }
 				array_push(_all_mons, id)
 			}
-			// Pick left or right neighbor — if that neighbor doesn't exist or is dead, attack misses
 			var _neighbor = noone
 			if irandom(1) == 0 {
 				if _self_idx > 0 and _all_mons[_self_idx - 1].monsterHealth > 0 {
@@ -224,23 +252,20 @@ function ExecuteMonsterTurn(mon_id) {
 			}
 			return
 		}
-		//TODO, make attack miss cloaked enemies
+
 		// --- Apply to player targets (range > 0) ---
 		var _total_damage_dealt = 0
 		if _range >= 1 {
-			// Build list of alive player indices
 			var _alive = []
 			for (var _i = 0; _i < 4; _i++) {
 				if global.players[_i].hp > 0 { array_push(_alive, _i) }
 			}
 			if array_length(_alive) == 0 { return }
 
-			// Pick targets based on range
 			var _player_targets = []
 			if _range == 1 {
 				array_push(_player_targets, _alive[irandom(array_length(_alive) - 1)])
 			} else if _range == 3 {
-				// Shuffle alive and pick up to 3
 				var _shuffled = array_create(array_length(_alive))
 				array_copy(_shuffled, 0, _alive, 0, array_length(_alive))
 				for (var _s = array_length(_shuffled) - 1; _s > 0; _s--) {
@@ -253,14 +278,12 @@ function ExecuteMonsterTurn(mon_id) {
 					array_push(_player_targets, _shuffled[_s])
 				}
 			} else {
-				// range 4+ = all alive players
 				_player_targets = _alive
 			}
 
-			// Lure Cap provoke: 25% chance per target to redirect to provoker
+			// Lure Cap provoke
 			for (var _pr = 0; _pr < array_length(_player_targets); _pr++) {
 				var _tgt = _player_targets[_pr]
-				// Check if any OTHER alive player has provoke
 				for (var _pi = 0; _pi < 4; _pi++) {
 					if (_pi == _tgt) { continue }
 					if (global.players[_pi].hp <= 0) { continue }
@@ -274,29 +297,25 @@ function ExecuteMonsterTurn(mon_id) {
 				}
 			}
 
-			// Apply damage to each target
-
 			var _hit_count = _move.double_hit ? (irandom(1) == 0 ? 2 : 1) : 1
 
 			for (var _t = 0; _t < array_length(_player_targets); _t++) {
 				var _pidx = _player_targets[_t]
 				var _p = global.players[_pidx]
-				
-				if _p.cloak {continue}
+
+				if _p.cloak { continue }
 
 				for (var _h = 0; _h < _hit_count; _h++) {
 					var _final = _base_dam
 					if !_move.pierce {
 						_final -= (_p.def + _p.defmod)
 					}
-					// Elemental resistance reduction
 					if _move_element == "Venus" { _final -= _p.vres }
 					else if _move_element == "Mars" { _final -= _p.mares }
 					else if _move_element == "Jupiter" { _final -= _p.jres }
 					else if _move_element == "Mercury" { _final -= _p.meres }
 					_final = max(0, _final)
 
-					// Apply passive damage reduction
 					if _final > 0 and CheckPassive("damage_cap_1") != undefined {
 						_final = 1
 					} else if _final > 0 and CheckPassive("damage_half") != undefined {
@@ -308,7 +327,6 @@ function ExecuteMonsterTurn(mon_id) {
 						_p.flash_timer = FLASH_DURATION
 						_total_damage_dealt += _final
 						if _p.hp <= 0 {
-							// Soul Ring: revive to full HP and discard the ring
 							var _soulID = FindItemID("Soul Ring")
 							var _soulIdx = array_get_index(_p.armor, _soulID)
 							if (_soulIdx >= 0) {
@@ -322,39 +340,35 @@ function ExecuteMonsterTurn(mon_id) {
 								CreateDicePool()
 							} else {
 								_p.hp = 0
-								ClearAllTokens(_p,true)
+								ClearAllTokens(_p, true)
 							}
 						}
 					}
-					
-					if _final > 0 and _p.reflect{
-						monsterHealth = (max(0,monsterHealth -( _p.atk + _p.atkmod)))
-					
+
+					if _final > 0 and _p.reflect {
+						monsterHealth = (max(0, monsterHealth - (_p.atk + _p.atkmod)))
 					}
 					var _gui_x = 237 + _pidx * 400
 					var _gui_y = 165
 
 					if _p.hp <= 0 {
+						ClearAllTokens(_p, true)
 						InjectLog("  " + _p.name + " is downed!")
 						instance_create_depth(0,0,-200,objDamageNumber,
-							{ amount: 0, world_x: _gui_x, world_y: _gui_y, gui_mode: true, icon: Death, life:120 })
+							{ amount: 0, world_x: _gui_x, world_y: _gui_y, gui_mode: true, icon: Death, life: 120 })
 					} else if _final > 0 {
 						instance_create_depth(0,0,-200,objDamageNumber,
-							{ amount: _final, world_x: _gui_x, world_y: _gui_y, col: ElementColor(_move_element), gui_mode: true })
+							{ amount: _final, world_x: _gui_x, world_y: _gui_y, col: ElementColor(_move_element), gui_mode: true, life: 60 })
 					}
-
-					
 				}
 			}
 
 			if _hit_count == 2 { InjectLog("  Double hit!") }
 
-			// Apply status to player targets
 			if _move.token != "" {
 				_EnemyApplyStatusToPlayers(_move, _player_targets)
 			}
 
-			// Drain healing
 			if _move.heal == "dam" and _total_damage_dealt > 0 {
 				monsterHealth = min(monsterHealth + _total_damage_dealt, maxhp)
 				InjectLog("  " + name + " recovers " + string(_total_damage_dealt) + " HP!")
@@ -363,11 +377,9 @@ function ExecuteMonsterTurn(mon_id) {
 
 		// --- Apply to self (range 0) ---
 		if _range == 0 {
-			// Self-buff tokens
 			if _move.token != "" {
 				_EnemyApplyTokenToMonster(id, _move.token, _move.amt)
 			}
-			// Self-heal
 			if _move.heal != "" and _move.heal != "dam" {
 				var _heal_amt = real(_move.heal)
 				monsterHealth = min(monsterHealth + _heal_amt, maxhp)
@@ -395,7 +407,7 @@ function ExecuteMonsterTurn(mon_id) {
 		// --- Apply to other monsters (range -3) ---
 		if _range == -3 {
 			with (objMonster) {
-				if id == mon_id { continue }
+				if id == _mon { continue }
 				if monsterHealth <= 0 { continue }
 				if _move.token != "" {
 					_EnemyApplyTokenToMonster(id, _move.token, _move.amt)
@@ -409,7 +421,6 @@ function ExecuteMonsterTurn(mon_id) {
 
 		// --- Apply to specific monster (range -1) ---
 		if _range == -1 {
-			// Find the monster at the target slot
 			var _target_idx = _move.targ
 			var _count = 0
 			with (objMonster) {

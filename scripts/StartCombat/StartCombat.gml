@@ -52,7 +52,7 @@ function StartCombat(_troop_override) {
 		if temp.boss{ temp.monsterHealth += global.hpcurse * 10 }else{ temp.monsterHealth += global.hpcurse * 3}
 		temp.res += global.rescurse
 		temp.atk += global.atkcurse
-		instance_create_depth(drawx,drawy,5,objMonster,temp)
+		instance_create_depth(drawx,drawy,200,objMonster,temp)
 		drawx += split
 	}
 

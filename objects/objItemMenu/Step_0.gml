@@ -74,38 +74,45 @@ if _needsRebuild {
 	clickable = true
 }
 
+// Mouse movement clears keyboard mode
+if mouse_x != _prev_mx or mouse_y != _prev_my {
+    kbd_mode = false
+    _prev_mx = mouse_x
+    _prev_my = mouse_y
+}
+
 // Keyboard / gamepad navigation
 var _ilen = (mode == 0) ? array_length(global.players[global.turn].inventory) : 1 + array_length(global.players[global.turn].armor)
 if InputPressed(INPUT_UP) and _ilen > 0 {
     selected = (selected == 0) ? _ilen - 1 : selected - 1
-    MENUMOVE
+    kbd_mode = true; MENUMOVE
 }
 if InputPressed(INPUT_DOWN) and _ilen > 0 {
     selected = (selected == _ilen - 1) ? 0 : selected + 1
-    MENUMOVE
+    kbd_mode = true; MENUMOVE
 }
 if InputPressed(INPUT_TAB) {
     mode = (mode == 0) ? 1 : 0
     selected = 0
-    MENUMOVE
+    kbd_mode = true; MENUMOVE
 }
 var _blen = array_length(bottom_buttons)
 if _blen > 0 {
     if InputPressed(INPUT_LEFT) {
         btn_selected = (btn_selected == 0) ? _blen - 1 : btn_selected - 1
-        MENUMOVE
+        kbd_mode = true; MENUMOVE
     }
     if InputPressed(INPUT_RIGHT) {
         btn_selected = (btn_selected == _blen - 1) ? 0 : btn_selected + 1
-        MENUMOVE
+        kbd_mode = true; MENUMOVE
     }
     btn_selected = clamp(btn_selected, 0, _blen - 1)
-    // Highlight selected bottom button via breathing animation
+    // Highlight selected bottom button via breathing animation — only in keyboard mode
     global.kbd_tooltip = ""
     for (var _bi = 0; _bi < _blen; _bi++) {
         if instance_exists(bottom_buttons[_bi]) {
-            bottom_buttons[_bi].keyboard_hover = (_bi == btn_selected)
-            if _bi == btn_selected and variable_instance_exists(bottom_buttons[_bi], "hovertext") {
+            bottom_buttons[_bi].keyboard_hover = (kbd_mode and _bi == btn_selected)
+            if kbd_mode and _bi == btn_selected and variable_instance_exists(bottom_buttons[_bi], "hovertext") {
                 global.kbd_tooltip = bottom_buttons[_bi].hovertext
             }
         }

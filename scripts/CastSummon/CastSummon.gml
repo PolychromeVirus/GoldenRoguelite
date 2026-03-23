@@ -65,6 +65,12 @@ function CastSummon(summonID, playerID){
 			_defer_splash = true
 			_struct.dam = weapon_atk
 			_struct.statuses = { inflict_defdown: 3 }
+			global.pendingAnim = [
+				{ type: "meteor", element: "venus", fires_hit: false, speed: 5, accel: 0.3, trail: 0, impact_foot: true, shake: 5, shake_duration: 15, linger: 5,
+					sub: [{ type: "burst", at: "hit", count: 20, max_speed: 3, max_scale: 2, trail: 0 }] },
+				{ type: "pillar", element: "venus", fires_hit: true, hold: 25, shake: 3, shake_duration: 10, target_splash: "splash" },
+				{ type: "fire", element: "venus", fires_hit: false, rate: 2, width: 0.3, life: 20, life_var: 10, hold: 30, linger: 15, trail: 0 }
+			]
 			break
 
 		// ── Megaera: 2× weapon attack (separate targets) + party +3 ATK ─
@@ -100,6 +106,8 @@ function CastSummon(summonID, playerID){
 				}
 			}
 			_struct.statuses = { inflict_sleep: true }
+			global.pendingAnim = [{ type: "drizzle", element: "jupiter", color: #ff69b4, fires_hit: true, single_anim: true,
+				hit_delay: 80, hold: 90, linger: 30, rate: 8, drop_scale: 0.15, drop_speed: 0.5, spread: 8 }]
 			break
 
 		// ── Catastrophe: weapon attack all enemies ─────────────────────

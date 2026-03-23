@@ -2,8 +2,7 @@
 if !_dismiss_ready {
 	if !mouse_check_button(mb_left) { _dismiss_ready = true }
 } else if mouse_check_button_pressed(mb_left) {
-	instance_destroy()
-	CreateOptions()
+	PopMenu()
 	exit
 }
 

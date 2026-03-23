@@ -40,7 +40,8 @@ function ProcessTownFinds() {
 				)
 				return
 			}
-		}else{Autosave()}
-		
+		} else { Autosave() }
+		DeleteButtons()
+		CreateOptions()
 	}
 }

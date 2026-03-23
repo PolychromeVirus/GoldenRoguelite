@@ -4,6 +4,9 @@ bottom_buttons = []
 lastmode = -1
 others = []
 otherslast = []
+kbd_mode = false
+_prev_mx = mouse_x
+_prev_my = mouse_y
 
 DeleteButtons()
 

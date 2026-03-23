@@ -17,7 +17,7 @@ function SplashWithResist(_struct, _source, _tempdam, _mon) {
 		if _elem == "jupiter" { _modif = max(1, floor(_caster.jupiter / 2)) }
 		if _elem == "mercury" { _modif = max(1, floor(_caster.mercury / 2)) }
 	}
-	return max(1, _base - _resist + _modif)
+	return max(0, _base - _resist + _modif)
 }
 
 function DoDamage(struct){
@@ -71,6 +71,7 @@ function DoDamage(struct){
 			if string_lower(dmgtype) == "mercury" and mon.mark {modif = max(1,floor(struct.caster.mercury / 2))}
 			}
 		
+		show_debug_message("DoDamage: " + mon.name + " | dam=" + string(dam) + " tempdam=" + string(tempdam) + " resist=" + string(_resist) + " modif=" + string(modif) + " defmod=" + string(mon.defmod) + " element=" + mon.element + " dmgtype=" + dmgtype + " pierce=" + string(pierce))
         var _show_dam = 0
         if tempdam >= 9999 and !mon.boss{
             // Instant kill (Charon)
@@ -85,7 +86,7 @@ function DoDamage(struct){
 			InjectLog("The boss resisted death!")
 
         }else if tempdam > 0 {
-            var final_dam = max(1, tempdam - _resist + modif)
+            var final_dam = max(0, tempdam - _resist + modif)
             mon.monsterHealth -= final_dam
             mon.flash_timer = FLASH_DURATION; mon.damage_timer = DAMAGE_DURATION; mon.flash_color = _dam_col
             _show_dam = final_dam
@@ -299,26 +300,41 @@ function DoDamage(struct){
 	// onConfirm: splash damage to neighbors (spell effects like Diamond Dust)
 	var _onConfirm = struct.onConfirm
 	if variable_struct_exists(_onConfirm, "splash_ratio") and _onConfirm.splash_ratio > 0 {
-		var _oc_splash_col = variable_struct_exists(_onConfirm, "splash_element") ? ElementColor(_onConfirm.splash_element) : _dam_col
-		if selected - 1 >= 0 and troop[selected - 1].monsterHealth > 0 {
-			var _sn = troop[selected - 1]
-			var _sd = SplashWithResist(struct, _onConfirm, tempdam, _sn)
-			_sn.monsterHealth -= _sd
-			_sn.flash_timer = FLASH_DURATION; _sn.damage_timer = DAMAGE_DURATION; _sn.flash_color = _oc_splash_col
-			InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
-			if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
-			instance_create_depth(0,0,-200,objDamageNumber,
-				{ amount: _sd, world_x: _sn.x, world_y: _sn.y - _sn.sprite_height, col: _oc_splash_col })
+		var _splash_delay = _onConfirm[$ "splash_delay"] ?? 0
+		var _splash_data = {
+			sel: selected, troop: troop, tempdam: tempdam, struct: struct,
+			onConfirm: _onConfirm,
+			splash_col: variable_struct_exists(_onConfirm, "splash_element") ? ElementColor(_onConfirm.splash_element) : _dam_col,
+			anim_col: variable_struct_exists(_onConfirm, "splash_element") ? AnimColor(_onConfirm.splash_element) : c_white,
 		}
-		if selected + 1 < array_length(troop) and troop[selected + 1].monsterHealth > 0 {
-			var _sn = troop[selected + 1]
-			var _sd = SplashWithResist(struct, _onConfirm, tempdam, _sn)
-			_sn.monsterHealth -= _sd
-			_sn.flash_timer = FLASH_DURATION; _sn.damage_timer = DAMAGE_DURATION; _sn.flash_color = _oc_splash_col
-			InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
-			if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
-			instance_create_depth(0,0,-200,objDamageNumber,
-				{ amount: _sd, world_x: _sn.x, world_y: _sn.y - _sn.sprite_height, col: _oc_splash_col })
+		var _do_splash = method(_splash_data, function() {
+			if sel - 1 >= 0 and troop[sel - 1].monsterHealth > 0 {
+				var _sn = troop[sel - 1]
+				var _sd = SplashWithResist(struct, onConfirm, tempdam, _sn)
+				_sn.monsterHealth -= _sd
+				_sn.flash_timer = FLASH_DURATION; _sn.damage_timer = DAMAGE_DURATION; _sn.flash_color = splash_col
+				SpawnBurstParticles(_sn.x, _sn.y - _sn.sprite_height / 2, anim_col, 10, 2, 0, 0)
+				InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
+				if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
+				instance_create_depth(0,0,-200,objDamageNumber,
+					{ amount: _sd, world_x: _sn.x, world_y: _sn.y - _sn.sprite_height, col: splash_col })
+			}
+			if sel + 1 < array_length(troop) and troop[sel + 1].monsterHealth > 0 {
+				var _sn = troop[sel + 1]
+				var _sd = SplashWithResist(struct, onConfirm, tempdam, _sn)
+				_sn.monsterHealth -= _sd
+				_sn.flash_timer = FLASH_DURATION; _sn.damage_timer = DAMAGE_DURATION; _sn.flash_color = splash_col
+				SpawnBurstParticles(_sn.x, _sn.y - _sn.sprite_height / 2, anim_col, 10, 2, 0, 0)
+				InjectLog(_sn.name + " takes " + string(_sd) + " splash damage!")
+				if _sn.monsterHealth <= 0 { _sn.monsterHealth = 0; global.gold += 1 }
+				instance_create_depth(0,0,-200,objDamageNumber,
+					{ amount: _sd, world_x: _sn.x, world_y: _sn.y - _sn.sprite_height, col: splash_col })
+			}
+		})
+		if _splash_delay > 0 {
+			MakeTurnDelay(_splash_delay, _do_splash)
+		} else {
+			_do_splash()
 		}
 	}
 

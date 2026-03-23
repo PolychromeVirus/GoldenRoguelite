@@ -179,10 +179,7 @@ _build_buttons = method(id, function() {
 })
 
 on_cancel = method(id, function() {
-    global.inTown      = false
-    global.currentTown = -1
-    var _bg_layer = layer_background_get_id(layer_get_id("Background"))
-    layer_background_sprite(_bg_layer, global.dungeonlist[global.dungeon].background)
+    DeleteButtons()
     CreateOptions()
     // PopMenu + CANCELSOUND handled by objCancel
 })
