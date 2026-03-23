@@ -19,6 +19,11 @@ if soft {
     vy *= _drag
 }
 vy += grav * _t
+// Wiggle — gentle horizontal sine sway
+if wiggle != 0 {
+    wiggle_t += wiggle_spd * _t
+    x += sin(wiggle_t) * wiggle * _t
+}
 // Oscillation — position-based swirl around spawn point
 if osc_amp != 0 {
     osc_phase += osc_speed * _t

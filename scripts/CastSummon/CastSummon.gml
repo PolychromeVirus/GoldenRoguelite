@@ -77,16 +77,24 @@ function CastSummon(summonID, playerID){
 		case "Megaera":
 			_struct.splash = Megaera1122
 
-			// Party ATK buff
-			AddPassive("party_atk", 3, asset_get_index(summon.alias), "Megaera", {amount: 0}, playerID)
-			for (var _me = 0; _me < array_length(global.players); _me++) {
-				if (global.players[_me].hp > 0) {
-					global.players[_me].atkmod += 3
+			var _meg_burst = [{ type: "burst", element: "mars", fires_hit: true, count: 30, max_speed: 4, max_scale: 2, trail: 0 }]
+			var _meg1 = WeaponAttack(true,false,Megaera1122)
+			var _meg2 = WeaponAttack(true,false,Megaera1122)
+			_meg1.anim = _meg_burst
+			_meg2.anim = _meg_burst
+			var _meg_buff = { callback: method({ pid: playerID, sid: summonID, alias: summon.alias }, function() {
+				AddPassive("party_atk", 3, asset_get_index(alias), "Megaera", {amount: 0}, pid)
+				for (var _me = 0; _me < array_length(global.players); _me++) {
+					if (global.players[_me].hp > 0) {
+						global.players[_me].atkmod += 3
+					}
 				}
-			}
-			caster.atkmod_fresh = true
-			InjectLog("Party ATK increased by 3!")
-			global.attackQueue = [WeaponAttack(true,false,Megaera1122),WeaponAttack(true,false,Megaera1122)]
+				global.players[pid].atkmod_fresh = true
+				InjectLog("Party ATK increased by 3!")
+				instance_create_depth(0, 0, 500, objSummonSplash, { spr: Megaera1122 })
+				MakeTurnDelay(30, NextTurn)
+			}) }
+			global.attackQueue = [_meg1, _meg2, _meg_buff]
 			
 			
 			
@@ -107,13 +115,16 @@ function CastSummon(summonID, playerID){
 			}
 			_struct.statuses = { inflict_sleep: true }
 			global.pendingAnim = [{ type: "drizzle", element: "jupiter", color: #ff69b4, fires_hit: true, single_anim: true,
-				hit_delay: 80, hold: 90, linger: 30, rate: 8, drop_scale: 0.15, drop_speed: 0.5, spread: 8 }]
+				hit_delay: 100, hold: 140, linger: 50, rate: 2, drop_scale: 0.1, drop_speed: 0.1, spread: 8, scl: 1, scl_var: 0, grav: 0.01, wiggle: 0.3, wiggle_spd: 0.08, life: 120, life_var: 30 }]
 			break
 
 		// ── Catastrophe: weapon attack all enemies ─────────────────────
 		case "Catastrophe":
 			_struct.dam = WeaponAttack(true,false).dam
 			_struct.num = 12
+			global.pendingAnim = [
+				{ type: "flash", element: "jupiter", fires_hit: true, hold: 10, stagger_damage: true, stagger: 15 }
+			]
 			break
 
 		// ── Azul: elemental affinity to all + stun ─────────────────────
@@ -121,6 +132,12 @@ function CastSummon(summonID, playerID){
 			_struct.splash = Azul1104
 			_struct.dam = QueryDice(caster, "elemental", "affinity")
 			_struct.statuses = { inflict_stun: true }
+			_struct.num = 12
+			global.pendingAnim = [
+				{ type: "fire", element: "mercury", fires_hit: true, target_all: true,
+				  screen_tint: AnimColor("mercury"), screen_tint_alpha: 0.4, screen_tint_hold: 9999,
+				  rate: 1, width: 0.4, life: 15, life_var: 10, hold: 100, linger: 20, trail: 0, hit_delay: 50 }
+			]
 			break
 
 		// ── Haures: poison all + poison does 2 damage ──────────────────
@@ -132,6 +149,9 @@ function CastSummon(summonID, playerID){
 			var _haures_data = { amount: 2 }
 			AddPassive("poison_buff", -1, asset_get_index(summon.alias), "Haures", _haures_data, playerID)
 			InjectLog("Poison will now deal 2 damage!")
+			global.pendingAnim = [
+				{ type: "cloud", element: "venus", color: #4B0082, fires_hit: true, target_all: true, hold: 120, cloud_hold: 100, linger: 30, hit_delay: 50, height: 0.5, scl: 5, scl_var: 3, count: 400, alpha: 0.95, spawn: 40, vert_spread: 30, hit_tint: c_black, hit_tint_duration: 40 }
+			]
 			break
 
 		// ── Coatlicue: heal all to full + 5-round regen ────────────────
@@ -191,8 +211,75 @@ function CastSummon(summonID, playerID){
 
 		// ── Charon: pair-cost instant-kill ──────────────────────────────
 		case "Charon":
-			instance_create_depth(0, 0, 0, objCharonPicker, _struct)
+			_struct.splash = Charon1110
+			// Count ready djinn
+			var _charon_ready = 0
+			for (var _cp = 0; _cp < array_length(global.players); _cp++) {
+				var _cpl = global.players[_cp]
+				if variable_struct_exists(_cpl, "djinn") {
+					for (var _cd = 0; _cd < array_length(_cpl.djinn); _cd++) {
+						var _cdj = global.djinnlist[_cpl.djinn[_cd]]
+						if (_cdj.ready or _cdj.spent) { _charon_ready++ }
+					}
+				}
+			}
+			// Count eligible (non-boss) targets
+			var _charon_eligible = 0
+			var _cmc = instance_number(objMonster)
+			for (var _ci = 0; _ci < _cmc; _ci++) {
+				var _cinst = instance_find(objMonster, _ci)
+				if _cinst.monsterHealth > 0 and !_cinst.boss { _charon_eligible++ }
+			}
+			var _charon_max = min(floor(_charon_ready / 2), _charon_eligible)
+			if _charon_max <= 0 {
+				InjectLog("No valid targets for Charon!")
+				instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
+				_handled = true
+				break
+			}
+			_handled = true
 			ExhaustSummonDjinn(summonID)
+			PushMenu(objMenuSlider, {
+				minim: 1, maxim: _charon_max, value: 1,
+				confirm_label: "Reap",
+				label: function(v) { return "Djinn to spend: " + string(v * 2) },
+				preview: function(v) { return "Targets to reap: " + string(v) },
+				on_confirm: method({ sid: summonID }, function(v) {
+					// Spend v*2 random ready djinn
+					var _spent = 0
+					var _needed = v * 2
+					for (var _p = 0; _p < array_length(global.players); _p++) {
+						var _pl = global.players[_p]
+						if !variable_struct_exists(_pl, "djinn") { continue }
+						for (var _d = 0; _d < array_length(_pl.djinn); _d++) {
+							if _spent >= _needed { break }
+							var _dj = global.djinnlist[_pl.djinn[_d]]
+							if (_dj.ready or _dj.spent) {
+								_dj.ready = false
+								_dj.spent = false
+								global.justSummoned = true
+								_spent++
+							}
+						}
+						if _spent >= _needed { break }
+					}
+					InjectLog("Charon consumes " + string(_spent) + " djinn!")
+					// Queue instant-kill targeters
+					for (var _k = 0; _k < v; _k++) {
+						var _s = variable_clone(global.AggressionSchema)
+						_s.dam     = 9999
+						_s.target  = "enemy"
+						_s.num     = 1
+						_s.source  = "summon"
+						_s.dmgtype = "none"
+						_s.splash  = (_k == 0) ? Charon1110 : -1
+						_s.anim    = [{ type: "cloud", element: "jupiter", color: #4B0082, fires_hit: true, hold: 20, linger: 15, hit_delay: 10, count: 50 }]
+						array_push(global.attackQueue, _s)
+					}
+					PopMenu()
+					ProcessAttackQueue()
+				}),
+			})
 			exit
 			break
 
@@ -233,50 +320,99 @@ function CastSummon(summonID, playerID){
 		// ── Moloch: pick a number to nullify on enemy move lists ───────
 		case "Moloch":
 			_struct.splash = Moloch1124
-				_handled = true
+			_handled = true
 			ExhaustSummonDjinn(summonID)
-			PushMenu(objMenuSlider, {
-				minim: 1, maxim: 20, value: 1,
-				confirm_label: "Nullify",
-				label: function(v) { return "Nullify enemy move #" + string(v) },
-				on_confirm: method({ pid: playerID }, function(v) {
-					AddPassive("nullify_move", -1, asset_get_index("Moloch"), "Moloch", { number: v }, pid)
-					InjectLog("Moloch nullifies enemy move #" + string(v) + "!")
-					PopMenu()
-					NextTurn()
-				}),
-			})
+			// Freeze all enemies: greyscale + damage frame for ~2 seconds
+			var _mol_count = instance_number(objMonster)
+			for (var _mi = 0; _mi < _mol_count; _mi++) {
+				var _mon = instance_find(objMonster, _mi)
+				if _mon.monsterHealth > 0 {
+					_mon.damage_timer = 120
+					_mon.frozen = 1
+					_mon.image_speed = 0
+				}
+			}
+			// Open slider after a brief pause
+			instance_create_depth(0, 0, 0, TurnDelay, { wait: 30, on_complete: method({ pid: playerID }, function() {
+				PushMenu(objMenuSlider, {
+					minim: 1, maxim: 20, value: 1,
+					confirm_label: "Nullify",
+					label: function(v) { return "Nullify enemy move #" + string(v) },
+					on_confirm: method({ pid: pid }, function(v) {
+						AddPassive("nullify_move", -1, asset_get_index("Moloch"), "Moloch", { number: v }, pid)
+						InjectLog("Moloch nullifies enemy move #" + string(v) + "!")
+						// Unfreeze all enemies
+						var _mc = instance_number(objMonster)
+						for (var _m = 0; _m < _mc; _m++) {
+							var _mon = instance_find(objMonster, _m)
+							_mon.frozen = 0
+							_mon.image_speed = 1
+							_mon.damage_timer = 0
+						}
+						PopMenu()
+						NextTurn()
+					}),
+				})
+			}) })
 			exit
 			break
 
 		// ── Eclipse: half max HP to enemies (10% to bosses) + delude all ─
 		case "Eclipse":
 			_struct.splash = Eclipse1114
-			var _mon_count = instance_number(objMonster)
-			for (var _m = 0; _m < _mon_count; _m++) {
+			// Build animation: black screen tint → white pillars with fire on all enemies
+			var _ecl_monsters = []
+			var _ecl_count = instance_number(objMonster)
+			for (var _m = 0; _m < _ecl_count; _m++) {
 				var _mon = instance_find(objMonster, _m)
-				if (_mon.monsterHealth <= 0) { continue }
-				var _eclipse_dam = 0
-				if (_mon.boss == 1) {
-					_eclipse_dam = max(1, ceil(_mon.maxhp * 0.1))
-				} else {
-					_eclipse_dam = max(1, ceil(_mon.maxhp * 0.5))
-				}
-				_mon.monsterHealth -= _eclipse_dam
-				_mon.flash_timer = FLASH_DURATION; _mon.damage_timer = DAMAGE_DURATION; _mon.flash_color = ElementColor("jupiter")
-				if (_mon.monsterHealth <= 0) {
-					_mon.monsterHealth = 0
-					global.gold += 1
-				}
-				InjectLog(_mon.name + " takes " + string(_eclipse_dam) + " Jupiter damage!")
-				if (_mon.monsterHealth > 0) {
-					_mon.delude = true
-					InjectLog(_mon.name + " is deluded!")
-				}
+				if (_mon.monsterHealth > 0) { array_push(_ecl_monsters, _mon) }
 			}
-			// Check victory
-			CheckVictory()
-			instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
+			// Queue: sustained black flash, then white pillars + fire
+			QueueAnim("flash", "jupiter", _ecl_monsters[0], {
+				type: "flash", element: "jupiter", target: _ecl_monsters[0],
+				color: c_black, fires_hit: false, hold: 60, peak: 10, alpha: 0.6, sustain: true, blend: "normal"
+			})
+			for (var _em = 0; _em < array_length(_ecl_monsters); _em++) {
+				QueueAnim("pillar", "jupiter", _ecl_monsters[_em], {
+					type: "pillar", element: "jupiter", target: _ecl_monsters[_em],
+					color: c_white, fires_hit: (_em == 0), hit_delay: 10,
+					outer_w: 24, core_w: 14,
+					hold: 30, fade: 20, linger: 10,
+					fire_overlay: true, fire_rate: 2, fire_w: 20,
+					shake: 0
+				})
+			}
+			// On hit: apply damage
+			var _ecl_on_hit = method({ mons: _ecl_monsters }, function() {
+				ScreenShake(6, 15)
+				for (var _m = 0; _m < array_length(mons); _m++) {
+					var _mon = mons[_m]
+					if (_mon.monsterHealth <= 0) { continue }
+					var _eclipse_dam = 0
+					if (_mon.boss == 1) {
+						_eclipse_dam = max(1, ceil(_mon.maxhp * 0.1))
+					} else {
+						_eclipse_dam = max(1, ceil(_mon.maxhp * 0.5))
+					}
+					_mon.monsterHealth -= _eclipse_dam
+					_mon.flash_timer = FLASH_DURATION; _mon.damage_timer = DAMAGE_DURATION; _mon.flash_color = ElementColor("jupiter")
+					if (_mon.monsterHealth <= 0) {
+						_mon.monsterHealth = 0
+						global.gold += 1
+					}
+					InjectLog(_mon.name + " takes " + string(_eclipse_dam) + " Jupiter damage!")
+					if (_mon.monsterHealth > 0) {
+						_mon.delude = true
+						InjectLog(_mon.name + " is deluded!")
+					}
+				}
+			})
+			// On complete: check victory + next turn
+			var _ecl_resolve = function() {
+				CheckVictory()
+				MakeTurnDelay(20, NextTurn)
+			}
+			PlayAnimation(_ecl_on_hit, _ecl_resolve)
 			_handled = true
 			break
 
@@ -287,6 +423,7 @@ function CastSummon(summonID, playerID){
 			_struct.dam = QueryDice(caster, "all", "values")
 			_struct.num = 1
 			global.daedalusCascade = true
+			global.daedalusAnim = true
 			break
 
 		default:
@@ -302,7 +439,7 @@ function CastSummon(summonID, playerID){
 
 	// Show splash (unless deferred for targeting summons or four-cost)
 	if !_defer_splash and !_defer_djinn and _struct.splash != -1 {
-		instance_create_depth(0, 0, -100, objSummonSplash, { spr: _struct.splash })
+		instance_create_depth(0, 0, 500, objSummonSplash, { spr: _struct.splash })
 	}
 
 	if (_handled) { exit }

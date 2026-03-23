@@ -20,12 +20,25 @@ function Anim_Flash_Tick() {
         }
     }
 
-    if _timer >= _TOTAL {
-        // Skip past all consecutive flash steps
-        while _qi < array_length(_queue) - 1 and _queue[_qi + 1].type == "flash" {
-            _qi++
+    var _stagger = _step[$ "stagger"] ?? undefined
+    if is_undefined(_stagger) {
+        if _timer >= _TOTAL {
+            // Skip past all consecutive flash steps
+            while _qi < array_length(_queue) - 1 and _queue[_qi + 1].type == "flash" {
+                _qi++
+            }
+            _next_step()
         }
-        _next_step()
+    } else {
+        var _is_last = (_qi >= array_length(_queue) - 1) or (_queue[_qi + 1].type != "flash")
+        var _end = _is_last ? _TOTAL : _stagger
+        if _timer >= _end {
+            if !_hit_fired and (_step[$ "fires_hit"] ?? false) {
+                _hit_fired = true
+                _on_hit()
+            }
+            _next_step()
+        }
     }
 }
 
@@ -35,16 +48,24 @@ function Anim_Flash_Draw() {
     var _PEAK  = _step[$ "peak"] ?? 3
     var _max_alpha = _step[$ "alpha"] ?? 0.5
 
-    // Sharp flash in, smooth fade out
+    // Sharp flash in, smooth fade out (sustain holds at max until end)
+    var _sustain = _step[$ "sustain"] ?? false
     var _alpha
     if _timer <= _PEAK {
         _alpha = _timer / _PEAK
+    } else if _sustain {
+        _alpha = 1
     } else {
         _alpha = 1 - ((_timer - _PEAK) / (_TOTAL - _PEAK))
     }
     _alpha = clamp(_alpha, 0, 1)
 
-    gpu_set_blendmode(bm_add)
+    var _blend = _step[$ "blend"] ?? "add"
+    if _blend == "normal" {
+        gpu_set_blendmode(bm_normal)
+    } else {
+        gpu_set_blendmode(bm_add)
+    }
     draw_set_alpha(_alpha * _max_alpha)
     draw_set_color(_col)
     draw_rectangle(0, 0, room_width, room_height, false)

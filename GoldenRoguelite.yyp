@@ -232,6 +232,7 @@
     {"id":{"name":"Anim_Cloud","path":"scripts/Anim_Cloud/Anim_Cloud.yy",},},
     {"id":{"name":"Anim_Flash","path":"scripts/Anim_Flash/Anim_Flash.yy",},},
     {"id":{"name":"Anim_Meteor","path":"scripts/Anim_Meteor/Anim_Meteor.yy",},},
+    {"id":{"name":"Anim_Pause","path":"scripts/Anim_Pause/Anim_Pause.yy",},},
     {"id":{"name":"Anim_Pillar","path":"scripts/Anim_Pillar/Anim_Pillar.yy",},},
     {"id":{"name":"Anim_Ray","path":"scripts/Anim_Ray/Anim_Ray.yy",},},
     {"id":{"name":"Anim_Sprite","path":"scripts/Anim_Sprite/Anim_Sprite.yy",},},

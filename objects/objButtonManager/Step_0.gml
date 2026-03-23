@@ -2,7 +2,7 @@ var _top = (array_length(global.menu_stack) > 0)
          ? global.menu_stack[array_length(global.menu_stack) - 1]
          : noone
 
-var _blocked = instance_exists(TurnDelay) or instance_exists(objSpellAnimation) or instance_exists(objEnemyPhaseController)
+var _blocked = instance_exists(TurnDelay) or instance_exists(objSpellAnimation) or instance_exists(objEnemyPhaseController) or instance_exists(objPostBattle)
 
 if _top != _prev_top{
     _prev_top = _top

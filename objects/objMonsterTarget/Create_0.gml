@@ -85,7 +85,7 @@ function logic(){
 		variable_struct_set(_struct,_names[i],variable_instance_get(id,_names[i]))
 	}
 	
-	if splash != -1{instance_create_depth(0,0,0,objSummonSplash,{spr: splash})}
+	if splash != -1{instance_create_depth(0,0,500,objSummonSplash,{spr: splash})}
 	_struct.troop = monsters
 
 	// Shared post-damage resolution — used by both animated and non-animated paths
@@ -113,6 +113,65 @@ function logic(){
 			HandleVictory()
 		}
 	})
+
+	// Daedalus: build cascade pillars dynamically based on distance from selected
+	if (variable_global_exists("daedalusAnim") and global.daedalusAnim) {
+		global.daedalusAnim = false
+		var _base_outer = 64
+		var _base_core  = 40
+		// Group monsters by distance from selected
+		var _max_dist = 0
+		for (var _m = 0; _m < array_length(monsters); _m++) {
+			var _d = abs(_m - selected)
+			if _d > _max_dist { _max_dist = _d }
+		}
+		var _dae_anims = []
+		// Build one pillar per alive monster — all consecutive (simultaneous)
+		// Each distance group delayed by 35 frames from the previous
+		// Drizzle overlay spawns 1px falling particles within pillar width
+		for (var _dist = 0; _dist <= _max_dist; _dist++) {
+			var _scale = power(0.5, _dist)
+			var _ow = max(4, round(_base_outer * _scale))
+			var _cw = max(2, round(_base_core * _scale))
+			var _group_delay = _dist * 35
+			for (var _m = 0; _m < array_length(monsters); _m++) {
+				if abs(_m - selected) != _dist { continue }
+				if monsters[_m].monsterHealth <= 0 { continue }
+				array_push(_dae_anims, {
+					type: "pillar", element: "mars", target: monsters[_m],
+					fires_hit: (_dist == 0 and _m == selected), hit_delay: 15,
+					outer_w: _ow, core_w: _cw,
+					hold: 30, fade: 20, linger: 10,
+					delay: _group_delay,
+					shake: (_dist == 0 and _m == selected) ? 5 : 0, shake_duration: 15
+				})
+			}
+		}
+		// Override pendingAnim with our custom queue — already has targets baked in
+		global.pendingAnim = undefined
+		// Play directly
+		if splash != -1 { instance_create_depth(0, 0, 0, objSummonSplash, { spr: splash }) }
+		_struct.troop = monsters
+		var _dae_resolve = method({ s: _struct, m: monsters }, function() {
+			var _any_alive = false
+			for (var j = 0; j < array_length(m); j++) {
+				if m[j].monsterHealth != 0 { _any_alive = true; break }
+			}
+			if _any_alive {
+				global.inCombat = true
+				MakeTurnDelay(20, NextTurn)
+			} else {
+				HandleVictory()
+			}
+		})
+		// Queue directly — targets already embedded in each step
+		for (var _da = 0; _da < array_length(_dae_anims); _da++) {
+			var _step = _dae_anims[_da]
+			QueueAnim(_step.type, _step.element, _step.target, _step)
+		}
+		PlayAnimation(method({ s: _struct }, function() { DoDamage(s) }), _dae_resolve)
+		exit
+	}
 
 	var _anims = global.pendingAnim
 	global.pendingAnim = undefined

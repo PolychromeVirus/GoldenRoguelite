@@ -85,7 +85,10 @@ function Anim_Stream() {
             var _spawn_count = _rising ? _base_count * ANIM_TICK : _base_count
             repeat (_spawn_count) {
                 var _ox = irandom_range(-_half_w, _half_w)
-                var _vy = _rising ? -(0.5 + random(1.0)) : (1.5 + random(2.0))
+                var _drop_spd = _step[$ "drop_speed"] ?? 1.5
+                var _vy = _rising ? -(0.5 + random(1.0)) : (_drop_spd + random(_drop_spd * 1.3))
+                var _wiggle_amt = _step[$ "wiggle"] ?? 0
+                var _wiggle_spd = _step[$ "wiggle_spd"] ?? 0.1
                 instance_create_depth(
                     _tx + _ox,
                     _ty,
@@ -99,6 +102,8 @@ function Anim_Stream() {
                         trail: _trail,
                         die_y: _rising ? undefined : _target.y,
                         spr:  sprCirclePart,
+                        wiggle: _wiggle_amt,
+                        wiggle_spd: _wiggle_spd,
                     })
             }
         }
@@ -117,7 +122,8 @@ function Anim_Stream() {
             var _ov_count = (_ov_rate >= 1) ? round(_ov_rate) : (random(1) < _ov_rate ? 1 : 0)
             repeat (_ov_count) {
                 var _ox = irandom_range(-_half_w, _half_w)
-                var _vy = _rising ? -(0.5 + random(1.0)) : (1.5 + random(2.0))
+                var _drop_spd = _step[$ "drop_speed"] ?? 1.5
+                var _vy = _rising ? -(0.5 + random(1.0)) : (_drop_spd + random(_drop_spd * 1.3))
                 instance_create_depth(
                     _tx + _ox, _ty,
                     100, objParticle, {

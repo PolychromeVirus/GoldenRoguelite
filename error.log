@@ -1,9 +1,16 @@
-DoDamage: Macetail | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Mars dmgtype=normal pierce=0
-DoDamage: Macetail | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Mars dmgtype=normal pierce=0
-DoDamage: Ghost Army | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Mercury dmgtype=normal pierce=0
-DoDamage: Ghost Army | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Mercury dmgtype=normal pierce=0
-DoDamage: Wyvern | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Venus dmgtype=normal pierce=0
-DoDamage: Wyvern | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Venus dmgtype=normal pierce=0
-DoDamage: Wyvern | dam=43 tempdam=43 resist=0 modif=0 defmod=0 element=Venus dmgtype=normal pierce=0
 
-Daedalus cascade: tempdam=43 dam=43
+___________________________________________
+############################################################################################
+ERROR in action number 1
+of Create Event for object objSpellAnimation:
+Push :: Execution Error - Variable Index [0] out of range [0] - -6._queue(100256,0)
+ at gml_Script_anon@4522@gml_Object_objSpellAnimation_Create_0 (line 133) -     var _step  = _queue[_qi]
+############################################################################################
+gml_Script_anon@4522@gml_Object_objSpellAnimation_Create_0 (line 133)
+gml_Object_objSpellAnimation_Create_0 (line 195) - _load_step()
+gml_Script_PlayAnimation (line 33)
+gml_Script_ApplyDamageToTargets (line 213) -               PlayAnimation(_on_hit, method({}, function() {
+gml_Script_SelectTargets (line 56) -               ApplyDamageToTargets(struct)
+gml_Script_OnUse (line 87) -                      SelectTargets(_struct)
+gml_Script_anon@360@gml_Object_objItemMenu_Create_0 (line 66) -                 OnUse(_selItem, selected, _player)
+gml_Object_objItemMenu_Mouse_56 (line 10) -     if instance_position(mouse_x, mouse_y, objConfirm)  { _do_action(instance_position(mouse_x, mouse_y, objConfirm)) }

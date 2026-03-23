@@ -45,6 +45,19 @@ _check_hit = method(id, function() {
         _hit_fired = true
         _hit_timer = _timer
         if _step[$ "fires_hit"] ?? false { _on_hit() }
+        // Tint targets at hit time + show damage shake sprite
+        var _hit_tint = _step[$ "hit_tint"]
+        if !is_undefined(_hit_tint) {
+            var _hit_tint_dur = _step[$ "hit_tint_duration"] ?? 20
+            for (var _hq = _qi; _hq < array_length(_queue); _hq++) {
+                if _hq != _qi and _queue[_hq].type != _step.type { break }
+                if instance_exists(_queue[_hq].target) {
+                    _queue[_hq].target.tint_color = _hit_tint
+                    _queue[_hq].target.tint_timer = _hit_tint_dur
+                    _queue[_hq].target.damage_timer = _hit_tint_dur
+                }
+            }
+        }
     }
 })
 
@@ -166,6 +179,14 @@ _load_step = method(id, function() {
             _step.target.frozen = 0
             _step.target.image_speed = 1
         }
+    }
+    // Screen tint — persistent overlay that lasts across subsequent steps
+    var _screen_tint = _step[$ "screen_tint"]
+    if !is_undefined(_screen_tint) {
+        _sub_flash_col   = _screen_tint
+        _sub_flash_alpha = _step[$ "screen_tint_alpha"] ?? 0.4
+        _sub_flash_timer = 7  // past peak so it starts at full alpha
+        _sub_flash_hold  = _step[$ "screen_tint_hold"] ?? 9999
     }
     _col = _step[$ "color"] ?? AnimColor(_step.element)
     switch (_step.type) {

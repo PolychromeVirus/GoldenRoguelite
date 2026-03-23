@@ -58,7 +58,9 @@ _do_action = method(id, function(btn_inst) {
         var _selItem = _inv[selected]
 
         if _oi == objConfirm { // Use
-            if global.itemcardlist[_selItem].type == "Healing"
+            if (global.itemcardlist[_selItem].type == "Battle" and !global.inCombat) {
+                InjectLog("Battle items can only be used in combat!")
+            } else if global.itemcardlist[_selItem].type == "Healing"
             or global.itemcardlist[_selItem].type == "Battle"
             or global.itemcardlist[_selItem].name == "Lucky Medal" {
                 ClearOptions()

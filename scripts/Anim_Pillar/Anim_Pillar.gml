@@ -3,7 +3,14 @@ function Anim_Pillar_Tick() {
     var _HOLD       = _step[$ "hold"] ?? 40
     var _FADE       = _step[$ "fade"] ?? 50
     var _LINGER     = _step[$ "linger"] ?? 40
-    var _TOTAL      = _HOLD + _FADE + _LINGER
+    // Find max delay across all consecutive pillars for total duration
+    var _max_delay  = 0
+    for (var _dq = _qi; _dq < array_length(_queue); _dq++) {
+        if _queue[_dq].type != "pillar" { break }
+        var _dd = _queue[_dq][$ "delay"] ?? 0
+        if _dd > _max_delay { _max_delay = _dd }
+    }
+    var _TOTAL      = _max_delay + _HOLD + _FADE + _LINGER
     var _embers     = _step[$ "embers"] ?? false
     var _outer_w    = _step[$ "outer_w"] ?? 32
     var _ember_count = _step[$ "ember_count"] ?? 5
@@ -19,10 +26,11 @@ function Anim_Pillar_Tick() {
     _check_hit()
 
     // Spawn embers while pillar is visible + ember_linger after
-    if _embers and _timer <= _HOLD + _FADE + _ember_linger {
+    if _embers and _timer <= _max_delay + _HOLD + _FADE + _ember_linger {
         for (var _q = _qi; _q < array_length(_queue); _q++) {
             var _s = _queue[_q]
             if _s.type != "pillar" { break }
+            if _timer < (_s[$ "delay"] ?? 0) { continue }
             var _t   = _s.target
             var _tx  = _t.x
             var _ty  = _t.y
@@ -46,10 +54,11 @@ function Anim_Pillar_Tick() {
     }
 
     // Fire overlay — thin trailless rising particles that reach the top
-    if _fire_overlay and _timer <= _HOLD + _FADE {
+    if _fire_overlay and _timer <= _max_delay + _HOLD + _FADE {
         for (var _q = _qi; _q < array_length(_queue); _q++) {
             var _s = _queue[_q]
             if _s.type != "pillar" { break }
+            if _timer < (_s[$ "delay"] ?? 0) { continue }
             var _t  = _s.target
             var _tx = _t.x
             var _ty = _t.y
@@ -67,6 +76,34 @@ function Anim_Pillar_Tick() {
                         scl:  1 + irandom(1),
                         trail: 0,
                         die_y: 0,
+                        spr:  sprCirclePart,
+                    })
+            }
+        }
+    }
+
+    // Drizzle overlay — tiny falling particles within the pillar width
+    var _drizzle_overlay = _step[$ "drizzle_overlay"] ?? false
+    var _drizzle_rate    = _step[$ "drizzle_rate"] ?? 3
+    var _drizzle_w       = _step[$ "drizzle_w"] ?? _outer_w
+    if _drizzle_overlay and _timer <= _max_delay + _HOLD + _FADE {
+        for (var _q = _qi; _q < array_length(_queue); _q++) {
+            var _s = _queue[_q]
+            if _s.type != "pillar" { break }
+            if _timer < (_s[$ "delay"] ?? 0) { continue }
+            var _t  = _s.target
+            var _dhw = (_s[$ "drizzle_w"] ?? _drizzle_w) / 2
+            repeat (_drizzle_rate) {
+                instance_create_depth(
+                    _t.x + irandom_range(-_dhw, _dhw), 0,
+                    100, objParticle, {
+                        vx:   0,
+                        vy:   0.2 + random(0.2),
+                        grav: 0.02,
+                        life: 300,
+                        col:  _col,
+                        scl:  1,
+                        trail: 0,
                         spr:  sprCirclePart,
                     })
             }
@@ -122,18 +159,34 @@ function Anim_Pillar_Draw() {
     for (var _q = _qi; _q < _q_end; _q++) {
         var _s = _queue[_q]
         if _s.type != "pillar" { break }
+        // Per-pillar delay support
+        var _pdelay = _s[$ "delay"] ?? 0
+        if _timer < _pdelay { continue }
+        var _pt = _timer - _pdelay
+        var _phold = _s[$ "hold"] ?? _HOLD
+        var _pfade = _s[$ "fade"] ?? _FADE
+        var _pfade_in = _s[$ "fade_in"] ?? _FADE_IN
+        var _p_ow = _s[$ "outer_w"] ?? _outer_w
+        var _p_cw = _s[$ "core_w"] ?? _core_w
+        // Per-pillar alpha
+        var _pa = 1
+        if _pt < _pfade_in { _pa = _pt / _pfade_in }
+        else if _pt > _phold { _pa = 1 - ((_pt - _phold) / _pfade) }
+        _pa = clamp(_pa, 0, 1)
         var _tx     = _s.target.x
         var _foot_y = _s.target.y
+        var _pho = _p_ow / 2
+        var _phc = _p_cw / 2
 
         // Outer glow
-        draw_set_alpha(_alpha * 0.6)
+        draw_set_alpha(_pa * 0.6)
         draw_set_color(_col)
-        draw_rectangle(_tx - _half_outer, 0, _tx + _half_outer - 1, _foot_y, false)
+        draw_rectangle(_tx - _pho, 0, _tx + _pho - 1, _foot_y, false)
 
         // Core — near white
-        draw_set_alpha(_alpha)
+        draw_set_alpha(_pa)
         draw_set_color(merge_color(_col, c_white, 0.7))
-        draw_rectangle(_tx - _half_core, 0, _tx + _half_core - 1, _foot_y, false)
+        draw_rectangle(_tx - _phc, 0, _tx + _phc - 1, _foot_y, false)
     }
 
     draw_set_alpha(1)

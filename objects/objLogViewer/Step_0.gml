@@ -24,6 +24,9 @@ if InputPressed(INPUT_DEBUG){
 		for (var i = 0; i < array_length(global.psynergylist); ++i) {
 		    array_push(_dplay.spells,i)
 		}
+		for (var j = 0; j < array_length(global.summonlist); ++j) {
+		    array_push(global.knownSummons,j)
+		}
 	CreateDicePool()
 	global.players[1] = variable_clone(global.players[0])
 	global.players[2] = variable_clone(global.players[0])

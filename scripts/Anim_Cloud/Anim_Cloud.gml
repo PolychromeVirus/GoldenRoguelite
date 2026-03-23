@@ -36,11 +36,11 @@ function Anim_Cloud() {
             var _tx     = _target.x
             var _ty     = is_undefined(_cloud_y) ? _target.y - _target.sprite_height * _height : _cloud_y
             var _half_w = _target.sprite_width / 2
+            var _vert_spread = _step[$ "vert_spread"] ?? (_target.sprite_height / 8)
             var _per_frame = ceil(_count / _SPAWN) * ANIM_TICK
             repeat (_per_frame) {
                 var _ox     = irandom_range(-_half_w, _half_w)
-                var _eighth_h = _target.sprite_height / 8
-                var _oy     = irandom_range(-_eighth_h, _eighth_h)
+                var _oy     = irandom_range(-_vert_spread, _vert_spread)
                 instance_create_depth(
                     _tx + _ox,
                     _ty + _oy,

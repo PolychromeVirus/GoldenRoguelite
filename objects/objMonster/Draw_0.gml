@@ -62,12 +62,18 @@ if dying and death_timer > 0 {
 	draw_self()
 	if frozen > 0 { shader_reset() }
 
-	// Colored tint overlay (e.g. red for Dull debuff)
+	// Colored tint overlay (e.g. red for Dull debuff, black for Haures)
 	if tint_timer > 0 {
-		gpu_set_blendmode(bm_add)
-		var _tint_alpha = min(tint_timer / 10, 0.5)
-		draw_sprite_ext(sprite_index, image_index, x, y,
-			image_xscale, image_yscale, image_angle, tint_color, _tint_alpha)
+		if tint_color == c_black {
+			gpu_set_blendmode(bm_normal)
+			draw_sprite_ext(sprite_index, image_index, x, y,
+				image_xscale, image_yscale, image_angle, c_black, 1)
+		} else {
+			var _tint_alpha = min(tint_timer / 10, 0.5)
+			gpu_set_blendmode(bm_add)
+			draw_sprite_ext(sprite_index, image_index, x, y,
+				image_xscale, image_yscale, image_angle, tint_color, _tint_alpha)
+		}
 		gpu_set_blendmode(bm_normal)
 		tint_timer--
 	}

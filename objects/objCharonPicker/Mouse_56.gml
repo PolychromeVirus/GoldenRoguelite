@@ -31,6 +31,7 @@ if instance_position(mouse_x, mouse_y, objConfirm) {
 		_s.source  = "summon"
 		_s.dmgtype = "none"
 		_s.splash  = (_k == 0) ? Charon1110 : -1
+		_s.anim    = [{ type: "cloud", element: "jupiter", color: #4B0082, fires_hit: true, hold: 20, linger: 15, hit_delay: 10, count: 50 }]
 		array_push(global.attackQueue, _s)
 	}
 	DeleteButtons()

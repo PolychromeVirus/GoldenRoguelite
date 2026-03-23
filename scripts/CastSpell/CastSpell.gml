@@ -156,7 +156,7 @@ function CastSpell(spellID, playerID) {
 			})
 			// Phase 2: frozen hold with random glints
 			SetAnim("flash", "mercury", {
-				hold: 15 + spell.stage * 5, peak: 1, alpha: 0.0,
+				hold: 120 + spell.stage * 5, peak: 1, alpha: 0.0,
 				glint: true, glint_interval: 4 + irandom(3)
 			})
 			// Phase 3: thin icy pillars — staggered per target
@@ -402,7 +402,7 @@ function CastSpell(spellID, playerID) {
 				struct.dam = QueryDice(caster, "all", "charge") * 2
 			}
 			SetAnim("meteor", "venus", { fires_hit: true, stagger_damage: true,
-				speed: 1.5 + spell.stage * 0.5, power: 15 + spell.stage * 5,
+				speed: 2.5 + spell.stage * 0.5, power: 15 + spell.stage * 5,
 				stagger: 10 + spell.stage * 3, linger: 20,
 				trail_life: 8, trail: 3, accel: 0.06,
 				no_burst: true, shake: 1 + spell.stage, shake_duration: 8,

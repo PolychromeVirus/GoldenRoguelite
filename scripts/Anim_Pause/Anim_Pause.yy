@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Anim_Pause",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Anim_Pause",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
