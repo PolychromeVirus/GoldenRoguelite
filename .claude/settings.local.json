@@ -33,8 +33,9 @@
       "Bash(done)"
     ]
   },
-  "outputStyle": "default",
+  "outputStyle": "Explanatory",
   "remote": {
     "defaultEnvironmentId": "env_01AcGtqE42bxrbv2q9nNYBTH"
-  }
+  },
+  "prefersReducedMotion": true
 }

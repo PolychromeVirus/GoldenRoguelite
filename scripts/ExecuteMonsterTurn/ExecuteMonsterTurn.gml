@@ -81,6 +81,19 @@ function ExecuteMonsterTurn(mon_id) {
 
 		if array_length(_attacks) == 0 { return undefined }
 
+		// Psy Seal: filter out psynergy moves
+		if psyseal {
+			var _physical = []
+			for (var _a = 0; _a < array_length(_attacks); _a++) {
+				if !_attacks[_a].psy { array_push(_physical, _attacks[_a]) }
+			}
+			if array_length(_physical) == 0 {
+				InjectLog(name + "'s psynergy is sealed! Can't act!")
+				return undefined
+			}
+			_attacks = _physical
+		}
+
 		// Roll a 1-based index into the weighted move list (simulates d6 move table)
 		var _roll = irandom(array_length(_attacks) - 1)
 		if (CheckPassive("_mud") != undefined) { _roll = max(_roll - 1, 0) }
@@ -111,7 +124,7 @@ function ExecuteMonsterTurn(mon_id) {
 					global.gold = global.goldAtCombatStart
 					global.enemyFled = true
 					InjectLog("Mimic ran away!")
-					instance_create_depth(0,0,0,TurnDelay,{on_complete: function(){CheckVictory()}})
+					//instance_create_depth(0,0,0,TurnDelay,{on_complete: function(){CheckVictory()}})
 				}else{
 					InjectLog("Mimic couldn't escape!")
 				}

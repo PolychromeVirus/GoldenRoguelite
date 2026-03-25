@@ -26,7 +26,7 @@ var _line_h = 40
 
 for (var _i = 0; _i < _cols; _i++) {
 	var _x1 = _i * _col_w
-	var _x2 = _x1 + _col_w
+	//var _x2 = _x1 + _col_w
 	var _tx = _x1 + _pad
 	var _tw = _col_w - (_pad * 2)
 	var _ty = _top + _pad

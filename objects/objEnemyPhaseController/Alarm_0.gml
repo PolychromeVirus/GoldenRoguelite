@@ -29,7 +29,8 @@ if (mon_index >= array_length(mon_list)) {
 			if monsterHealth <= 0 { monsterHealth = 0 }
 		}
 	}
-	if (global.inCombat) { CheckVictory() }
+	if (global.inCombat) { //CheckVictory() 
+		}
 
 	instance_destroy()
 	exit
@@ -71,7 +72,8 @@ if phase == 1 {
 	if (!_any_alive) {
 		mon_index = array_length(mon_list)
 	}
-	if (global.inCombat) { CheckVictory() }
+	if (global.inCombat) { //CheckVictory() 
+	}
 
 	alarm[0] = 45 // ~0.75 sec before next monster
 }

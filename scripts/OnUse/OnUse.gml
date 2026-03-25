@@ -79,9 +79,10 @@ function OnUse(item,slot,player = -1){
 			_struct.num = 12
 			_struct.dam = QueryDice(player, "elemental", "charge") + 1
 			_struct.dmgtype = "mars"
-			global.pendingAnim = [{ type: "fire", element: "mars", fires_hit: true, stagger_damage: true, hit_delay: 60,
+			_struct.anim = [{ type: "fire", element: "mars", mode: "stagger", stagger_delay: 10,
+				fires_hit: true, hit_delay: 60,
 				rate: 2, width: 0.5, life: 40, life_var: 20, hold: 60, linger: 30,
-				stagger: 20, shake: 2, shake_duration: 10,
+				shake: 2, shake_duration: 10,
 				sub: [{ type: "flash", at: 1, hold: 30, element: "mars" }]
 			}]
 			SelectTargets(_struct)
@@ -92,9 +93,10 @@ function OnUse(item,slot,player = -1){
 			_struct.num = 12
 			_struct.dam = QueryDice(player, "elemental", "charge") + 1
 			_struct.dmgtype = "venus"
-			global.pendingAnim = [{ type: "burst", element: "venus", fires_hit: true, stagger_damage: true,
+			_struct.anim = [{ type: "burst", element: "venus", mode: "stagger", stagger_delay: 10,
+				fires_hit: true,
 				windup: true, count: 20, max_speed: 2, max_scale: 1, trail: 0, at_foot: true,
-				stagger: 20, duration: 30, shake: 2, shake_duration: 10
+				duration: 30, shake: 2, shake_duration: 10
 			}]
 			SelectTargets(_struct)
 			break
@@ -104,10 +106,10 @@ function OnUse(item,slot,player = -1){
 			_struct.num = 12
 			_struct.dam = QueryDice(player, "elemental", "charge") + 1
 			_struct.dmgtype = "mercury"
-			global.pendingAnim = [{ type: "drizzle", element: "mercury", fires_hit: true, stagger_damage: true, hit_delay: 60,
-				hold: 60, linger: 40, stagger: 20,
-				splash: true, splash_rate: 2, splash_life: 12, splash_scl: 1, splash_delay: 25,
-				clouds: true, cloud_height: 30, cloud_scl: 4, cloud_scl_var: 2, cloud_alpha: 0.8
+			_struct.anim = [{ type: "drizzle", element: "mercury", mode: "stagger", stagger_delay: 10,
+				fires_hit: true, hit_delay: 60, rate: 4,
+				hold: 60, linger: 40, scl: 1, scl_var: 0, width: 1.5,
+				splash: false,	clouds: true, cloud_height: 30, cloud_scl: 4, cloud_scl_var: 2, cloud_alpha: 0.8
 			}]
 			SelectTargets(_struct)
 			break
@@ -117,8 +119,9 @@ function OnUse(item,slot,player = -1){
 			_struct.num = 12
 			_struct.dam = QueryDice(player, "elemental", "charge") + 1
 			_struct.dmgtype = "jupiter"
-			global.pendingAnim = [{ type: "wind", element: "jupiter", fires_hit: true, stagger_damage: true, hit_delay: 30,
-				hold: 40, stagger: 20, shake: 2, shake_duration: 10
+			_struct.anim = [{ type: "wind", element: "jupiter", mode: "stagger", stagger_delay: 10,
+				fires_hit: true, hit_delay: 30, amp: 10, spread_x: 20, spread_y: 20,osc_speed:1.5,
+				hold: 40, shake: 2, shake_duration: 10
 			}]
 			SelectTargets(_struct)
 			break
@@ -127,7 +130,7 @@ function OnUse(item,slot,player = -1){
 			array_delete(global.players[global.turn].inventory, slot, 1)
 			_struct.num = 3
 			_struct.statuses = {inflict_delude: true}
-			global.pendingAnim = [{ type: "cloud", element: "none", fires_hit: true, hit_delay: 50, spawn: 20 }]
+			_struct.anim = [{ type: "cloud", element: "none", fires_hit: true, hit_delay: 50, spawn: 20 }]
 			SelectTargets(_struct)
 			break
 		case "Sleep Bomb":
@@ -135,7 +138,7 @@ function OnUse(item,slot,player = -1){
 			array_delete(global.players[global.turn].inventory, slot, 1)
 			_struct.num = 3
 			_struct.statuses = {inflict_sleep: true}
-			global.pendingAnim = [{ type: "cloud", element: "none", fires_hit: true, hit_delay: 50, spawn: 20 }]
+			_struct.anim = [{ type: "cloud", element: "none", fires_hit: true, hit_delay: 50, spawn: 20 }]
 			SelectTargets(_struct)
 			break
 		case "Lucky Medal":

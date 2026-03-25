@@ -1,6 +1,6 @@
 {
   "$GMSound":"v2",
-  "%Name":"DjinniPing",
+  "%Name":"MagicSound",
   "audioGroupId":{
     "name":"audiogroup_default",
     "path":"audiogroups/audiogroup_default",
@@ -10,9 +10,9 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.81,
+  "duration":1.1108164,
   "exportDir":"",
-  "name":"DjinniPing",
+  "name":"MagicSound",
   "parent":{
     "name":"SFX",
     "path":"folders/Sounds/SFX.yy",
@@ -21,6 +21,6 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"DjinniPing.wav",
+  "soundFile":"MagicSound.wav",
   "volume":1.0,
 }

@@ -13,7 +13,6 @@ function InitGlobalVars(){
 	global.challenge_buttons = []
 	global.menu_stack = []
 	global.animQueue  = []
-	global.pendingAnim = undefined
 	global.turn = 0
 	global.errormessage = ""
 	global.genbackground = Sol_Sanctum
@@ -25,10 +24,13 @@ function InitGlobalVars(){
 	audio_group_load(BossThemes)
 	audio_group_load(BattleThemes)
 	audio_group_load(BGM)
+	audio_group_load(Casts)
 	var _gain = 0.2
 	audio_group_set_gain(BossThemes,   _gain, 0)
 	audio_group_set_gain(BattleThemes, _gain, 0)
 	audio_group_set_gain(BGM,          _gain, 0)
+	audio_group_set_gain(Casts,          3, 0)
+	audio_sound_gain(DjinnCast,0.5)
 	
 	#macro INPUT_CONFIRM  0
 	#macro INPUT_CANCEL   1
@@ -94,10 +96,7 @@ function InitGlobalVars(){
 	#macro CANCELSOUND audio_stop_sound(MenuNegative);audio_play_sound(MenuNegative,0,0)
 	#macro MENUMOVE audio_stop_sound(MenuMove);audio_play_sound(MenuMove,0,0)
 	#macro HITSOUND audio_play_sound(DamageSound,0,0)
-	#macro BIGHIT audio_play_sound(TargetedBigHit,0,0)
-	#macro BIGHITMULT audio_play_sound(BigHit,0,0)
-	#macro SUMMONHIT audio_play_sound(VeryBigHit,0,0)
-	#macro INFLICT audio_play_sound(InflictStatus,0,0)
+	#macro INFLICT audio_stop_sound(InflictStatus); audio_play_sound(InflictStatus,0,0)
 	#macro HEALSOUND audio_play_sound(HealSound,0,0)
 
 	global.floor = 1

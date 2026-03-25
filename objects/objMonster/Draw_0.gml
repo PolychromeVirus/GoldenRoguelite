@@ -55,12 +55,14 @@ if dying and death_timer > 0 {
 	}
 } else {
 	if global.gameover { shader_set(shGreyscale) }
-	if frozen > 0 {
+	if greyscale > 0 {
+		shader_set(shGreyscale)
+	} else if frozen > 0 {
 		shader_set(shFreeze)
 		shader_set_uniform_f(shader_get_uniform(shFreeze, "u_amount"), 1.0)
 	}
 	draw_self()
-	if frozen > 0 { shader_reset() }
+	if greyscale > 0 or frozen > 0 { shader_reset() }
 
 	// Colored tint overlay (e.g. red for Dull debuff, black for Haures)
 	if tint_timer > 0 {

@@ -1,6 +1,5 @@
 function Anim_Sprite_Tick() {
-    // self = objSpellAnimation
-    var _step      = _queue[_qi]
+    // self = objAnimController instance
     var _spr       = _step.spr
     var _speed     = _step[$ "speed"] ?? 1
     var _hold      = _step[$ "hold"] ?? 20
@@ -10,9 +9,7 @@ function Anim_Sprite_Tick() {
 
     // Fire on_hit at hit_frame
     if _cur_frame >= _hit_frame and !_hit_fired {
-        _hit_fired = true
-        _hit_timer = _timer
-        if _step[$ "fires_hit"] ?? false { _on_hit() }
+        _check_hit()
     }
 
     // Advance after hold completes — leave a fading ghost behind
@@ -20,16 +17,16 @@ function Anim_Sprite_Tick() {
         _fade_spr    = _spr
         _fade_frame  = _hit_frame
         _fade_blend  = _step[$ "blend"] ?? "normal"
-        _fade_tx     = _step.target.x
-        _fade_ty     = _step.target.y
+        _fade_tx     = _target.x
+        _fade_ty     = _target.y
         _fade_alpha  = 1
-        _next_step()
+        _finish()
     }
 }
 
 function Anim_Sprite_Draw() {
-    // self = objSpellAnimation
-    var _step      = _queue[_qi]
+    // self = objAnimController instance
+    if !instance_exists(_target) { return }
     var _spr       = _step.spr
     var _speed     = _step[$ "speed"] ?? 1
     var _hit_frame = _step[$ "hit_frame"] ?? sprite_get_number(_spr) - 1
@@ -43,6 +40,6 @@ function Anim_Sprite_Draw() {
     } else {
         gpu_set_blendmode(bm_normal)
     }
-    draw_sprite(_spr, _cur_frame, _step.target.x, _step.target.y)
+    draw_sprite(_spr, _cur_frame, _target.x, _target.y)
     gpu_set_blendmode(bm_normal)
 }

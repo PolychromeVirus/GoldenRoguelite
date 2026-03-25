@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"DragonRoar",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":3.4753287,
+  "exportDir":"",
+  "name":"DragonRoar",
+  "parent":{
+    "name":"SFX",
+    "path":"folders/Sounds/SFX.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"DragonRoar.wav",
+  "volume":1.0,
+}

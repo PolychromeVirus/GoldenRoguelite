@@ -2,7 +2,14 @@ var _top = (array_length(global.menu_stack) > 0)
          ? global.menu_stack[array_length(global.menu_stack) - 1]
          : noone
 
-var _blocked = instance_exists(TurnDelay) or instance_exists(objSpellAnimation) or instance_exists(objEnemyPhaseController) or instance_exists(objPostBattle)
+// Check if any monster is mid-death animation
+var _any_dying = false
+var _mc = instance_number(objMonster)
+for (var _m = 0; _m < _mc; _m++) {
+    var _mon = instance_find(objMonster, _m)
+    if _mon.dying and _mon.death_timer > 0 { _any_dying = true; break }
+}
+var _blocked = _any_dying or instance_exists(TurnDelay) or instance_exists(objAnimOrchestrator) or instance_exists(objSpellAnimation) or instance_exists(objEnemyPhaseController) or instance_exists(objPostBattle)
 
 if _top != _prev_top{
     _prev_top = _top

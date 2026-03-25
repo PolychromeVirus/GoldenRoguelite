@@ -418,7 +418,7 @@ if _half_open and _show_compact {
 }
 
 // ── PASSIVE VISUALIZER ────────────────────────────────────────────────────────
-var _pvx = 16
+var _pvx = display_get_gui_width()-16
 var _pvy = 160
 draw_set_halign(fa_center)
 draw_set_font(GoldenSun)
@@ -429,7 +429,7 @@ for (var i = 0; i < array_length(global.passiveEffects); i++) {
         draw_text(_pvx + 16 + 4, _pvy + 36 + 4, string(global.passiveEffects[i].countdown))
         draw_set_color(c_white)
         draw_text(_pvx + 16, _pvy + 36, string(global.passiveEffects[i].countdown))
-        _pvx += 100
+        _pvx -= 100
     }
 }
 draw_set_halign(fa_left)

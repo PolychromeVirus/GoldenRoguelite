@@ -1,8 +1,6 @@
 var _slen = array_length(global.menu_stack)
 if _slen == 0 or global.menu_stack[_slen - 1] != id { exit }
 
-var _player = global.players[global.turn]
-
 var _clicked = instance_position(mouse_x, mouse_y, objButton2)
 if _clicked != noone and _clicked.object_index == objButton2 { _do_action(_clicked) }
 

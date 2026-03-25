@@ -28,7 +28,7 @@ if _needsRebuild {
 	bottom_buttons = []
 	if mode == 0 {
 		// Inventory buttons
-		var sprite = {image: yes, hoverhovertext:"Use"}
+		var sprite = {image: yes, hovertext:"Use"}
 		array_push(bottom_buttons, instance_create_depth(BUTTON1, BOTTOMROW, 0, objConfirm, sprite))
 
 		sprite = {image: Fight, hovertext:"Equip"}

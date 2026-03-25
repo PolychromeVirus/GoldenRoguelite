@@ -27,11 +27,8 @@ function ElementColor(element_str) {
 function SelectTargets(struct){
 	//passes through aggression struct
 
-	// If the packet carries its own anim, promote it to global.pendingAnim
-	if variable_struct_exists(struct, "pendingAnim") {
-		global.pendingAnim = struct.pendingAnim
-		variable_struct_remove(struct, "pendingAnim")
-	}
+
+
 
 	struct.caster = global.players[global.turn]
 	struct.dmgtype = string_lower(struct.dmgtype)
@@ -52,8 +49,13 @@ function SelectTargets(struct){
 			global.players[global.pendingPPCaster].pp -= global.pendingPPCost
 			global.pendingPPCost = 0
 		}
-
-		ApplyDamageToTargets(struct)
+		var _cast_delay = 85
+		var _text = ""
+		if variable_struct_exists(struct,"cast_name"){_text = struct.cast_name}
+		if variable_struct_exists(struct,"cast_delay"){ _cast_delay = struct.cast_delay }
+		PopAll()
+		InjectLog(_text)
+		MakeTurnDelay(_cast_delay, method({ pkt: variable_clone(struct)}, function(){ApplyDamageToTargets(pkt)}))  
 		return
 	}
 	if struct.num >= 4 and struct.target == "ally"{
@@ -97,9 +99,11 @@ function SelectTargets(struct){
 	}
 }
 
-/// @function _FireRepeats(struct, remaining, delay, total)
+/// @function _FireRepeats(struct, remaining, delay, total, loop_index)
 /// @desc Fire one repeat hit then schedule the next via TurnDelay (survives outside the menu stack).
-function _FireRepeats(_struct, _remaining, _delay, _total) {
+function _FireRepeats(_struct, _remaining, _delay, _total, _loop_index) {
+    _loop_index = _loop_index ?? 0
+
     // Refresh troop list to current live monsters
     var _mcount = instance_number(objMonster)
     _struct.troop = []
@@ -123,27 +127,54 @@ function _FireRepeats(_struct, _remaining, _delay, _total) {
         }
     }
 
-    DoDamage(_struct)
-
-    // Check if anyone survives
-    var _alive = false
-    for (var _j = 0; _j < _mcount; _j++) {
-        if _struct.troop[_j].monsterHealth != 0 { _alive = true; break }
-    }
-    if !_alive { HandleVictory(); return }
-
-    if _remaining > 1 {
-        MakeTurnDelay(_delay, method({s: _struct, r: _remaining - 1, d: _delay, t: _total}, function() {
-            _FireRepeats(s, r, d, t)
-        }))
-    } else {
-        InjectLog("Hit " + string(_total) + " times!")
-        if _struct.source == "attack" { QueueOnAttack() }
-        if array_length(global.attackQueue) > 0 {
-            ProcessAttackQueue()
-        } else {
-            MakeTurnDelay(120, NextTurn)
+    // If the struct has anim layers tagged for this loop, play them (fires_hit handles damage)
+    // Otherwise fall back to direct DoDamage
+    var _anim = _struct[$ "anim"]
+    var _loop_layers = []
+    if !is_undefined(_anim) {
+        var _all = is_array(_anim) ? _anim : [_anim]
+        for (var _ai = 0; _ai < array_length(_all); _ai++) {
+            var _al = _all[_ai][$ "anim_loop"]
+            if !is_undefined(_al) and _al == _loop_index { array_push(_loop_layers, _all[_ai]) }
         }
+    }
+
+    var _on_done = method({ s: _struct, r: _remaining, d: _delay, t: _total, li: _loop_index }, function() {
+        // Check if anyone survives
+        var _mcount = instance_number(objMonster)
+        var _alive = false
+        for (var _j = 0; _j < _mcount; _j++) {
+            if s.troop[_j].monsterHealth != 0 { _alive = true; break }
+        }
+        //if !_alive { HandleVictory(); return }
+
+        if r > 1 {
+            MakeTurnDelay(d, method({s: s, r: r - 1, d: d, t: t, li: li + 1}, function() {
+                _FireRepeats(s, r, d, t, li)
+            }))
+        } else {
+            InjectLog("Hit " + string(t) + " times!")
+            if s.source == "attack" { QueueOnAttack() }
+            if array_length(global.attackQueue) > 0 {
+                ProcessAttackQueue()
+            } else {
+                MakeTurnDelay(120, NextTurn)
+            }
+        }
+    })
+
+    if array_length(_loop_layers) > 0 {
+        _struct.loop_index = _loop_index
+        // Stamp the original targets onto layers that don't specify their own
+        for (var _li = 0; _li < array_length(_loop_layers); _li++) {
+            if is_undefined(_loop_layers[_li][$ "targets"]) and is_undefined(_loop_layers[_li][$ "target"]) {
+                _loop_layers[_li].targets = _struct.targets
+            }
+        }
+        AnimPlay(_loop_layers, _struct, _on_done)
+    } else {
+        DoDamage(_struct)
+        _on_done()
     }
 }
 
@@ -152,71 +183,35 @@ function _FireRepeats(_struct, _remaining, _delay, _total) {
 function ApplyDamageToTargets(struct) {
 	global.textdisplay = ""
 
-	var _anims = global.pendingAnim
-	global.pendingAnim = undefined
-
-	if _anims != undefined {
-		if !is_array(_anims) { _anims = [_anims] }
+	var _anim_layers = struct[$ "anim"]
+	if !is_undefined(_anim_layers) {
+		if !is_array(_anim_layers) { _anim_layers = [_anim_layers] }
+		// Translate legacy flags
+		for (var _li = 0; _li < array_length(_anim_layers); _li++) {
+			var _layer = _anim_layers[_li]
+			if is_undefined(_layer[$ "mode"]) {
+				if _layer[$ "stagger_damage"] ?? false {
+					_layer.mode = "stagger"
+					_layer.stagger_delay = _layer[$ "stagger"] ?? 15
+				} else if _layer[$ "single_anim"] ?? false {
+					_layer.mode = "shared"
+				}
+			}
+			// target_all: set targets to all alive monsters
+			if _layer[$ "target_all"] ?? false {
+				var _all_alive = []
+				with (objMonster) { if monsterHealth > 0 { array_push(_all_alive, id) } }
+				_layer.targets = _all_alive
+			}
+		}
 		PopAll()
-		var _targets = struct.targets
-
-		// Check for stagger_damage
-		var _stagger_dmg = false
-		for (var _a = 0; _a < array_length(_anims); _a++) {
-			if _anims[_a][$ "stagger_damage"] ?? false { _stagger_dmg = true; break }
-		}
-
-		// Step-major ordering when staggered, target-major otherwise
-		var _first_hit = true
-		if _stagger_dmg {
-			for (var _a = 0; _a < array_length(_anims); _a++) {
-				for (var _t = 0; _t < array_length(_targets); _t++) {
-					var _anim = variable_clone(_anims[_a])
-					if variable_struct_exists(_anim, "fires_hit") and _anim.fires_hit {
-						_anim._stagger_target_index = _t
-					}
-					QueueAnim(_anim.type, _anim.element, _targets[_t], _anim)
-				}
-			}
-		} else {
-			for (var _t = 0; _t < array_length(_targets); _t++) {
-				for (var _a = 0; _a < array_length(_anims); _a++) {
-					var _anim = variable_clone(_anims[_a])
-					if variable_struct_exists(_anim, "fires_hit") and _anim.fires_hit {
-						if !_first_hit { _anim.fires_hit = false }
-						_first_hit = false
-					}
-					QueueAnim(_anim.type, _anim.element, _targets[_t], _anim)
-				}
-			}
-		}
-
-		var _on_hit = _stagger_dmg
-			? method({ s: struct, tgts: _targets }, function() {
-				var _anim_inst = instance_find(objSpellAnimation, 0)
-				var _copy = variable_clone(s)
-				if instance_exists(_anim_inst) and variable_instance_exists(_anim_inst, "_barrage_hit_target")
-					and instance_exists(_anim_inst._barrage_hit_target) {
-					_copy.targets = [_anim_inst._barrage_hit_target]
-				} else {
-					var _ti = 0
-					if instance_exists(_anim_inst) {
-						var _step = _anim_inst._queue[_anim_inst._qi]
-						_ti = _step[$ "_stagger_target_index"] ?? 0
-					}
-					_copy.targets = [tgts[_ti]]
-				}
-				DoDamage(_copy)
-			})
-			: method({ s: struct }, function() { DoDamage(s) })
-
-		PlayAnimation(_on_hit, method({}, function() {
-			CheckVictory()
+		AnimPlay(_anim_layers, struct, method({}, function() {
+			//CheckVictory()
 			MakeTurnDelay(60, NextTurn)
 		}))
 	} else {
 		DoDamage(struct)
-		CheckVictory()
+		//CheckVictory()
 		PopAll()
 		MakeTurnDelay(60, NextTurn)
 	}

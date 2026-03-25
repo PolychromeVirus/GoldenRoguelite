@@ -1,6 +1,6 @@
 {
   "$GMSound":"v2",
-  "%Name":"VeryBigHit",
+  "%Name":"WaveCrash",
   "audioGroupId":{
     "name":"audiogroup_default",
     "path":"audiogroups/audiogroup_default",
@@ -10,9 +10,9 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":2.58483,
+  "duration":1.48,
   "exportDir":"",
-  "name":"VeryBigHit",
+  "name":"WaveCrash",
   "parent":{
     "name":"SFX",
     "path":"folders/Sounds/SFX.yy",
@@ -21,6 +21,6 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"VeryBigHit.wav",
+  "soundFile":"WaveCrash.wav",
   "volume":1.0,
 }

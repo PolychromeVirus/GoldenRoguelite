@@ -10,5 +10,5 @@ function BattleMusic(boss = false){
 	audio_play_sound(boss ? DeathSoundBig : DeathSoundMedium,0,0)
 	var delaysound = boss ? bosssongs[_choice] : regsongs[_choice]
 	
-	instance_create_depth(0,0,0,TurnDelay,{wait:30,delaysound: delaysound,on_complete: function(){audio_play_sound(delaysound,1,1)}})
+	instance_create_depth(0,0,0,TurnDelay,{wait:30, delaysound:delaysound, on_complete: function(){audio_play_sound(delaysound,1,1)}})
 }

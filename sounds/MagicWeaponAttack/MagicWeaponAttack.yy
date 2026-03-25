@@ -1,6 +1,6 @@
 {
   "$GMSound":"v2",
-  "%Name":"TargetedBigHit",
+  "%Name":"MagicWeaponAttack",
   "audioGroupId":{
     "name":"audiogroup_default",
     "path":"audiogroups/audiogroup_default",
@@ -10,9 +10,9 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":2.3624716,
+  "duration":0.98097503,
   "exportDir":"",
-  "name":"TargetedBigHit",
+  "name":"MagicWeaponAttack",
   "parent":{
     "name":"SFX",
     "path":"folders/Sounds/SFX.yy",
@@ -21,6 +21,6 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"TargetedBigHit.wav",
+  "soundFile":"MagicWeaponAttack.wav",
   "volume":1.0,
 }

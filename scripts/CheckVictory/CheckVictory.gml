@@ -9,8 +9,17 @@ function CheckVictory(){
 		}
 	}
 	if (_mon_count > 0 and !_any_monster_alive) {
-		MakeTurnDelay(120,HandleVictory)
-		exit
+		// Wait for all death animations to finish before victory
+		var _max_death = 0
+		for (var _m = 0; _m < _mon_count; _m++) {
+			var _mon = instance_find(objMonster, _m)
+			if _mon.dying and _mon.death_timer > _max_death {
+				_max_death = _mon.death_timer
+			}
+		}
+		var _wait = max(120, _max_death + 15)
+		MakeTurnDelay(_wait, HandleVictory)
+		return true
 	}
 
 	// --- Party wipe check ---
@@ -44,4 +53,7 @@ CreateDicePool()
 		layer_background_blend(_bg, c_gray)
 		exit
 	}
+	
+	return false
+	
 }

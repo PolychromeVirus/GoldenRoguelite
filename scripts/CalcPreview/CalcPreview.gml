@@ -200,7 +200,6 @@ function CalcPreview(action_type, action_id, player) {
 					result.description = "ATK+"
 					return result
 				case "Root":
-					var _rt = (spell.stage == 1) ? 3 : 6
 					result.targets = "Ally"
 					result.description = ""
 					return result

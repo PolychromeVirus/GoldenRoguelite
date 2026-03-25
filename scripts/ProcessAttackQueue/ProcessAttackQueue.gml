@@ -7,9 +7,14 @@ function ProcessAttackQueue() {
 		instance_create_depth(0, 0, 0, TurnDelay, {wait: 30, on_complete: NextTurn})
 		return
 	}
-	
+
+	if !variable_global_exists("_attack_queue_index") { global._attack_queue_index = 0 }
+
 	var a = variable_clone(global.attackQueue[0])
 	array_delete(global.attackQueue, 0, 1)
+	a.loop_index = global._attack_queue_index
+	global._attack_queue_index++
+	if array_length(global.attackQueue) == 0 { global._attack_queue_index = 0 }
 
 	// Callback entry — run function instead of SelectTargets
 	if variable_struct_exists(a, "callback") {
@@ -17,11 +22,8 @@ function ProcessAttackQueue() {
 		return
 	}
 
-	// Restore per-attack animation if stored on the struct
-	if variable_struct_exists(a, "anim") {
-		global.pendingAnim = a.anim
-		variable_struct_remove(a, "anim")
-	}
+	// Per-attack animation: stays on the struct as .anim
+	// (AnimPlay reads it from the packet directly)
 
 	a.committed = true   // cancel on this targeter ends the turn, not returns to menu
 	SelectTargets(a)

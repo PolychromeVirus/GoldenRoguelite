@@ -7,6 +7,7 @@ function UnleashDjinn(djinnID, playerID) {
 	_struct.source  = "djinni"
 	_struct.dmgtype = djinn.element
 	_struct.djinn_id = djinnID
+	_struct.cast_name = caster.name + " unleashes " + djinn.name + "!"
 	_struct.num = 1
 
 	// If spent, set to ready instead of unleashing
@@ -40,74 +41,74 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Bane":    // Venus: damage + poison
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_poison: true}
-			global.pendingAnim = [{ type: "burst", element: "venus", fires_hit: true, count: 15, max_speed: 2, max_scale: 1.5, duration: 20, shake: 2, shake_duration: 8 }]
+			_struct.anim = [{ type: "burst", element: "venus", fires_hit: true, sfx: Explosion1, count: 15, max_speed: 2, max_scale: 1.5, duration: 20, shake: 2, shake_duration: 8 }]
 			break
 
 		case "Fever":   // Mars: damage + delusion
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_delude: true}
-			global.pendingAnim = [{ type: "burst", element: "mars", fires_hit: true, count: 15, max_speed: 2, max_scale: 1.5, duration: 20, shake: 2, shake_duration: 8 }]
+			_struct.anim = [{ type: "burst", element: "mars", fires_hit: true, sfx: Explosion1, count: 15, max_speed: 2, max_scale: 1.5, duration: 20, shake: 2, shake_duration: 8 }]
 			break
 
 		case "Wheeze":  // Jupiter: damage + poison
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_poison: true}
-			global.pendingAnim = [{ type: "wind", element: "jupiter", fires_hit: true, hit_delay: 20, hold: 30, shake: 1, shake_duration: 6 }]
+			_struct.anim = [{ type: "wind", element: "jupiter", fires_hit: true, sfx: MoveSpellSound, hit_delay: 20, hold: 30, shake: 1, shake_duration: 6 }]
 			break
 
 		case "Mist":    // Mercury: damage + sleep
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_sleep: true}
-			global.pendingAnim = [{ type: "cloud", element: "mercury", fires_hit: true, hit_delay: 40, spawn: 20 }]
+			_struct.anim = [{ type: "cloud", element: "mercury", fires_hit: true, sfx: MagicSound, hit_delay: 40, spawn: 20 }]
 			break
 
 		case "Char":    // Mars: damage + stun
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_stun: true}
-			global.pendingAnim = [{ type: "flash", element: "mars", fires_hit: true, hold: 15, peak: 3 }]
+			_struct.anim = [{ type: "flash", element: "mars", fires_hit: true, sfx: Explosion1, hold: 15, peak: 3 }]
 			break
 
 		case "Smog":    // Jupiter: damage + delusion
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_delude: true}
-			global.pendingAnim = [{ type: "cloud", element: "jupiter", fires_hit: true, hit_delay: 40, spawn: 20 }]
+			_struct.anim = [{ type: "cloud", element: "jupiter", fires_hit: true, sfx: MagicSound, hit_delay: 40, spawn: 20 }]
 			break
 
 		case "Blitz":   // Jupiter: damage + stun
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_stun: true}
-			global.pendingAnim = [{ type: "pillar", element: "jupiter", fires_hit: true, hold: 20, shake: 3, shake_duration: 10 }]
+			_struct.anim = [{ type: "pillar", element: "jupiter", fires_hit: true, sfx: BigRockHit, hold: 20, shake: 3, shake_duration: 10 }]
 			break
 
 		case "Squall":  // Jupiter: damage + stun
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_stun: true}
-			global.pendingAnim = [{ type: "burst", element: "jupiter", fires_hit: true, count: 20, max_speed: 3, max_scale: 2, duration: 25, shake: 3, shake_duration: 10 }]
+			_struct.anim = [{ type: "burst", element: "jupiter", fires_hit: true, sfx: Explosion1, count: 20, max_speed: 3, max_scale: 2, duration: 25, shake: 3, shake_duration: 10 }]
 			break
 
 		case "Hail":    // Mercury: damage + 2 DEF down
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_defdown: 2}
-			global.pendingAnim = [{ type: "burst", element: "mercury", fires_hit: true, count: 20, max_speed: 3, max_scale: 1, duration: 25, shake: 2, shake_duration: 8 }]
+			_struct.anim = [{ type: "burst", element: "mercury", fires_hit: true, sfx: Explosion1, count: 20, max_speed: 3, max_scale: 1, duration: 25, shake: 2, shake_duration: 8 }]
 			break
 
 		case "Sleet":   // Mercury: damage + 2 ATK down
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_atkdown: 2}
-			global.pendingAnim = [{ type: "drizzle", element: "mercury", fires_hit: true, hit_delay: 40, hold: 40, linger: 20,
+			_struct.anim = [{ type: "drizzle", element: "mercury", fires_hit: true, sfx: RunningWater, hit_delay: 40, hold: 40, linger: 20,
 				rate: 6, drop_scale: 0.3, spread: 1.2, drop_speed: 1.5 }]
 			break
 
 		case "Chill":   // Mercury: damage + clear all stats
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.statuses = {inflict_clearstats: true}
-			global.pendingAnim = [{ type: "burst", element: "mercury", fires_hit: true, count: 25, max_speed: 3, max_scale: 2, duration: 30, shake: 3, shake_duration: 12 }]
+			_struct.anim = [{ type: "burst", element: "mercury", fires_hit: true, sfx: Explosion1, count: 25, max_speed: 3, max_scale: 2, duration: 30, shake: 3, shake_duration: 12 }]
 			break
 
 		case "Shine":   // Mars: damage + delusion on adjacent
 			_struct.dam = QueryDice(caster, "all", "charge")
 			_struct.splash_statuses = { inflict_delude: true }
-			global.pendingAnim = [{ type: "flash", element: "mars", fires_hit: true, hold: 20, peak: 4 }]
+			_struct.anim = [{ type: "flash", element: "mars", fires_hit: true, sfx: Explosion1, hold: 20, peak: 4 }]
 			break
 
 		// ── Weapon attack + bonus (1 target) ────────────────────────────
@@ -115,44 +116,44 @@ function UnleashDjinn(djinnID, playerID) {
 		case "Flint":   // Venus: weapon + half damage done
 			_struct.dam = WeaponAttack(false, false).dam
 			_struct.dam += ceil(_struct.dam / 2)
-			global.pendingAnim = [{ type: "meteor", element: "venus", fires_hit: true, speed: 4, accel: 0.2, trail: 0, shake: 4, shake_duration: 12, linger: 15,
+			_struct.anim = [{ type: "meteor", element: "venus", fires_hit: true, sfx: BigRockHit, sfx_start: FallSound, speed: 4, accel: 0.2, trail: 0, shake: 4, shake_duration: 12, linger: 15,
 				sub: [{ type: "burst", at: "hit", count: 25, max_speed: 3, max_scale: 2, trail: 0 }] }]
 			break
 		case "Sap":   // Venus: weapon + half damage done
 			_struct.dam = WeaponAttack(true, false).dam
 			_struct.unleash.heal_hp_ratio = 0.5
-			global.pendingAnim = [{ type: "burst", element: "venus", fires_hit: true, count: 15, max_speed: 2, max_scale: 1.5, duration: 20, shake: 2, shake_duration: 8 }]
+			_struct.anim = [{ type: "burst", element: "venus", fires_hit: true, sfx: DrainSound, count: 15, max_speed: 2, max_scale: 1.5, duration: 20, shake: 2, shake_duration: 8 }]
 			break
 
 		case "Cannon":  // Mars: weapon + half damage done
 			_struct.dam = WeaponAttack(false, false).dam
 			_struct.dam += ceil(_struct.dam / 2)
-			global.pendingAnim = [{ type: "meteor", element: "mars", fires_hit: true, speed: 4, accel: 0.2, trail: 0, shake: 4, shake_duration: 12, linger: 15,
+			_struct.anim = [{ type: "meteor", element: "mars", fires_hit: true, sfx: BigRockHit, sfx_start: FallSound, speed: 4, accel: 0.2, trail: 0, shake: 4, shake_duration: 12, linger: 15,
 				sub: [{ type: "burst", at: "hit", count: 25, max_speed: 3, max_scale: 2, trail: 0 }] }]
 			break
 
 		case "Sour":    // Mercury: weapon + half damage done
 			_struct.dam = WeaponAttack(false, false).dam
 			_struct.dam += ceil(_struct.dam / 2)
-			global.pendingAnim = [{ type: "meteor", element: "mercury", fires_hit: true, speed: 4, accel: 0.2, trail: 0, shake: 4, shake_duration: 12, linger: 15,
+			_struct.anim = [{ type: "meteor", element: "mercury", fires_hit: true, sfx: BigRockHit, sfx_start: FallSound, speed: 4, accel: 0.2, trail: 0, shake: 4, shake_duration: 12, linger: 15,
 				sub: [{ type: "burst", at: "hit", count: 25, max_speed: 3, max_scale: 2, trail: 0 }] }]
 			break
 
 		case "Geode":   // Venus: weapon + charged Venus * 2
 			_struct.dam = WeaponAttack(true, false).dam + WeaponAttack(false,false).dam
-			global.pendingAnim = [{ type: "burst", element: "venus", fires_hit: true, count: 30, max_speed: 3, max_scale: 2.5, duration: 30, shake: 4, shake_duration: 15 }]
+			_struct.anim = [{ type: "burst", element: "venus", fires_hit: true, sfx: Explosion1, count: 30, max_speed: 3, max_scale: 2.5, duration: 30, shake: 4, shake_duration: 15 }]
 			break
 
 		case "Torch":   // Mars: weapon + half charged Mars
 			_struct.dam = weapon_atk
 			_struct.pierce = true
-			global.pendingAnim = [{ type: "fire", element: "mars", fires_hit: true, hit_delay: 30, rate: 3, width: 0.4, life: 30, life_var: 15, hold: 40, linger: 20, shake: 2, shake_duration: 10 }]
+			_struct.anim = [{ type: "fire", element: "mars", fires_hit: true, sfx: FireSound, hit_delay: 30, rate: 3, width: 0.4, life: 30, life_var: 15, hold: 40, linger: 20, shake: 2, shake_duration: 10 }]
 			break
 
 		case "Scorch":  // Mars: weapon + charged Mars + stun
 			_struct.dam = weapon_atk
 			_struct.statuses = {inflict_stun: true}
-			global.pendingAnim = [{ type: "burst", element: "mars", fires_hit: true, count: 20, max_speed: 3, max_scale: 2, duration: 25, shake: 3, shake_duration: 12 }]
+			_struct.anim = [{ type: "burst", element: "mars", fires_hit: true, sfx: Explosion1, count: 20, max_speed: 3, max_scale: 2, duration: 25, shake: 3, shake_duration: 12 }]
 			break
 
 		// ── Heal all living players ─────────────────────────────────────
@@ -280,23 +281,23 @@ function UnleashDjinn(djinnID, playerID) {
 
 		case "Luff":    // Jupiter: psyseal 1 enemy
 			_struct.statuses = {inflict_psyseal: true}
-			global.pendingAnim = [{ type: "wind", element: "jupiter", fires_hit: true, hit_delay: 20, hold: 30 }]
+			_struct.anim = [{ type: "wind", element: "jupiter", fires_hit: true, sfx: InflictStatus, hit_delay: 20, hold: 30 }]
 			break
 
 		case "Fog":     // Mercury: delude 1 enemy
 			_struct.statuses = {inflict_delude: true}
-			global.pendingAnim = [{ type: "cloud", element: "mercury", fires_hit: true, hit_delay: 40, spawn: 20 }]
+			_struct.anim = [{ type: "cloud", element: "mercury", fires_hit: true, sfx: InflictStatus, hit_delay: 40, spawn: 20 }]
 			break
 
 		case "Rime":    // Mercury: psyseal 1 enemy
 			_struct.statuses = {inflict_psyseal: true}
-			global.pendingAnim = [{ type: "burst", element: "mercury", fires_hit: true, count: 12, max_speed: 2, max_scale: 1, duration: 20 }]
+			_struct.anim = [{ type: "burst", element: "mercury", fires_hit: true, sfx: InflictStatus, count: 12, max_speed: 2, max_scale: 1, duration: 20 }]
 			break
 
 		case "Waft":    // Jupiter: sleep 3 enemies
 			_struct.statuses = {inflict_sleep: true}
 			_struct.num = 3
-			global.pendingAnim = [{ type: "cloud", element: "jupiter", fires_hit: true, hit_delay: 50, spawn: 25 }]
+			_struct.anim = [{ type: "cloud", element: "jupiter", fires_hit: true, sfx: InflictStatus, hit_delay: 50, spawn: 25 }]
 			break
 
 		// ── Gust: weapon attack, then d6 — on 5/6 a second weapon attack ─
@@ -339,7 +340,7 @@ function UnleashDjinn(djinnID, playerID) {
 			// Target's neighbours each hit it with a random attack (as if deluded)
 			_struct.dam = 0
 			_struct.mold = true
-			global.pendingAnim = [{ type: "burst", element: "venus", fires_hit: true, count: 10, max_speed: 1.5, max_scale: 1, duration: 15 }]
+			_struct.anim = [{ type: "burst", element: "venus", fires_hit: true, sfx: Explosion1, count: 10, max_speed: 1.5, max_scale: 1, duration: 15 }]
 			break
 		case "Flower":
 			var _flower_dice = BuildDiceArray(global.players[playerID], "venus")
@@ -427,14 +428,14 @@ function UnleashDjinn(djinnID, playerID) {
 			_struct.statuses = attack.statuses
 			_struct.onConfirm.convert_element = "venus"
 			_struct.dmgtype = "venus"
-			global.pendingAnim = [{ type: "burst", element: "venus", fires_hit: true, count: 20, max_speed: 2, max_scale: 2, duration: 25, shake: 3, shake_duration: 10 }]
+			_struct.anim = [{ type: "burst", element: "venus", fires_hit: true, sfx: Explosion1, count: 20, max_speed: 2, max_scale: 2, duration: 25, shake: 3, shake_duration: 10 }]
 			break
 		case "Steel":
 			var heal = WeaponAttack(true,false).unleash.dam_bonus
 			if WeaponAttack(true,false).unleash.double_atk{heal *= 2}
 			_struct.onConfirm.heal_hp_flat = heal
 			_struct.onConfirm.active = true
-			global.pendingAnim = [{ type: "burst", element: "venus", fires_hit: true, count: 15, max_speed: 2, max_scale: 1.5, duration: 20, shake: 2, shake_duration: 8 }]
+			_struct.anim = [{ type: "burst", element: "venus", fires_hit: true, sfx: Explosion1, count: 15, max_speed: 2, max_scale: 1.5, duration: 20, shake: 2, shake_duration: 8 }]
 			break
 		case "Meld":
 			// Pick another adept's weapon, attack with caster's dice
@@ -490,7 +491,7 @@ function UnleashDjinn(djinnID, playerID) {
 			_struct.dam = WeaponAttack(true,false).dam + WeaponAttack(true,false).unleash.dam_bonus
 			_struct.unleash = WeaponAttack(true,false).unleash
 			_struct.dmgtype = "mercury"
-			global.pendingAnim = [{ type: "burst", element: "mercury", fires_hit: true, count: 20, max_speed: 2, max_scale: 2, duration: 25, shake: 3, shake_duration: 10 }]
+			_struct.anim = [{ type: "burst", element: "mercury", fires_hit: true, sfx: Explosion1, count: 20, max_speed: 2, max_scale: 2, duration: 25, shake: 3, shake_duration: 10 }]
 			break
 		case "Serac":
 			_struct.dam = WeaponAttack(false,false).dam
@@ -498,7 +499,7 @@ function UnleashDjinn(djinnID, playerID) {
 			if irandom(5) == 0{
 				_struct.dam = 9999
 			}
-			global.pendingAnim = [{ type: "pillar", element: "mercury", fires_hit: true, hold: 25, shake: 4, shake_duration: 15 }]
+			_struct.anim = [{ type: "pillar", element: "mercury", fires_hit: true, sfx: BigRockHit, hold: 25, shake: 4, shake_duration: 15 }]
 			break
 		case "Eddy":
 			var _djinnsel=[]
@@ -546,7 +547,7 @@ function UnleashDjinn(djinnID, playerID) {
 			}
 			_struct.dam = WeaponAttack(true,false).dam
 			_struct.unleash = WeaponAttack(true,false).unleash
-			global.pendingAnim = [{ type: "fire", element: "mars", fires_hit: true, hit_delay: 40, rate: 4, width: 0.5, life: 40, life_var: 20, hold: 60, linger: 30, shake: 4, shake_duration: 15,
+			_struct.anim = [{ type: "fire", element: "mars", fires_hit: true, sfx: FireSound, hit_delay: 40, rate: 4, width: 0.5, life: 40, life_var: 20, hold: 60, linger: 30, shake: 4, shake_duration: 15,
 				sub: [{ type: "flash", at: 1, hold: 20, element: "mars" }] }]
 			break
 		case "Reflux":
@@ -562,7 +563,7 @@ function UnleashDjinn(djinnID, playerID) {
 			_struct.num      = 1
 			_struct.unleash  = { scatter: true, scatter_any: true }
 			_struct.statuses = { inflict_psyseal: true }
-			global.pendingAnim = [{ type: "burst", element: "mars", fires_hit: true, count: 15, max_speed: 3, max_scale: 1.5, duration: 20, shake: 2, shake_duration: 8 }]
+			_struct.anim = [{ type: "burst", element: "mars", fires_hit: true, sfx: Explosion1, count: 15, max_speed: 3, max_scale: 1.5, duration: 20, shake: 2, shake_duration: 8 }]
 			break
 		case "Coal":
 			// Grant partial reroll to ALL players, expires after 1 round
@@ -587,7 +588,7 @@ function UnleashDjinn(djinnID, playerID) {
 			_struct.dam = QueryDice(caster,"all","charge")
 			_struct.statuses = {inflict_haunt: 2}
 			_struct.dmgtype = "mars"
-			global.pendingAnim = [{ type: "fire", element: "mars", fires_hit: true, hit_delay: 30, rate: 3, width: 0.4, life: 35, life_var: 15, hold: 45, linger: 20, shake: 3, shake_duration: 10 }]
+			_struct.anim = [{ type: "fire", element: "mars", fires_hit: true, sfx: FireSound, hit_delay: 30, rate: 3, width: 0.4, life: 35, life_var: 15, hold: 45, linger: 20, shake: 3, shake_duration: 10 }]
 			break
 		case "Kite":
 			_struct.target = "ally"
@@ -620,12 +621,12 @@ function UnleashDjinn(djinnID, playerID) {
 			if irandom(5) == 0{
 				_struct.dam = 9999
 			}
-			global.pendingAnim = [{ type: "wind", element: "jupiter", fires_hit: true, hit_delay: 25, hold: 40, shake: 3, shake_duration: 12 }]
+			_struct.anim = [{ type: "wind", element: "jupiter", fires_hit: true, sfx: MoveSpellSound, hit_delay: 25, hold: 40, shake: 3, shake_duration: 12 }]
 			break
 		case "Gasp":
 			_struct.num = 12
 			_struct.statuses = {inflict_haunt: 2}
-			global.pendingAnim = [{ type: "cloud", element: "jupiter", fires_hit: true, hit_delay: 50, spawn: 25 }]
+			_struct.anim = [{ type: "cloud", element: "jupiter", fires_hit: true, sfx: MagicSound, hit_delay: 50, spawn: 25 }]
 			break
 		case "Lull":
 			global.playersActed = 0
@@ -638,7 +639,7 @@ function UnleashDjinn(djinnID, playerID) {
 			if irandom(1) == 0{
 				_struct.dam = 9999
 			}
-			global.pendingAnim = [{ type: "wind", element: "jupiter", fires_hit: true, hit_delay: 30, hold: 50, shake: 4, shake_duration: 15 }]
+			_struct.anim = [{ type: "wind", element: "jupiter", fires_hit: true, sfx: MoveSpellSound, hit_delay: 30, hold: 50, shake: 4, shake_duration: 15 }]
 			break
 			
 		default:

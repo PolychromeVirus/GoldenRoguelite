@@ -31,5 +31,16 @@ if InputPressed(INPUT_DEBUG){
 	global.players[1] = variable_clone(global.players[0])
 	global.players[2] = variable_clone(global.players[0])
 	global.players[3] = variable_clone(global.players[0])
+	global.players[1].portrait = Armor_Shopkeeper
+	global.players[2].portrait = Item_Shopkeeper
+	global.players[3].portrait = Weapon_Shopkeeper
+	global.players[1].name = "Debug 2"
+	global.players[2].name = "Debug 3"
+	global.players[3].name = "Debug 4"
+	
+	global.players[0].portrait = Aaron_Jerra
+	global.players[0].name = "Debug 1"
+	
+	
 	InjectLog("Debug Mode Activated")
 }

@@ -6,7 +6,6 @@ draw_set_font(GoldenSun)
 
 var _cx = display_get_gui_width() div 2
 var _cy = display_get_gui_height() div 2 - 20
-var _offset = 4
 var _w = max(string_width(text), (subtext != "") ? string_width(subtext) : 0, 200) / 2 + 16
 var _h = (subtext != "") ? 50 : 30
 

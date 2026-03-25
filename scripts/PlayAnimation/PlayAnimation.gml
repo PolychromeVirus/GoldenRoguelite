@@ -27,12 +27,22 @@ function SpawnFireParticles(_x, _y, _col, _count, _half_w) {
     }
 }
 
+/// @func PlayAnimation(on_hit, on_complete)
+/// @desc Legacy wrapper — converts QueueAnim entries into AnimPlay layers.
+///       on_hit is ignored in the new system (damage fires via packet).
 function PlayAnimation(on_hit, on_complete) {
-    var _q        = global.animQueue
+    var _q = global.animQueue
     global.animQueue = []
-    instance_create_depth(0, 0, -150, objSpellAnimation, {
-        _queue:       _q,
-        _on_hit:      on_hit,
-        _on_complete: on_complete,
-    })
+    // Convert queue entries to layers — each entry becomes a single-target layer
+    var _layers = []
+    for (var _i = 0; _i < array_length(_q); _i++) {
+        var _entry = _q[_i]
+        _entry.mode = "single"
+        array_push(_layers, _entry)
+    }
+    if array_length(_layers) == 0 {
+        on_complete()
+        return
+    }
+    AnimPlay(_layers, undefined, on_complete)
 }

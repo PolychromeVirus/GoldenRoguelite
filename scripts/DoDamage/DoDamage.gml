@@ -21,13 +21,13 @@ function SplashWithResist(_struct, _source, _tempdam, _mon) {
 }
 
 function DoDamage(struct){
-	// Hit sound based on attack source
-	switch struct.source {
-		case "attack":
-		case "onAttack": HITSOUND;   break
-		case "psynergy": if struct.num > 1 { BIGHITMULT } else { BIGHIT } break
-		case "summon":   SUMMONHIT;  break
-		case "djinni":   BIGHIT;     break
+	// Hit sounds are now played by the animation controller via sfx field.
+	// Non-animated damage (e.g. weapon attacks with no anim) still needs sound:
+	if is_undefined(struct[$ "anim"]) {
+		switch struct.source {
+			case "attack":
+			case "onAttack": HITSOUND;   break
+		}
 	}
 
 	var dam      = struct.dam
@@ -150,7 +150,7 @@ function DoDamage(struct){
 			if _has_status { mon.status_timer = mon.status_resist }
 		}
 	}
-	if _status_inflicted { INFLICT }
+	//if _status_inflicted { INFLICT }
 
 	var _unleash = struct.unleash
 	// Unleash: instant kill non-boss targets
@@ -253,6 +253,8 @@ function DoDamage(struct){
 					if variable_struct_exists(_ss, "inflict_poison") { _sn.poison = _ss.inflict_poison; InjectLog(_sn.name + " is poisoned!") }
 					if variable_struct_exists(_ss, "inflict_sleep") { _sn.sleep = _ss.inflict_sleep; InjectLog(_sn.name + " fell asleep!") }
 					if variable_struct_exists(_ss, "inflict_stun") and _ss.inflict_stun { _sn.stun = 3; InjectLog(_sn.name + " is stunned!") }
+					if variable_struct_exists(_ss, "inflict_defdown") { _sn.defmod -= _ss.inflict_defdown; InjectLog(_sn.name + " DEF went down!") }
+					if variable_struct_exists(_ss, "inflict_atkdown") { _sn.atkmod -= _ss.inflict_atkdown; InjectLog(_sn.name + " ATK went down!") }
 				}
 			}
 		}

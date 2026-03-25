@@ -1,18 +1,19 @@
 var _scale = 6
 var drawx  = 0
 var drawy  = 120 * _scale+6
-
+var _textallowed = true
+if instance_exists(objAnimController){_textallowed = false}
 draw_set_font(GoldenSunItalic)
 draw_set_valign(fa_bottom)
 var target = instance_position(mouse_x, mouse_y, all)
 var _text  = ""
-if global.kbd_tooltip != "" and global.textdisplay == "" {
+if global.kbd_tooltip != "" and global.textdisplay == "" and _textallowed{
     _text = global.kbd_tooltip
-} else if global.textdisplay == "" {
+} else if global.textdisplay == "" and _textallowed {
     if variable_instance_exists(target, "hovertext") and target.hovertext != "" {
         _text = target.hovertext
     }
-} else {
+} else if _textallowed {
     _text = global.textdisplay
 	alarm_set(0,60)
 }

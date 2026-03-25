@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":1.0229932,
+  "duration":1.1401134,
   "exportDir":"",
   "name":"CastSound",
   "parent":{

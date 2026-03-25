@@ -89,6 +89,7 @@ function _DraftNext() {
 
 		// Shuffle eligible spells (Fisher-Yates)
 		var _len = array_length(_bases)
+		if _len == 0{return}
 		for (var i = _len - 1; i > 0; i--) {
 			var j = irandom(i)
 			var _tmp = _bases[i]

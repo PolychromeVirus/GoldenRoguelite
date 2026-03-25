@@ -22,9 +22,6 @@
 //    }
 //}
 
-var button1 = 36
-var button2 = 64
-
 using_kbd = false
 _prev_mx  = device_mouse_x_to_gui(0)
 _prev_my  = device_mouse_y_to_gui(0)
@@ -89,186 +86,169 @@ function logic(){
 	_struct.troop = monsters
 
 	// Shared post-damage resolution — used by both animated and non-animated paths
-	var _resolve = method({ s: _struct, m: monsters, rep: repeater, src: source }, function() {
+	var _resolve = method({ s: _struct, m: monsters, rep: repeater, src: source, li: _struct[$ "loop_index"] ?? 0 }, function() {
 		var _any_alive = false
 		for (var j = 0; j < array_length(m); j++) {
 			if m[j].monsterHealth != 0 { _any_alive = true; break }
 		}
 		if _any_alive {
 			global.inCombat = true
-			if rep > 1 {
-				var _total = rep
-				MakeTurnDelay(15, method({ s: s, r: rep - 1, t: _total }, function() {
-					_FireRepeats(s, r, 15, t)
+			if rep > 0 {
+				var _total = rep + 1
+				MakeTurnDelay(15, method({ s: s, r: rep, t: _total, li: li + 1 }, function() {
+					_FireRepeats(s, r, 15, t, li)
 				}))
 			} else {
 				if src == "attack" { QueueOnAttack() }
 				if array_length(global.attackQueue) > 0 {
 					ProcessAttackQueue()
 				} else {
-					MakeTurnDelay(20, NextTurn)
+					MakeTurnDelay(s[$ "post_delay"] ?? 20, NextTurn)
 				}
 			}
 		} else {
-			HandleVictory()
+			 //HandleVictory()
+			 MakeTurnDelay(30, NextTurn)
 		}
 	})
 
-	// Daedalus: build cascade pillars dynamically based on distance from selected
-	if (variable_global_exists("daedalusAnim") and global.daedalusAnim) {
+	// --- Daedalus: build cascade pillar layers dynamically ---
+	if variable_global_exists("daedalusAnim") and global.daedalusAnim {
 		global.daedalusAnim = false
+		global.daedalusCascade = false  // disable old DoDamage cascade — handled per-layer now
 		var _base_outer = 64
 		var _base_core  = 40
-		// Group monsters by distance from selected
+		var _base_dam = _struct.dam
+		var _dam_col = ElementColor(_struct.element)
 		var _max_dist = 0
 		for (var _m = 0; _m < array_length(monsters); _m++) {
 			var _d = abs(_m - selected)
 			if _d > _max_dist { _max_dist = _d }
 		}
-		var _dae_anims = []
-		// Build one pillar per alive monster — all consecutive (simultaneous)
-		// Each distance group delayed by 35 frames from the previous
-		// Drizzle overlay spawns 1px falling particles within pillar width
+		var _dae_layers = []
 		for (var _dist = 0; _dist <= _max_dist; _dist++) {
 			var _scale = power(0.5, _dist)
 			var _ow = max(4, round(_base_outer * _scale))
 			var _cw = max(2, round(_base_core * _scale))
-			var _group_delay = _dist * 35
+			var _cascade_dam = (_dist == 0) ? _base_dam : max(1, ceil(_base_dam * _scale))
+			var _group_targets = []
 			for (var _m = 0; _m < array_length(monsters); _m++) {
 				if abs(_m - selected) != _dist { continue }
 				if monsters[_m].monsterHealth <= 0 { continue }
-				array_push(_dae_anims, {
-					type: "pillar", element: "mars", target: monsters[_m],
-					fires_hit: (_dist == 0 and _m == selected), hit_delay: 15,
+				array_push(_group_targets, monsters[_m])
+			}
+			if array_length(_group_targets) > 0 {
+				var _dae_hit = method({ dam: _cascade_dam, col: _dam_col }, function(_mon) {
+					if !instance_exists(_mon) { return }
+					if _mon.monsterHealth <= 0 { return }
+					_mon.monsterHealth -= dam
+					_mon.flash_timer = FLASH_DURATION; _mon.damage_timer = DAMAGE_DURATION; _mon.flash_color = col
+					InjectLog(_mon.name + " takes " + string(dam) + " cascade damage!")
+					if _mon.monsterHealth <= 0 {
+						_mon.monsterHealth = 0
+						global.gold += 1
+					}
+				})
+				array_push(_dae_layers, {
+					type: "pillar", element: "mars", mode: "simultaneous",
+					targets: _group_targets, delay: _dist * 35,
+					fires_hit: false, hit_delay: 6, on_hit: _dae_hit, sfx: HugeExplosion,
 					outer_w: _ow, core_w: _cw,
 					hold: 30, fade: 20, linger: 10,
-					delay: _group_delay,
-					shake: (_dist == 0 and _m == selected) ? 5 : 0, shake_duration: 15
+					shake: (_dist == 0) ? 5 : 0, shake_duration: 15
 				})
 			}
 		}
-		// Override pendingAnim with our custom queue — already has targets baked in
-		global.pendingAnim = undefined
-		// Play directly
-		if splash != -1 { instance_create_depth(0, 0, 0, objSummonSplash, { spr: splash }) }
-		_struct.troop = monsters
-		var _dae_resolve = method({ s: _struct, m: monsters }, function() {
-			var _any_alive = false
-			for (var j = 0; j < array_length(m); j++) {
-				if m[j].monsterHealth != 0 { _any_alive = true; break }
-			}
-			if _any_alive {
-				global.inCombat = true
-				MakeTurnDelay(20, NextTurn)
-			} else {
-				HandleVictory()
-			}
-		})
-		// Queue directly — targets already embedded in each step
-		for (var _da = 0; _da < array_length(_dae_anims); _da++) {
-			var _step = _dae_anims[_da]
-			QueueAnim(_step.type, _step.element, _step.target, _step)
-		}
-		PlayAnimation(method({ s: _struct }, function() { DoDamage(s) }), _dae_resolve)
-		exit
+		_struct.anim = _dae_layers
 	}
 
-	var _anims = global.pendingAnim
-	global.pendingAnim = undefined
-	if _anims != undefined {
-		// Normalize single struct to array
-		if !is_array(_anims) { _anims = [_anims] }
-		// Check if any step requests staggered per-target damage
-		var _stagger_dmg = false
-		for (var _a = 0; _a < array_length(_anims); _a++) {
-			if _anims[_a][$ "stagger_damage"] ?? false { _stagger_dmg = true; break }
-		}
-		// Queue animation steps
-		var _first_hit = true
-		var _hit_count = 0
-		if _stagger_dmg {
-			// Step-major: all targets get step 0, then all get step 1, etc.
-			// This lets wind/flash group targets simultaneously, bursts play sequentially
-			for (var _a = 0; _a < array_length(_anims); _a++) {
-				for (var _t = 0; _t < array_length(targets); _t++) {
-					var _anim = variable_clone(_anims[_a])
-					if variable_struct_exists(_anim, "fires_hit") and _anim.fires_hit {
-						_anim._stagger_target_index = _t
-						_hit_count++
-					}
-					QueueAnim(_anim.type, _anim.element, targets[_t], _anim)
-				}
-			}
-		} else {
-			// Check if animation should only play on one target
-			var _single = false
-			for (var _a = 0; _a < array_length(_anims); _a++) {
-				if _anims[_a][$ "single_anim"] ?? false { _single = true; break }
-			}
-			var _anim_target = floor((array_length(targets) - 1) / 2) // middle target gets the visual
+	// --- Animation system: read anim layers from struct ---
+	var _anim_layers = _struct[$ "anim"]
 
-			// Build ordered list of all alive monsters for splash steps
-			var _all_monsters = []
-			with (objMonster) {
-				if monsterHealth > 0 { array_push(_all_monsters, id) }
+	if _anim_layers != undefined {
+		// Normalize: single struct → array
+		if !is_array(_anim_layers) { _anim_layers = [_anim_layers] }
+		// Filter layers by anim_loop — default to loop 0 if any layer uses anim_loop
+		var _loop_idx = _struct[$ "loop_index"] ?? 0
+		var _any_looped = false
+		for (var _fi = 0; _fi < array_length(_anim_layers); _fi++) {
+			if !is_undefined(_anim_layers[_fi][$ "anim_loop"]) { _any_looped = true; break }
+		}
+		if _any_looped {
+			var _filtered = []
+			for (var _fi = 0; _fi < array_length(_anim_layers); _fi++) {
+				var _fl = _anim_layers[_fi][$ "anim_loop"]
+				if is_undefined(_fl) or _fl == _loop_idx { array_push(_filtered, _anim_layers[_fi]) }
 			}
-
-			// Target-major: each target gets all steps before the next target
-			for (var _t = 0; _t < array_length(targets); _t++) {
-				if _single and _t != _anim_target { continue }
-				for (var _a = 0; _a < array_length(_anims); _a++) {
-					var _anim = variable_clone(_anims[_a])
-					// target_all / target_splash: queue on extra monsters beyond just this target
-					var _extra_mode = _anim[$ "target_all"] ?? (_anim[$ "target_splash"] ?? false)
-					if _extra_mode != false {
-						if _t == 0 or (_single and _t == _anim_target) {
-							// Find target's index in the all_monsters list
-							var _tgt = targets[_t]
-							var _tgt_idx = -1
-							for (var _m = 0; _m < array_length(_all_monsters); _m++) {
-								if _all_monsters[_m] == _tgt { _tgt_idx = _m; break }
-							}
-							for (var _m = 0; _m < array_length(_all_monsters); _m++) {
-								// target_splash: only target and immediate neighbors
-								if _extra_mode == "splash" and abs(_m - _tgt_idx) > 1 { continue }
-								var _ma = variable_clone(_anim)
-								_ma.fires_hit = false
-								QueueAnim(_ma.type, _ma.element, _all_monsters[_m], _ma)
-							}
-						}
-						continue
-					}
-					if variable_struct_exists(_anim, "fires_hit") and _anim.fires_hit {
-						if !_first_hit { _anim.fires_hit = false }
-						_first_hit = false
-					}
-					QueueAnim(_anim.type, _anim.element, targets[_t], _anim)
+			_anim_layers = _filtered
+		}
+		// Translate legacy flags to new mode system
+		for (var _li = 0; _li < array_length(_anim_layers); _li++) {
+			var _layer = _anim_layers[_li]
+			// Legacy stagger_damage → mode: "stagger"
+			if is_undefined(_layer[$ "mode"]) {
+				if _layer[$ "stagger_damage"] ?? false {
+					_layer.mode = "stagger"
+					_layer.stagger_delay = _layer[$ "stagger"] ?? 15
+				}
+				// Legacy single_anim → mode: "shared"
+				else if _layer[$ "single_anim"] ?? false {
+					_layer.mode = "shared"
 				}
 			}
-		}
-		if _stagger_dmg {
-			// Each fires_hit triggers DoDamage for just that target
-			PlayAnimation(method({ s: _struct, tgts: targets }, function() {
-				var _anim_inst = instance_find(objSpellAnimation, 0)
-				var _copy = variable_clone(s)
-				// Barrage mode: meteor stores hit target directly
-				if instance_exists(_anim_inst) and variable_instance_exists(_anim_inst, "_barrage_hit_target")
-					and instance_exists(_anim_inst._barrage_hit_target) {
-					_copy.targets = [_anim_inst._barrage_hit_target]
-				} else {
-					// Normal stagger: look up target index from queue step
-					var _ti = 0
-					if instance_exists(_anim_inst) {
-						var _step = _anim_inst._queue[_anim_inst._qi]
-						_ti = _step[$ "_stagger_target_index"] ?? 0
-					}
-					_copy.targets = [tgts[_ti]]
+			// Legacy target_all → set targets to all alive monsters
+			if _layer[$ "target_all"] ?? false {
+				var _all_alive = []
+				with (objMonster) { if monsterHealth > 0 { array_push(_all_alive, id) } }
+				_layer.targets = _all_alive
+				_layer.mode = _layer[$ "mode"] ?? "simultaneous"
+			}
+			// Legacy target_splash → targets = selected + neighbors
+			else if (_layer[$ "target_splash"] ?? false) != false {
+				var _all_alive = []
+				with (objMonster) { if monsterHealth > 0 { array_push(_all_alive, id) } }
+				var _sel_idx = -1
+				for (var _m = 0; _m < array_length(_all_alive); _m++) {
+					if _all_alive[_m] == targets[0] { _sel_idx = _m; break }
 				}
-				DoDamage(_copy)
-			}), _resolve)
-		} else {
-			PlayAnimation(method({ s: _struct }, function() { DoDamage(s) }), _resolve)
+				var _splash_tgts = []
+				for (var _m = 0; _m < array_length(_all_alive); _m++) {
+					if abs(_m - _sel_idx) <= 1 { array_push(_splash_tgts, _all_alive[_m]) }
+				}
+				_layer.targets = _splash_tgts
+				_layer.mode = _layer[$ "mode"] ?? "simultaneous"
+			}
+			// Set default targets on layers that don't specify them
+			else if is_undefined(_layer[$ "targets"]) and is_undefined(_layer[$ "target"]) {
+				_layer.targets = targets
+			}
 		}
+		// Log cast name and play cast sound with pause before animation
+		var _cast_name = _struct[$ "cast_name"]
+		if !is_undefined(_cast_name) {
+			InjectLog(_cast_name)
+		}
+		var _cast_sfx = undefined
+		switch _struct.source {
+			case "psynergy": _cast_sfx = asset_get_index("SpellCast");  break
+			case "summon":   _cast_sfx = asset_get_index("SpellCast"); break
+			case "djinni":   _cast_sfx = asset_get_index("DjinnCast");  break
+		}
+		if !is_undefined(_cast_sfx) and _cast_sfx >= 0 {
+			audio_stop_sound(_cast_sfx)
+			audio_play_sound(_cast_sfx, 0, 0)
+		}
+		// Set targets on the packet for DoDamage
+		_struct.targets = targets
+		// Pause for cast sound before starting animation
+		var _cast_delay = 85
+		if variable_struct_exists(_struct,"cast_delay"){ _cast_delay = _struct.cast_delay }
+		instance_create_depth(0, 0, 0, TurnDelay, {
+			wait: _cast_delay,
+			on_complete: method({ layers: _anim_layers, pkt: _struct, resolve: _resolve }, function() {
+				AnimPlay(layers, pkt, resolve)
+			})
+		})
 	} else {
 		DoDamage(_struct)
 		_resolve()

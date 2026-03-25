@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"FireBallSound",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "channelFormat":0,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":1.1465759,
+  "exportDir":"",
+  "name":"FireBallSound",
+  "parent":{
+    "name":"SFX",
+    "path":"folders/Sounds/SFX.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"FireBallSound.wav",
+  "volume":1.0,
+}
